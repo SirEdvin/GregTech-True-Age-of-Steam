@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package site.siredvin.gttruesteam;
 
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 @GTAddon
-public class ExampleGTAddon implements IGTAddon {
+public class GTTrueSteamGTAddon implements IGTAddon {
 
     @Override
     public GTRegistrate getRegistrate() {
-        return ExampleMod.EXAMPLE_REGISTRATE;
+        return GTTrueSteam.REGISTRATE;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class ExampleGTAddon implements IGTAddon {
 
     @Override
     public String addonModId() {
-        return ExampleMod.MOD_ID;
+        return GTTrueSteam.MOD_ID;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ExampleGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
-        // CustomRecipes.init(provider);
+        TrueSteamRecipes.registerRecipes(provider);
     }
 
     @Override

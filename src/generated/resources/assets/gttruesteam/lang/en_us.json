@@ -1,0 +1,18 @@
+{
+  "block.gttruesteam.cooling_box": "Cooling Box",
+  "block.gttruesteam.industrial_bronze_casing": "Industrial Bronze Casing",
+  "block.gttruesteam.industrial_fluid_heater": "Industrial Fluid Heater",
+  "block.gttruesteam.industrial_fluid_pressurizer": "Industrial Fluid Pressurizer",
+  "block.gttruesteam.slightly_corrosion_proof_casing": "Slightly Corrosion Proof Casing",
+  "material.gttruesteam.corrosion_tempered_alloy": "Corrosion Tempered Alloy",
+  "material.gttruesteam.extremely_pressurized_steam": "Extremely Pressurized Steam",
+  "material.gttruesteam.high_pressurized_steam": "High Pressurized Steam",
+  "material.gttruesteam.hot_steam": "Hot Steam",
+  "material.gttruesteam.hydrochloric_acid_slurry": "Hydrochloric Acid Slurry",
+  "material.gttruesteam.overheated_hydrochloric_acid": "Overheated Hydrochloric Acid",
+  "material.gttruesteam.pressurized_steam": "Pressurized Steam",
+  "material.gttruesteam.steam_oxygen_mixture": "Steam Oxygen Mixture",
+  "material.gttruesteam.steam_tempered_bronze": "Steam Tempered Bronze",
+  "material.gttruesteam.superhot_steam": "Superhot Steam",
+  "material.gttruesteam.warm_steam": "Warm Steam"
+}

@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package site.siredvin.gttruesteam;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
@@ -9,9 +9,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -22,15 +20,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(ExampleMod.MOD_ID)
+@Mod(GTTrueSteam.MOD_ID)
 @SuppressWarnings("removal")
-public class ExampleMod {
+public class GTTrueSteam {
 
-    public static final String MOD_ID = "examplemod";
+    public static final String MOD_ID = "gttruesteam";
     public static final Logger LOGGER = LogManager.getLogger();
-    public static GTRegistrate EXAMPLE_REGISTRATE = GTRegistrate.create(ExampleMod.MOD_ID);
+    public static GTRegistrate REGISTRATE = GTRegistrate.create(GTTrueSteam.MOD_ID);
 
-    public ExampleMod() {
+    public GTTrueSteam() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
@@ -49,19 +47,12 @@ public class ExampleMod {
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
 
-        EXAMPLE_REGISTRATE.registerRegistrate();
+        REGISTRATE.registerRegistrate();
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            LOGGER.info("Hello from common setup! This is *after* registries are done, so we can do this:");
-            LOGGER.info("Look, I found a {}!", Items.DIAMOND);
-        });
-    }
+    private void commonSetup(final FMLCommonSetupEvent event) {}
 
-    private void clientSetup(final FMLClientSetupEvent event) {
-        LOGGER.info("Hey, we're on Minecraft version {}!", Minecraft.getInstance().getLaunchedVersion());
-    }
+    private void clientSetup(final FMLClientSetupEvent event) {}
 
     /**
      * Create a ResourceLocation in the format "modid:path"
@@ -81,7 +72,7 @@ public class ExampleMod {
      * @param event
      */
     private void addMaterialRegistries(MaterialRegistryEvent event) {
-        GTCEuAPI.materialManager.createRegistry(ExampleMod.MOD_ID);
+        GTCEuAPI.materialManager.createRegistry(GTTrueSteam.MOD_ID);
     }
 
     /**
@@ -91,7 +82,8 @@ public class ExampleMod {
      * @param event
      */
     private void addMaterials(MaterialEvent event) {
-        // CustomMaterials.init();
+        TrueSteamMaterials.init();
+        TrueSteamBlocks.sayHi();
     }
 
     /**
@@ -110,7 +102,7 @@ public class ExampleMod {
      * @param event
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
-        // CustomRecipeTypes.init();
+        TrueSteamRecipeTypes.init();
     }
 
     /**
@@ -120,7 +112,7 @@ public class ExampleMod {
      * @param event
      */
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        // CustomMachines.init();
+        MultiMachines.sayHi();
     }
 
     /**
