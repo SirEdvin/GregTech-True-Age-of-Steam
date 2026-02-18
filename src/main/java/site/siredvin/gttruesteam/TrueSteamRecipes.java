@@ -3,6 +3,7 @@ package site.siredvin.gttruesteam;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
@@ -10,10 +11,14 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.level.block.Block;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
+import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
+import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
 import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
+import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.FLUID_COOLING;
+import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
 
 public class TrueSteamRecipes {
 
@@ -24,19 +29,6 @@ public class TrueSteamRecipes {
                 .outputFluids(
                         GTMaterials.DistilledWater.getFluid(4))
                 .duration(10).EUt(-32).save(provider);
-    }
-
-    private static void heatingSteamRecipes(Material old, Material current, double density,
-                                            Consumer<FinishedRecipe> provider) {
-        FLUID_HEATER_RECIPES.recipeBuilder(current.getResourceLocation()).inputFluids(
-                old.getFluid(500)).circuitMeta(1).outputFluids(current.getFluid(1000)).duration(30).EUt(20)
-                .save(provider);
-        steamFuel(current, density, provider);
-    }
-
-    private static void pressuringSteamRecipes(Material raw, Material result, int coefficient, double rawDensity,
-                                               Consumer<FinishedRecipe> provider) {
-        steamFuel(result, coefficient * rawDensity, provider);
     }
 
     private static void casingRecipe(Material casingMaterial, BlockEntry<Block> casingOutput,
@@ -58,61 +50,111 @@ public class TrueSteamRecipes {
                 .save(provider);
     }
 
-    public static void registerRecipes(Consumer<FinishedRecipe> provider) {
-        heatingSteamRecipes(GTMaterials.Steam, TrueSteamMaterials.WarmSteam, 0.6, provider);
-        heatingSteamRecipes(TrueSteamMaterials.WarmSteam, TrueSteamMaterials.HotSteam, 0.7, provider);
-        heatingSteamRecipes(TrueSteamMaterials.HotSteam, TrueSteamMaterials.SuperhotSteam, 0.8, provider);
-
-        pressuringSteamRecipes(TrueSteamMaterials.WarmSteam, TrueSteamMaterials.PressurisedSteam, 2, 0.6, provider);
-        pressuringSteamRecipes(TrueSteamMaterials.HotSteam, TrueSteamMaterials.HighPressurisedSteam, 4, 0.7, provider);
-        pressuringSteamRecipes(TrueSteamMaterials.SuperhotSteam, TrueSteamMaterials.ExtremelyPressurisedSteam, 8, 0.8,
-                provider);
-
-        FLUID_HEATER_RECIPES.recipeBuilder("hydrochloric_cleaning")
-                .inputFluids(GTMaterials.HydrochloricAcid.getFluid(10000))
-                .outputFluids(TrueSteamMaterials.HydrochloricAcidSlurry.getFluid(15000))
-                .duration(20 * 100)
-                .circuitMeta(2)
-                .addData(TrueSteamRecipeTypes.PURE_CYCLES_DATA_KEY, 256)
+    public static void registerInfernalChargingLoop(Consumer<FinishedRecipe> provider) {
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.ActivatedBlaze.getResourceLocation())
+                .inputFluids(GTMaterials.Blaze.getFluid(1000), GTMaterials.NetherAir.getFluid(3000))
+                .inputItems(TagPrefix.dust, GTMaterials.Redstone)
+                .outputFluids(TrueSteamMaterials.ActivatedBlaze.getFluid(4000))
+                .EUt(60)
+                .duration(200)
+                .save(provider);
+        METAPHYSICAL_BOILING.recipeBuilder(TrueSteamMaterials.OverheatedInfernalSlurry.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.ActivatedBlaze.getFluid(8000))
+                .outputFluids(TrueSteamMaterials.OverheatedInfernalSlurry.getFluid(8000))
                 .EUt(8)
+                .circuitMeta(2)
+                .addData(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY, 512)
+                .duration(1000)
                 .save(provider);
-        CENTRIFUGE_RECIPES.recipeBuilder("hydrochloric_acid_slurry_separation")
-                .inputFluids(TrueSteamMaterials.HydrochloricAcidSlurry.getFluid(3000))
-                .outputFluids(TrueSteamMaterials.OverheatedHydrochloricAcid.getFluid(2000),
-                        GTMaterials.SaltWater.getFluid(1000))
-                .EUt(120)
-                .duration(200)
+        FLUID_COOLING.recipeBuilder(TrueSteamMaterials.InfernalSlurry.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.OverheatedInfernalSlurry.getFluid(4000))
+                .outputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(4000))
+                .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 500)
+                .addCondition(new CoolingCapacityCondition(5000))
                 .save(provider);
-        TrueSteamRecipeTypes.FLUID_COOLING.recipeBuilder("cooling_hydrochloric_acid")
-                .inputFluids(TrueSteamMaterials.OverheatedHydrochloricAcid.getFluid(10000))
-                .outputFluids(GTMaterials.HydrochloricAcid.getFluid(10000))
-                .duration(2000)
-                .save(provider);
-
-        ARC_FURNACE_RECIPES.recipeBuilder("steam_tempered_bronze")
-                .inputFluids(GTMaterials.Steam.getFluid(63))
-                .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
-                .outputItems(TagPrefix.ingot, TrueSteamMaterials.SteamTemperedBronze)
+        CENTRIFUGE_RECIPES.recipeBuilder(GTTrueSteam.id("infernal_slurry_separation"))
+                .inputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(1000))
+                .outputFluids(TrueSteamMaterials.DilutedBlaze.getFluid(250))
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 2)
                 .EUt(60)
-                .duration(63)
+                .duration(100)
+                .save(provider);
+        DISTILLERY_RECIPES.recipeBuilder(GTTrueSteam.id("diluted_blaze_into_blaze"))
+                .inputFluids(TrueSteamMaterials.DilutedBlaze.getFluid(1000))
+                .outputFluids(GTMaterials.Blaze.getFluid(950))
+                .circuitMeta(1)
+                .EUt(30)
+                .duration(24)
+                .save(provider);
+        DISTILLERY_RECIPES.recipeBuilder(GTTrueSteam.id("diluted_blaze_into_nether_air"))
+                .inputFluids(TrueSteamMaterials.DilutedBlaze.getFluid(1000))
+                .outputFluids(GTMaterials.NetherAir.getFluid(950))
+                .circuitMeta(2)
+                .EUt(30)
+                .duration(48)
+                .save(provider);
+    }
+
+    public static void registerRecipes(Consumer<FinishedRecipe> provider) {
+        steamFuel(TrueSteamMaterials.SuperhotSteam, 2.1, provider);
+        registerInfernalChargingLoop(provider);
+
+        METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("boiling_water"))
+            .inputFluids(GTMaterials.Water.getFluid(18))
+            .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(3000))
+            .circuitMeta(1)
+            .EUt(30)
+            .duration(900)
+            .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
+
+        ALLOY_SMELTER_RECIPES.recipeBuilder(GTTrueSteam.id("bronze_glass"))
+            .inputItems(TagPrefix.block, GTMaterials.Glass)
+            .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
+            .duration(200)
+            .EUt(8)
+            .save(provider);
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, TrueSteamBlocks.BoilerHusk.getId(), TrueSteamBlocks.BoilerHusk.asStack(),
+                " h ",
+                " C ",
+                " w ",
+                'C', GTMachines.STEAM_SOLAR_BOILER.second().asStack());
+
+        casingRecipe(TrueSteamMaterials.CorrosionTemperedBrass, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
+        casingRecipe(TrueSteamMaterials.InfernalAlloy, TrueSteamBlocks.InfernalAlloyCasing, provider);
+
+        TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())
+                .inputItems(TagPrefix.ingot, GTMaterials.Steel)
+                .outputItems(TagPrefix.ingot, TrueSteamMaterials.LavaCoatedSteel)
+                .duration(200)
+                .addCondition(new CoatingFluidCondition(GTMaterials.Lava.getFluid()))
                 .save(provider);
 
-        ARC_FURNACE_RECIPES.recipeBuilder("corrosion_tempered_alloy")
-                .inputFluids(TrueSteamMaterials.SteamOxygenMixture.getFluid(63))
+        TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.CorrosionTemperedBrass.getResourceLocation())
                 .inputItems(TagPrefix.ingot, GTMaterials.CobaltBrass)
-                .outputItems(TagPrefix.ingot, TrueSteamMaterials.CorrosionTemperedAlloy)
-                .EUt(60)
-                .duration(63)
-                .save(provider);
-
-        MIXER_RECIPES.recipeBuilder("steam_oxygen_mixture")
-                .inputFluids(GTMaterials.Oxygen.getFluid(400), GTMaterials.Steam.getFluid(600))
-                .outputFluids(TrueSteamMaterials.SteamOxygenMixture.getFluid(1000))
+                .outputItems(TagPrefix.ingot, TrueSteamMaterials.CorrosionTemperedBrass)
                 .duration(200)
-                .EUt(32)
+                .addCondition(new CoatingFluidCondition(GTMaterials.Water.getFluid()))
                 .save(provider);
 
-        casingRecipe(TrueSteamMaterials.CorrosionTemperedAlloy, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
-        casingRecipe(TrueSteamMaterials.SteamTemperedBronze, TrueSteamBlocks.IndustrialBronzeCasing, provider);
+        TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.FrostbiteMagnalium.getResourceLocation())
+                .inputItems(TagPrefix.ingot, GTMaterials.Magnalium)
+                .outputItems(TagPrefix.ingot, TrueSteamMaterials.FrostbiteMagnalium)
+                .duration(200)
+                .addCondition(new CoatingFluidCondition(GTMaterials.Ice.getFluid()))
+                .save(provider);
+
+        ALLOY_SMELTER_RECIPES.recipeBuilder(TrueSteamMaterials.AluminiumBronze.getResourceLocation())
+                .inputItems(TagPrefix.ingot, GTMaterials.Aluminium)
+                .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
+                .outputItems(TagPrefix.ingot, TrueSteamMaterials.AluminiumBronze, 2)
+                .duration(200).EUt(32).save(provider);
+
+        TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.InfernalAlloy.getResourceLocation())
+                .inputItems(TagPrefix.ingot, TrueSteamMaterials.AluminiumBronze)
+                .outputItems(TagPrefix.ingot, TrueSteamMaterials.InfernalAlloy)
+                .duration(200)
+                .addCondition(new CoatingFluidCondition(GTMaterials.Blaze.getFluid()))
+                .save(provider);
     }
 }

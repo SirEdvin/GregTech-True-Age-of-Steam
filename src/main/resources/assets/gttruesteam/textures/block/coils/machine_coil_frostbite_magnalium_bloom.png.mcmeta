@@ -1,0 +1,9 @@
+{
+    "ldlib": {
+        "connection": "gttruesteam:block/coils/machine_coil_frostbite_magnalium_bloom_ctm",
+        "emissive": true
+    },
+    "shimmer": {
+        "bloom": true
+    }
+}

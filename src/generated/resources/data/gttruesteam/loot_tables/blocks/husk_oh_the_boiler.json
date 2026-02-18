@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "gttruesteam:industrial_bronze_casing"
+          "name": "gttruesteam:husk_oh_the_boiler"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "gttruesteam:blocks/industrial_bronze_casing"
+  "random_sequence": "gttruesteam:blocks/husk_oh_the_boiler"
 }

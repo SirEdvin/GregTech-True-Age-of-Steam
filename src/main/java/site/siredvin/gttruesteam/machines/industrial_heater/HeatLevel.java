@@ -11,11 +11,11 @@ import java.util.Locale;
 public enum HeatLevel {
 
     NONE(0, 1, false, TextColor.fromRgb(0xD3D3D3)),
-    BASIC(16, 2, false, TextColor.fromRgb(0xFFB343)),
-    ADVANCED(32, 4, false, TextColor.fromRgb(0xE86100)),
-    PROGRESSIVE(64, 8, true, TextColor.fromRgb(0xED2100)),
-    SUPREME(128, 16, true, TextColor.fromRgb(0x81D8D0)),
-    MAX(256, 16, true, TextColor.fromRgb(0x000000));
+    BASIC(32, 2, false, TextColor.fromRgb(0xFFB343)),
+    ADVANCED(64, 4, false, TextColor.fromRgb(0xE86100)),
+    PROGRESSIVE(128, 8, true, TextColor.fromRgb(0xED2100)),
+    SUPREME(256, 16, true, TextColor.fromRgb(0x81D8D0)),
+    MAX(512, 16, true, TextColor.fromRgb(0x000000));
 
     public static final HeatLevel[] HEAT_LEVELS = new HeatLevel[] {
             SUPREME, PROGRESSIVE, ADVANCED, BASIC, NONE
@@ -27,13 +27,13 @@ public enum HeatLevel {
     private final boolean perfectOverlock;
     private final TextColor color;
     @Getter
-    private final int requiredLevel;
+    private final int requiredHeat;
 
-    HeatLevel(int requiredLevel, int maxParallels, boolean perfectOverlock, TextColor color) {
+    HeatLevel(int requiredHeat, int maxParallels, boolean perfectOverlock, TextColor color) {
         this.maxParallels = maxParallels;
         this.perfectOverlock = perfectOverlock;
         this.color = color;
-        this.requiredLevel = requiredLevel;
+        this.requiredHeat = requiredHeat;
     }
 
     public Component component() {

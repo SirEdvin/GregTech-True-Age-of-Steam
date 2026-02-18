@@ -10,16 +10,16 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
 import lombok.Setter;
 
-public class HeaterRecipeLogic extends RecipeLogic {
+public class InfernalBoilerRecipeLogic extends RecipeLogic {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(HeaterRecipeLogic.class,
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(InfernalBoilerRecipeLogic.class,
             RecipeLogic.MANAGED_FIELD_HOLDER);
 
     @Getter
     @Setter
     @DescSynced
     @Persisted
-    private int pureChargers = 256;
+    private int infernalCharges = 512;
 
     @Getter
     @Setter
@@ -31,7 +31,7 @@ public class HeaterRecipeLogic extends RecipeLogic {
     @Persisted
     private int cycleCounterReductionFactor = 0;
 
-    public HeaterRecipeLogic(IRecipeLogicMachine machine) {
+    public InfernalBoilerRecipeLogic(IRecipeLogicMachine machine) {
         super(machine);
     }
 
@@ -42,10 +42,10 @@ public class HeaterRecipeLogic extends RecipeLogic {
 
     public void trackCycle(int coilLevel) {
         this.cycleCounterReductionFactor = 0;
-        if (this.pureChargers > 0) {
-            this.pureChargers--;
+        if (this.infernalCharges > 0) {
+            this.infernalCharges--;
         }
-        if (this.cycleCounter < HeatLevel.MAX.getRequiredLevel()) {
+        if (this.cycleCounter < HeatLevel.MAX.getRequiredHeat()) {
             this.cycleCounter += coilLevel;
         }
     }
@@ -57,7 +57,7 @@ public class HeaterRecipeLogic extends RecipeLogic {
 
     public HeatLevel getHeatLevel() {
         for (var heatLevel : HeatLevel.HEAT_LEVELS) {
-            if (this.cycleCounter > heatLevel.getRequiredLevel())
+            if (this.cycleCounter > heatLevel.getRequiredHeat())
                 return heatLevel;
         }
         return HeatLevel.NONE;

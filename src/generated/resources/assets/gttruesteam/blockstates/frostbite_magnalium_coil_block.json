@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "gttruesteam:block/frostbite_magnalium_coil_block"
+    },
+    "active=true": {
+      "model": "gttruesteam:block/frostbite_magnalium_coil_block_active"
+    }
+  }
+}
