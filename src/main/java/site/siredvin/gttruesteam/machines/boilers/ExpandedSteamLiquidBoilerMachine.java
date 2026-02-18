@@ -10,10 +10,13 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.machine.steam.SteamLiquidBoilerMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+
 import net.minecraftforge.fluids.FluidType;
+
 import org.jetbrains.annotations.NotNull;
 
 public class ExpandedSteamLiquidBoilerMachine extends SteamLiquidBoilerMachine {
+
     private final boolean isHigherPressure;
 
     public ExpandedSteamLiquidBoilerMachine(IMachineBlockEntity holder, boolean isHigherPressure, Object... args) {
@@ -22,7 +25,7 @@ public class ExpandedSteamLiquidBoilerMachine extends SteamLiquidBoilerMachine {
     }
 
     @Override
-    protected @NotNull NotifiableFluidTank createFuelTank(Object @NotNull ... args) {
+    protected @NotNull NotifiableFluidTank createFuelTank(Object @NotNull... args) {
         return new NotifiableFluidTank(this, 1, 32 * FluidType.BUCKET_VOLUME, IO.IN);
     }
 
@@ -36,6 +39,7 @@ public class ExpandedSteamLiquidBoilerMachine extends SteamLiquidBoilerMachine {
     protected int getCooldownInterval() {
         return isHigherPressure ? 30 : 35;
     }
+
     public int getMaxTemperature() {
         return isHigherPressure ? 2000 : 1500;
     }

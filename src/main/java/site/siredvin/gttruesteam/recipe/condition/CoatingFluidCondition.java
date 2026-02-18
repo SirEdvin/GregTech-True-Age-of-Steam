@@ -5,14 +5,16 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
@@ -20,6 +22,7 @@ import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrineMachine;
 
 @NoArgsConstructor
 public class CoatingFluidCondition extends RecipeCondition {
+
     // spotless:off
     public static final Codec<CoatingFluidCondition> CODEC =
             RecordCodecBuilder.create(instance -> instance.group(

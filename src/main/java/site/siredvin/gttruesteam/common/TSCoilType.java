@@ -1,15 +1,18 @@
 package site.siredvin.gttruesteam.common;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import lombok.Getter;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.GTTrueSteam;
 import site.siredvin.gttruesteam.TrueSteamMaterials;
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
 
 public enum TSCoilType implements StringRepresentable, ICoolingCoilType {
+
     FROSTBITE_MAGNALIUM("frostbite_magnalium", 10_000, 5, 1, TrueSteamMaterials.FrostbiteMagnalium,
             GTTrueSteam.id("block/coils/machine_coil_frostbite_magnalium"));
 

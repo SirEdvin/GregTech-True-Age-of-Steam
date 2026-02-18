@@ -12,7 +12,8 @@ import lombok.Setter;
 
 public class InfernalBoilerRecipeLogic extends RecipeLogic {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(InfernalBoilerRecipeLogic.class,
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            InfernalBoilerRecipeLogic.class,
             RecipeLogic.MANAGED_FIELD_HOLDER);
 
     @Getter

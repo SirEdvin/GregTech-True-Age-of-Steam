@@ -2,7 +2,6 @@ package site.siredvin.gttruesteam;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
-import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
@@ -81,8 +80,8 @@ public class TrueSteamMaterials {
                         MaterialFlags.DISABLE_DECOMPOSITION,
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
-                        MaterialFlags.GENERATE_FRAME
-                ).color(0xa38e8e).secondaryColor(0x121c37).iconSet(METALLIC).buildAndRegister();
+                        MaterialFlags.GENERATE_FRAME)
+                .color(0xa38e8e).secondaryColor(0x121c37).iconSet(METALLIC).buildAndRegister();
         FrostbiteMagnalium = new Material.Builder(GTTrueSteam.id("frostbite_magnalium"))
                 .components(Magnalium, 1)
                 .ingot(3)
@@ -90,8 +89,8 @@ public class TrueSteamMaterials {
                         MaterialFlags.DISABLE_DECOMPOSITION,
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
-                        MaterialFlags.GENERATE_FRAME
-                ).color(0x81aceb).secondaryColor(0x2f0b51).iconSet(METALLIC).buildAndRegister();
+                        MaterialFlags.GENERATE_FRAME)
+                .color(0x81aceb).secondaryColor(0x2f0b51).iconSet(METALLIC).buildAndRegister();
         AluminiumBronze = new Material.Builder(GTTrueSteam.id("aluminium_bronze"))
                 .components(Aluminium, 1, Bronze, 1)
                 .ingot(3)
@@ -101,12 +100,11 @@ public class TrueSteamMaterials {
                 .flags(
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
-                        MaterialFlags.GENERATE_FRAME
-                ).color(0xdb4c24).secondaryColor(0x756ac9c).iconSet(METALLIC).buildAndRegister();
+                        MaterialFlags.GENERATE_FRAME)
+                .color(0xdb4c24).secondaryColor(0x756ac9c).iconSet(METALLIC).buildAndRegister();
     }
 
-    private static void initMisc() {
-    }
+    private static void initMisc() {}
 
     public static void init() {
         initSteams();

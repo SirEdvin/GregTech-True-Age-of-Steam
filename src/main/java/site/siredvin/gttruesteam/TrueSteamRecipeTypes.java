@@ -9,16 +9,18 @@ import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
-
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidEntryList;
 import com.gregtechceu.gtceu.integration.xei.entry.fluid.FluidStackList;
 import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandler;
+
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
@@ -35,14 +37,14 @@ public class TrueSteamRecipeTypes {
     public static String INFERNAL_CYCLES_DATA_KEY = "infernal_cycles";
     public static String OVERHEATED_KEY = "overheated";
     public static String COOLING_CONSUMED = "cooling_consumed";
-//
-//    public static GTRecipeType INDUSTRIAL_FLUID_PRESSURIZER = GTRecipeTypes
-//            .register("industrial_fluid_pressurizer", GTRecipeTypes.MULTIBLOCK)
-//            .setMaxIOSize(1, 0, 2, 2)
-//            .setEUIO(IO.IN)
-//            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
-//            .setIconSupplier(() -> IndustrialFluidPressurizer.MACHINE.getItem().getDefaultInstance())
-//            .setSound(GTSoundEntries.COMPRESSOR);
+    //
+    // public static GTRecipeType INDUSTRIAL_FLUID_PRESSURIZER = GTRecipeTypes
+    // .register("industrial_fluid_pressurizer", GTRecipeTypes.MULTIBLOCK)
+    // .setMaxIOSize(1, 0, 2, 2)
+    // .setEUIO(IO.IN)
+    // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+    // .setIconSupplier(() -> IndustrialFluidPressurizer.MACHINE.getItem().getDefaultInstance())
+    // .setSound(GTSoundEntries.COMPRESSOR);
 
     public static GTRecipeType FLUID_COOLING = register("fluid_cooling", GTRecipeTypes.MULTIBLOCK, "Fluid cooling")
             .setMaxIOSize(1, 0, 1, 1)
@@ -51,12 +53,14 @@ public class TrueSteamRecipeTypes {
             .setIconSupplier(() -> CoolingBox.MACHINE.getItem().getDefaultInstance())
             .addDataInfo((data) -> {
                 if (data.contains(COOLING_CONSUMED)) {
-                    return Component.translatable(TrueSteamLang.COOLING_CONSUMED_KEY, data.getInt(COOLING_CONSUMED)).getString();
+                    return Component.translatable(TrueSteamLang.COOLING_CONSUMED_KEY, data.getInt(COOLING_CONSUMED))
+                            .getString();
                 }
                 return "";
             })
             .setSound(GTSoundEntries.TURBINE);
-    public static GTRecipeType METAPHYSICAL_BOILING = register("metaphysical_boiling", GTRecipeTypes.MULTIBLOCK, "Metaphysical boiling")
+    public static GTRecipeType METAPHYSICAL_BOILING = register("metaphysical_boiling", GTRecipeTypes.MULTIBLOCK,
+            "Metaphysical boiling")
             .setMaxIOSize(1, 1, 1, 2)
             .setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
@@ -66,16 +70,15 @@ public class TrueSteamRecipeTypes {
                     widgetGroup.addWidget(new LabelWidget(
                             -7,
                             widgetGroup.getSize().height,
-                            Component.translatable(TrueSteamLang.CHARGING_CYCLES_KEY,recipe.data.getInt(INFERNAL_CYCLES_DATA_KEY))
-                    ));
+                            Component.translatable(TrueSteamLang.CHARGING_CYCLES_KEY,
+                                    recipe.data.getInt(INFERNAL_CYCLES_DATA_KEY))));
                     widgetGroup.setSizeHeight(widgetGroup.getSizeHeight() + 10);
                 }
                 if (recipe.data.contains(OVERHEATED_KEY)) {
                     widgetGroup.addWidget(new LabelWidget(
                             -7,
                             widgetGroup.getSize().height,
-                            TrueSteamLang.OVERHEATABLE
-                    ));
+                            TrueSteamLang.OVERHEATABLE));
                     widgetGroup.setSizeHeight(widgetGroup.getSizeHeight() + 10);
                 }
             });
@@ -99,7 +102,8 @@ public class TrueSteamRecipeTypes {
                 int yOffset = 0;
                 int i = 0;
                 for (Fluid set : fluids) {
-                    List<FluidEntryList> slots = Collections.singletonList(FluidStackList.of(new FluidStack(set, 1000)));
+                    List<FluidEntryList> slots = Collections
+                            .singletonList(FluidStackList.of(new FluidStack(set, 1000)));
                     TankWidget tank = new TankWidget(new CycleFluidEntryHandler(slots),
                             widgetGroup.getSize().width - 30 - xOffset, widgetGroup.getSize().height - 30 + yOffset,
                             false, false)
@@ -123,6 +127,5 @@ public class TrueSteamRecipeTypes {
         return recipeType;
     }
 
-    public static void init() {
-    }
+    public static void init() {}
 }

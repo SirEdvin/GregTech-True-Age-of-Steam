@@ -3,10 +3,12 @@ package site.siredvin.gttruesteam;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
+
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
 public class TrueSteamRecipeConditions {
+
     public static RecipeConditionType<CoatingFluidCondition> COATING_FLUID;
     public static RecipeConditionType<CoolingCapacityCondition> COOLING_CAPACITY;
 

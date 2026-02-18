@@ -4,13 +4,9 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
-import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
-import com.tterrag.registrate.providers.DataGenContext;
-import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -18,11 +14,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.client.model.generators.ModelFile;
 
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import net.minecraftforge.client.model.generators.ModelFile;
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 import site.siredvin.gttruesteam.common.TSCoilType;
@@ -56,7 +55,8 @@ public class TrueSteamBlocks {
             GTCEu.id("block/casings/gcym/corrosion_proof_casing"));
     public static BlockEntry<Block> InfernalAlloyCasing = createCasingBlock("infernal_alloy_casing",
             GTTrueSteam.id("block/infernal_alloy_casing"));
-    public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(TSCoilType.FROSTBITE_MAGNALIUM);
+    public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
+            TSCoilType.FROSTBITE_MAGNALIUM);
 
     public static BlockEntry<Block> BoilerHusk = GTTrueSteam.REGISTRATE.block("husk_oh_the_boiler", Block::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
@@ -80,8 +80,7 @@ public class TrueSteamBlocks {
             .build()
             .register();
 
-    public static void sayHi() {
-    }
+    public static void sayHi() {}
 
     public static NonNullBiConsumer<DataGenContext<Block, CoolingCoilBlock>, RegistrateBlockstateProvider> createCoilModel(ICoilType coilType) {
         return (ctx, prov) -> {

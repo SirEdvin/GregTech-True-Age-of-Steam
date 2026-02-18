@@ -8,11 +8,10 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
-import com.gregtechceu.gtceu.integration.xei.entry.item.ItemTagList;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.level.block.Block;
 
+import com.mojang.datafixers.util.Pair;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
@@ -101,21 +100,20 @@ public class TrueSteamRecipes {
                 .save(provider);
     }
 
-    private static void generateBoilerRecipe(MachineDefinition boiler, Pair<MachineDefinition, MachineDefinition> next, Consumer<FinishedRecipe> provider) {
+    private static void generateBoilerRecipe(MachineDefinition boiler, Pair<MachineDefinition, MachineDefinition> next,
+                                             Consumer<FinishedRecipe> provider) {
         VanillaRecipeHelper.addShapedRecipe(provider, true, next.getFirst().getId(), next.getFirst().asStack(),
                 "PPP",
                 "PwP",
                 " B ",
                 'B', boiler.asStack(),
-                'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel)
-        );
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel));
         VanillaRecipeHelper.addShapedRecipe(provider, true, next.getSecond().getId(), next.getSecond().asStack(),
                 "PPP",
                 "PwP",
                 " B ",
                 'B', next.getFirst().asStack(),
-                'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy)
-        );
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy));
     }
 
     private static void registerBoilerRecipes(Consumer<FinishedRecipe> provider) {
@@ -130,21 +128,22 @@ public class TrueSteamRecipes {
         registerBoilerRecipes(provider);
 
         METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("boiling_water"))
-            .inputFluids(GTMaterials.Water.getFluid(18))
-            .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(3000))
-            .circuitMeta(1)
-            .EUt(30)
-            .duration(900)
-            .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
+                .inputFluids(GTMaterials.Water.getFluid(18))
+                .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(3000))
+                .circuitMeta(1)
+                .EUt(30)
+                .duration(900)
+                .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
 
         ALLOY_SMELTER_RECIPES.recipeBuilder(GTTrueSteam.id("bronze_glass"))
-            .inputItems(TagPrefix.block, GTMaterials.Glass)
-            .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
-            .duration(200)
-            .EUt(8)
-            .save(provider);
+                .inputItems(TagPrefix.block, GTMaterials.Glass)
+                .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
+                .duration(200)
+                .EUt(8)
+                .save(provider);
 
-        VanillaRecipeHelper.addShapedRecipe(provider, true, TrueSteamBlocks.BoilerHusk.getId(), TrueSteamBlocks.BoilerHusk.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, TrueSteamBlocks.BoilerHusk.getId(),
+                TrueSteamBlocks.BoilerHusk.asStack(),
                 " h ",
                 " C ",
                 " w ",
@@ -187,23 +186,23 @@ public class TrueSteamRecipes {
                 .addCondition(new CoatingFluidCondition(GTMaterials.Blaze.getFluid()))
                 .save(provider);
 
-        VanillaRecipeHelper.addShapedRecipe(provider, true, InfernalBoiler.MACHINE.getId(), InfernalBoiler.MACHINE.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, InfernalBoiler.MACHINE.getId(),
+                InfernalBoiler.MACHINE.asStack(),
                 "TST",
                 "SCS",
                 "TST",
                 'C', TrueSteamBlocks.InfernalAlloyCasing.asStack(),
                 'S', CustomTags.MV_CIRCUITS,
-                'T', new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Copper)
-        );
+                'T', new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Copper));
 
-        VanillaRecipeHelper.addShapedRecipe(provider, true, CoatingShrine.MACHINE.getId(), CoatingShrine.MACHINE.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, CoatingShrine.MACHINE.getId(),
+                CoatingShrine.MACHINE.asStack(),
                 "TST",
                 "SCS",
                 "TST",
                 'C', GTBlocks.STEEL_HULL.asStack(),
                 'S', CustomTags.ULV_CIRCUITS,
-                'T', new MaterialEntry(TagPrefix.pipeNormalItem, GTMaterials.Tin)
-        );
+                'T', new MaterialEntry(TagPrefix.pipeNormalItem, GTMaterials.Tin));
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingBox.MACHINE.getId(), CoolingBox.MACHINE.asStack(),
                 "TST",
@@ -211,7 +210,6 @@ public class TrueSteamRecipes {
                 "TST",
                 'C', TrueSteamBlocks.SlightlyCorrosionProofCasing.asStack(),
                 'S', CustomTags.MV_CIRCUITS,
-                'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.Aluminium)
-        );
+                'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.Aluminium));
     }
 }

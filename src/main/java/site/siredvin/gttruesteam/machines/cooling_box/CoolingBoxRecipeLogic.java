@@ -2,9 +2,11 @@ package site.siredvin.gttruesteam.machines.cooling_box;
 
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+
 import lombok.Getter;
 import lombok.Setter;
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
@@ -33,8 +35,7 @@ public class CoolingBoxRecipeLogic extends RecipeLogic {
         if (this.aggregatedCoolingCapacity < coilType.getCoolingCapacity()) {
             this.aggregatedCoolingCapacity = Math.min(
                     coilType.getCoolingCapacity(),
-                    this.aggregatedCoolingCapacity + coilType.getCoolingRate()
-            );
+                    this.aggregatedCoolingCapacity + coilType.getCoolingRate());
         }
     }
 }

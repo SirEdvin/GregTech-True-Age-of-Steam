@@ -79,8 +79,7 @@ public class InfernalBoiler {
             .tooltips(
                     TrueSteamLang.INFERNAL_BOILER_TOOLTIP_1,
                     TrueSteamLang.INFERNAL_BOILER_TOOLTIP_2,
-                    TrueSteamLang.INFERNAL_BOILER_TOOLTIP_3
-            )
+                    TrueSteamLang.INFERNAL_BOILER_TOOLTIP_3)
             .additionalDisplay(((iMultiController, components) -> {
                 if (iMultiController.isFormed()) {
                     if (iMultiController instanceof InfernalBoilerMachine infernalBoilerMachine) {

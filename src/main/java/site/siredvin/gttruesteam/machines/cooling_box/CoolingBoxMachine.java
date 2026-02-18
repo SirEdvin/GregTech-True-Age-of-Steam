@@ -3,7 +3,7 @@ package site.siredvin.gttruesteam.machines.cooling_box;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import lombok.Getter;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -12,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamPredicates;
@@ -52,15 +54,17 @@ public class CoolingBoxMachine extends WorkableMultiblockMachine implements ICoo
         var lastRecipe = recipeLogic.getLastRecipe();
         if (lastRecipe != null && lastRecipe.data.contains(TrueSteamRecipeTypes.COOLING_CONSUMED)) {
             recipeLogic.setAggregatedCoolingCapacity(
-                    recipeLogic.getAggregatedCoolingCapacity() - lastRecipe.data.getInt(TrueSteamRecipeTypes.COOLING_CONSUMED)
-            );
+                    recipeLogic.getAggregatedCoolingCapacity() -
+                            lastRecipe.data.getInt(TrueSteamRecipeTypes.COOLING_CONSUMED));
         }
     }
 
     @Override
-    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
+                                   BlockHitResult hit) {
         if (hand == InteractionHand.MAIN_HAND && world.isClientSide) {
-            player.displayClientMessage(Component.translatable(TrueSteamLang.COOLING_CAPACITY_MESSAGE_KEY, this.getRecipeLogic().getAggregatedCoolingCapacity()), false);
+            player.displayClientMessage(Component.translatable(TrueSteamLang.COOLING_CAPACITY_MESSAGE_KEY,
+                    this.getRecipeLogic().getAggregatedCoolingCapacity()), false);
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }
@@ -71,7 +75,7 @@ public class CoolingBoxMachine extends WorkableMultiblockMachine implements ICoo
     }
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
         return new CoolingBoxRecipeLogic(this);
     }
 
