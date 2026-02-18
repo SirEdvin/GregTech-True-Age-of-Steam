@@ -1,6 +1,5 @@
 package site.siredvin.gttruesteam;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
@@ -52,7 +51,7 @@ public class TrueSteamRecipeTypes {
             .setIconSupplier(() -> CoolingBox.MACHINE.getItem().getDefaultInstance())
             .addDataInfo((data) -> {
                 if (data.contains(COOLING_CONSUMED)) {
-                    return "Cooling consumed: " + data.getInt(COOLING_CONSUMED);
+                    return Component.translatable(TrueSteamLang.COOLING_CONSUMED_KEY, data.getInt(COOLING_CONSUMED)).getString();
                 }
                 return "";
             })
@@ -61,7 +60,7 @@ public class TrueSteamRecipeTypes {
             .setMaxIOSize(1, 1, 1, 2)
             .setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
-            .setIconSupplier(() -> InfernalBoiler.INFERNAL_BOILER.asStack())
+            .setIconSupplier(() -> InfernalBoiler.MACHINE.asStack())
             .setUiBuilder((recipe, widgetGroup) -> {
                 if (recipe.data.contains(INFERNAL_CYCLES_DATA_KEY)) {
                     widgetGroup.addWidget(new LabelWidget(

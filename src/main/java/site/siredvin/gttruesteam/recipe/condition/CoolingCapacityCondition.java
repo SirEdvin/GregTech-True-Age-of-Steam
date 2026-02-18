@@ -43,7 +43,7 @@ public class CoolingCapacityCondition extends RecipeCondition {
 
     @Override
     public Component getTooltips() {
-        return TrueSteamLang.COOLING_CAPACITY_CONDITION;
+        return Component.translatable(TrueSteamLang.COOLING_REQUIRED_KEY, this.requiredCapacity);
     }
 
     @Override

@@ -36,13 +36,13 @@ public class InfernalBoilerRecipeModifier implements RecipeModifier {
                 var insides = x.content;
                 if (insides instanceof FluidIngredient fluidIngredient) {
                     var stackCopy = fluidIngredient.copy();
-                    stackCopy.setAmount(stackCopy.getAmount() * (4 + 2 * level));
+                    stackCopy.setAmount(stackCopy.getAmount() * (2 + 2 * level));
                     return new Content(stackCopy, x.chance, x.maxChance, x.tierChanceBoost);
                 }
                 return x;
             }).collect(Collectors.toList());
             copy.outputs.put(GTRecipeCapabilities.FLUID, newFluids);
-            copy.duration *= (int) (copy.duration * (2 + 0.5 * level));
+            copy.duration = (int) (copy.duration * (1.5 + 0.5 * level));
             return copy;
         };
     }

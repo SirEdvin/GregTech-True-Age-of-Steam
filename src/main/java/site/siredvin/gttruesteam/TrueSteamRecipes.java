@@ -3,14 +3,18 @@ package site.siredvin.gttruesteam;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.common.data.GTMachines;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
+import com.gregtechceu.gtceu.integration.xei.entry.item.ItemTagList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.level.block.Block;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
+import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
+import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
@@ -156,5 +160,32 @@ public class TrueSteamRecipes {
                 .duration(200)
                 .addCondition(new CoatingFluidCondition(GTMaterials.Blaze.getFluid()))
                 .save(provider);
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, InfernalBoiler.MACHINE.getId(), InfernalBoiler.MACHINE.asStack(),
+                "TST",
+                "SCS",
+                "TST",
+                'C', TrueSteamBlocks.InfernalAlloyCasing.asStack(),
+                'S', CustomTags.MV_CIRCUITS,
+                'T', new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Copper)
+        );
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, CoatingShrine.MACHINE.getId(), CoatingShrine.MACHINE.asStack(),
+                "TST",
+                "SCS",
+                "TST",
+                'C', GTBlocks.STEEL_HULL.asStack(),
+                'S', CustomTags.ULV_CIRCUITS,
+                'T', new MaterialEntry(TagPrefix.pipeNormalItem, GTMaterials.Tin)
+        );
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingBox.MACHINE.getId(), CoolingBox.MACHINE.asStack(),
+                "TST",
+                "SCS",
+                "TST",
+                'C', TrueSteamBlocks.SlightlyCorrosionProofCasing.asStack(),
+                'S', CustomTags.MV_CIRCUITS,
+                'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.Aluminium)
+        );
     }
 }

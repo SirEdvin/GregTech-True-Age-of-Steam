@@ -8,7 +8,7 @@
   "block.gttruesteam.infernal_boiler": "Infernal Boiler",
   "block.gttruesteam.slightly_corrosion_proof_casing": "Slightly Corrosion Proof Casing",
   "condition.gttruesteam.coating_fluid": "Coating fluid:",
-  "condition.gttruesteam.cooling_capacity": "Cooling required:",
+  "condition.gttruesteam.cooling_capacity": "Cooling required: %d",
   "error.gttruesteam.cooling_coils": "All cooling coils should be the same",
   "gttruesteam.coating": "Coating",
   "gttruesteam.fluid_cooling": "Fluid cooling",
@@ -17,6 +17,9 @@
   "item_tooltip.gttruesteam.coating_shrine_2": "§7Coating is primitive and imperfect process, fluid in the middle will be consume each 100 crafts. You can right click on controller to get about of charges left.",
   "item_tooltip.gttruesteam.cooling_box_1": "§3Surprisingly effective device, that works by using cooling coils to accumulate cooling capacity and discharge it to cool fluids or items",
   "item_tooltip.gttruesteam.cooling_box_2": "§7Recipes usually shows amount of accumulated cooling capacity required as well as how capacity they will consume. You can right click it to get accumulate cooling capacity. Better cooling coils impact maximum capacity as well as capacity generation over time.",
+  "item_tooltip.gttruesteam.infernal_boiler_1": "§cBoiler build from liquid blazes and with stronger version of bronze§f. This almost unnatural device can generate superhot steam in large quantities nearly free!",
+  "item_tooltip.gttruesteam.infernal_boiler_2": "§7Boiler has two important mechanics.\n  First one is heat. Each time boiler completes recipe, it slowly gather heat and after some time increases heat level. Each heat level doubles the possible parallels. Last heat level - Supreme, also overheats recipes, multiplying its output.",
+  "item_tooltip.gttruesteam.infernal_boiler_3": "§7  Second one is boiler charging. Periodically boiler need to run specific recipes, that can restore its charge, or it will start throttling and dropping heat.",
   "material.gttruesteam.activated_blaze": "Activated Blaze",
   "material.gttruesteam.aluminium_bronze": "Aluminium Bronze",
   "material.gttruesteam.corrosion_tempered_brass": "Corrosion Tempered Brass",
@@ -33,5 +36,6 @@
   "tooltip.gttruesteam.charging_cycles": "Charging for %d cycles",
   "tooltip.gttruesteam.coating_charges": "Coating charges: ",
   "tooltip.gttruesteam.cooling_coils_capacity": "§bBase Cooling Capacity: §f%d ηK",
+  "tooltip.gttruesteam.cooling_consumed": "Cooling consumed: %d",
   "tooltip.gttruesteam.overheatable": "§cOverheat§f-able"
 }

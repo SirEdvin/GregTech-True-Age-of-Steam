@@ -20,12 +20,13 @@ import net.minecraft.world.level.block.Blocks;
 
 import site.siredvin.gttruesteam.GTTrueSteam;
 import site.siredvin.gttruesteam.TrueSteamBlocks;
+import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 
 public class InfernalBoiler {
 
     @SuppressWarnings({ "Convert2MethodRef", "FunctionalExpressionCanBeFolded" })
-    public static MultiblockMachineDefinition INFERNAL_BOILER = GTTrueSteam.REGISTRATE
+    public static MultiblockMachineDefinition MACHINE = GTTrueSteam.REGISTRATE
             .multiblock("infernal_boiler", InfernalBoilerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(TrueSteamRecipeTypes.METAPHYSICAL_BOILING)
@@ -75,6 +76,11 @@ public class InfernalBoiler {
                     .where('I', GTMachines.FLUID_IMPORT_HATCH[2], Direction.NORTH)
                     .where('O', GTMachines.FLUID_EXPORT_HATCH[2], Direction.SOUTH)
                     .build())
+            .tooltips(
+                    TrueSteamLang.INFERNAL_BOILER_TOOLTIP_1,
+                    TrueSteamLang.INFERNAL_BOILER_TOOLTIP_2,
+                    TrueSteamLang.INFERNAL_BOILER_TOOLTIP_3
+            )
             .additionalDisplay(((iMultiController, components) -> {
                 if (iMultiController.isFormed()) {
                     if (iMultiController instanceof InfernalBoilerMachine infernalBoilerMachine) {

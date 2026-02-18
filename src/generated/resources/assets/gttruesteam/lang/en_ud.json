@@ -8,7 +8,7 @@
   "block.gttruesteam.infernal_boiler": "ɹǝןıoᗺ ןɐuɹǝɟuI",
   "block.gttruesteam.slightly_corrosion_proof_casing": "buısɐƆ ɟooɹԀ uoısoɹɹoƆ ʎןʇɥbıןS",
   "condition.gttruesteam.coating_fluid": ":pınןɟ buıʇɐoƆ",
-  "condition.gttruesteam.cooling_capacity": ":pǝɹınbǝɹ buıןooƆ",
+  "condition.gttruesteam.cooling_capacity": "%d :pǝɹınbǝɹ buıןooƆ",
   "error.gttruesteam.cooling_coils": "ǝɯɐs ǝɥʇ ǝq pןnoɥs sןıoɔ buıןooɔ ןןⱯ",
   "gttruesteam.coating": "buıʇɐoƆ",
   "gttruesteam.fluid_cooling": "buıןooɔ pınןℲ",
@@ -17,6 +17,9 @@
   "item_tooltip.gttruesteam.coating_shrine_2": "˙ʇɟǝן sǝbɹɐɥɔ ɟo ʇnoqɐ ʇǝb oʇ ɹǝןןoɹʇuoɔ uo ʞɔıןɔ ʇɥbıɹ uɐɔ noʎ ˙sʇɟɐɹɔ 00Ɩ ɥɔɐǝ ǝɯnsuoɔ ǝq ןןıʍ ǝןppıɯ ǝɥʇ uı pınןɟ 'ssǝɔoɹd ʇɔǝɟɹǝdɯı puɐ ǝʌıʇıɯıɹd sı buıʇɐoƆㄥ§",
   "item_tooltip.gttruesteam.cooling_box_1": "sɯǝʇı ɹo spınןɟ ןooɔ oʇ ʇı ǝbɹɐɥɔsıp puɐ ʎʇıɔɐdɐɔ buıןooɔ ǝʇɐןnɯnɔɔɐ oʇ sןıoɔ buıןooɔ buısn ʎq sʞɹoʍ ʇɐɥʇ 'ǝɔıʌǝp ǝʌıʇɔǝɟɟǝ ʎןbuısıɹdɹnSƐ§",
   "item_tooltip.gttruesteam.cooling_box_2": "˙ǝɯıʇ ɹǝʌo uoıʇɐɹǝuǝb ʎʇıɔɐdɐɔ sɐ ןןǝʍ sɐ ʎʇıɔɐdɐɔ ɯnɯıxɐɯ ʇɔɐdɯı sןıoɔ buıןooɔ ɹǝʇʇǝᗺ ˙ʎʇıɔɐdɐɔ buıןooɔ ǝʇɐןnɯnɔɔɐ ʇǝb oʇ ʇı ʞɔıןɔ ʇɥbıɹ uɐɔ noʎ ˙ǝɯnsuoɔ ןןıʍ ʎǝɥʇ ʎʇıɔɐdɐɔ ʍoɥ sɐ ןןǝʍ sɐ pǝɹınbǝɹ ʎʇıɔɐdɐɔ buıןooɔ pǝʇɐןnɯnɔɔɐ ɟo ʇunoɯɐ sʍoɥs ʎןןɐnsn sǝdıɔǝᴚㄥ§",
+  "item_tooltip.gttruesteam.infernal_boiler_1": "¡ǝǝɹɟ ʎןɹɐǝu sǝıʇıʇuɐnb ǝbɹɐן uı ɯɐǝʇs ʇoɥɹǝdns ǝʇɐɹǝuǝb uɐɔ ǝɔıʌǝp ןɐɹnʇɐuun ʇsoɯןɐ sıɥ⟘ ˙ɟ§ǝzuoɹq ɟo uoısɹǝʌ ɹǝbuoɹʇs ɥʇıʍ puɐ sǝzɐןq pınbıן ɯoɹɟ pןınq ɹǝןıoᗺɔ§",
+  "item_tooltip.gttruesteam.infernal_boiler_2": "˙ʇndʇno sʇı buıʎןdıʇןnɯ 'sǝdıɔǝɹ sʇɐǝɥɹǝʌo osןɐ 'ǝɯǝɹdnS - ןǝʌǝן ʇɐǝɥ ʇsɐꞀ ˙sןǝןןɐɹɐd ǝןqıssod ǝɥʇ sǝןqnop ןǝʌǝן ʇɐǝɥ ɥɔɐƎ ˙ןǝʌǝן ʇɐǝɥ sǝsɐǝɹɔuı ǝɯıʇ ǝɯos ɹǝʇɟɐ puɐ ʇɐǝɥ ɹǝɥʇɐb ʎןʍoןs ʇı 'ǝdıɔǝɹ sǝʇǝןdɯoɔ ɹǝןıoq ǝɯıʇ ɥɔɐƎ ˙ʇɐǝɥ sı ǝuo ʇsɹıℲ  \n˙sɔıuɐɥɔǝɯ ʇuɐʇɹodɯı oʍʇ sɐɥ ɹǝןıoᗺㄥ§",
+  "item_tooltip.gttruesteam.infernal_boiler_3": "˙ʇɐǝɥ buıddoɹp puɐ buıןʇʇoɹɥʇ ʇɹɐʇs ןןıʍ ʇı ɹo 'ǝbɹɐɥɔ sʇı ǝɹoʇsǝɹ uɐɔ ʇɐɥʇ 'sǝdıɔǝɹ ɔıɟıɔǝds unɹ oʇ pǝǝu ɹǝןıoq ʎןןɐɔıpoıɹǝԀ ˙buıbɹɐɥɔ ɹǝןıoq sı ǝuo puoɔǝS  ㄥ§",
   "material.gttruesteam.activated_blaze": "ǝzɐןᗺ pǝʇɐʌıʇɔⱯ",
   "material.gttruesteam.aluminium_bronze": "ǝzuoɹᗺ ɯnıuıɯnןⱯ",
   "material.gttruesteam.corrosion_tempered_brass": "ssɐɹᗺ pǝɹǝdɯǝ⟘ uoısoɹɹoƆ",
@@ -33,5 +36,6 @@
   "tooltip.gttruesteam.charging_cycles": "sǝןɔʎɔ %d ɹoɟ buıbɹɐɥƆ",
   "tooltip.gttruesteam.coating_charges": " :sǝbɹɐɥɔ buıʇɐoƆ",
   "tooltip.gttruesteam.cooling_coils_capacity": "ʞη %dɟ§ :ʎʇıɔɐdɐƆ buıןooƆ ǝsɐᗺq§",
+  "tooltip.gttruesteam.cooling_consumed": "%d :pǝɯnsuoɔ buıןooƆ",
   "tooltip.gttruesteam.overheatable": "ǝןqɐ-ɟ§ʇɐǝɥɹǝʌOɔ§"
 }
