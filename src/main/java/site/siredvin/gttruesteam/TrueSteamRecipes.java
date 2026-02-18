@@ -3,11 +3,13 @@ package site.siredvin.gttruesteam;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
 import com.gregtechceu.gtceu.integration.xei.entry.item.ItemTagList;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.level.block.Block;
 
@@ -99,9 +101,33 @@ public class TrueSteamRecipes {
                 .save(provider);
     }
 
+    private static void generateBoilerRecipe(MachineDefinition boiler, Pair<MachineDefinition, MachineDefinition> next, Consumer<FinishedRecipe> provider) {
+        VanillaRecipeHelper.addShapedRecipe(provider, true, next.getFirst().getId(), next.getFirst().asStack(),
+                "PPP",
+                "PwP",
+                " B ",
+                'B', boiler.asStack(),
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel)
+        );
+        VanillaRecipeHelper.addShapedRecipe(provider, true, next.getSecond().getId(), next.getSecond().asStack(),
+                "PPP",
+                "PwP",
+                " B ",
+                'B', next.getFirst().asStack(),
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy)
+        );
+    }
+
+    private static void registerBoilerRecipes(Consumer<FinishedRecipe> provider) {
+        generateBoilerRecipe(GTMachines.STEAM_SOLAR_BOILER.second(), TrueSteamMachines.SOLAR, provider);
+        generateBoilerRecipe(GTMachines.STEAM_LIQUID_BOILER.second(), TrueSteamMachines.LIQUID, provider);
+        generateBoilerRecipe(GTMachines.STEAM_SOLID_BOILER.second(), TrueSteamMachines.SOLID, provider);
+    }
+
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
         steamFuel(TrueSteamMaterials.SuperhotSteam, 2.1, provider);
         registerInfernalChargingLoop(provider);
+        registerBoilerRecipes(provider);
 
         METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("boiling_water"))
             .inputFluids(GTMaterials.Water.getFluid(18))

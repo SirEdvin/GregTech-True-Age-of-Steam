@@ -1,0 +1,8 @@
+{
+  "parent": "gtceu:block/machine/template/sided/sided",
+  "textures": {
+    "bottom": "gttruesteam:block/boilers/infernal_alloy/bottom",
+    "side": "gttruesteam:block/boilers/infernal_alloy/side",
+    "top": "gttruesteam:block/boilers/infernal_alloy/top"
+  }
+}

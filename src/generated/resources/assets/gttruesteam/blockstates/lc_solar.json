@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "gttruesteam:block/machine/lc_solar",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gttruesteam:block/machine/lc_solar"
+    },
+    "facing=south": {
+      "model": "gttruesteam:block/machine/lc_solar",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gttruesteam:block/machine/lc_solar",
+      "y": 270
+    }
+  }
+}

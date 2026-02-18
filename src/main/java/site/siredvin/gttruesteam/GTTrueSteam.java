@@ -126,6 +126,7 @@ public class GTTrueSteam {
      */
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         MultiMachines.sayHi();
+        TrueSteamMachines.sayHi();
     }
 
     /**

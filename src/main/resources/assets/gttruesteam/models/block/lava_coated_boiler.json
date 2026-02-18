@@ -1,0 +1,8 @@
+{
+  "parent": "gtceu:block/machine/template/sided/sided",
+  "textures": {
+    "bottom": "gttruesteam:block/boilers/lava_coated/bottom",
+    "side": "gttruesteam:block/boilers/lava_coated/side",
+    "top": "gttruesteam:block/boilers/lava_coated/top"
+  }
+}

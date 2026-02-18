@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "gttruesteam:block/machine/ia_solid",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "gttruesteam:block/machine/ia_solid",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gttruesteam:block/machine/ia_solid"
+    },
+    "facing=south": {
+      "model": "gttruesteam:block/machine/ia_solid",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "gttruesteam:block/machine/ia_solid",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "gttruesteam:block/machine/ia_solid",
+      "y": 270
+    }
+  }
+}
