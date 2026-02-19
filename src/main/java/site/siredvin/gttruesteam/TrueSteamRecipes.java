@@ -179,6 +179,19 @@ public class TrueSteamRecipes {
                 .outputItems(TagPrefix.ingot, TrueSteamMaterials.AluminiumBronze, 2)
                 .duration(200).EUt(32).save(provider);
 
+        ALLOY_SMELTER_RECIPES.recipeBuilder(TrueSteamBlocks.BronzeGlass.getId())
+                .inputItems(TagPrefix.block, GTMaterials.Glass)
+                .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
+                .outputItems(TrueSteamBlocks.BronzeGlass, 1)
+                .duration(200).EUt(32).save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.getId())
+                .inputItems(TagPrefix.foil, TrueSteamMaterials.FrostbiteMagnalium, 8)
+                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.Aluminium, 8)
+                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
+                .outputItems(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.asStack())
+                .duration(200).EUt(30).save(provider);
+
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.InfernalAlloy.getResourceLocation())
                 .inputItems(TagPrefix.ingot, TrueSteamMaterials.AluminiumBronze)
                 .outputItems(TagPrefix.ingot, TrueSteamMaterials.InfernalAlloy)

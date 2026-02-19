@@ -89,7 +89,8 @@ public class TrueSteamMaterials {
                         MaterialFlags.DISABLE_DECOMPOSITION,
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
-                        MaterialFlags.GENERATE_FRAME)
+                        MaterialFlags.GENERATE_FRAME,
+                        MaterialFlags.GENERATE_FOIL)
                 .color(0x81aceb).secondaryColor(0x2f0b51).iconSet(METALLIC).buildAndRegister();
         AluminiumBronze = new Material.Builder(GTTrueSteam.id("aluminium_bronze"))
                 .components(Aluminium, 1, Bronze, 1)

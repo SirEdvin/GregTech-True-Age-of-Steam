@@ -93,10 +93,10 @@ public class TrueSteamMachines {
                                                                                    BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
         MachineDefinition lowTier = builder.apply(false,
                 GTTrueSteam.REGISTRATE.machine("lc_%s".formatted(name), holder -> factory.apply(holder, false))
-                        .langValue("Lava Coated " + FormattingUtil.toEnglishName(name)));
+                        .langValue("Lava Coated " + FormattingUtil.toEnglishName(name) + " Boiler"));
         MachineDefinition highTier = builder.apply(true,
                 GTTrueSteam.REGISTRATE.machine("ia_%s".formatted(name), holder -> factory.apply(holder, true))
-                        .langValue("Infernal " + FormattingUtil.toEnglishName(name)));
+                        .langValue("Infernal " + FormattingUtil.toEnglishName(name) + " Boiler"));
         return Pair.of(lowTier, highTier);
     }
 
