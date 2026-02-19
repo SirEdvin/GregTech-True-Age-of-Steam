@@ -21,7 +21,7 @@ import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrineMachine;
 
 @NoArgsConstructor
-public class CoatingFluidCondition extends RecipeCondition {
+public class CoatingFluidCondition extends RecipeCondition<CoatingFluidCondition> {
 
     // spotless:off
     public static final Codec<CoatingFluidCondition> CODEC =
@@ -45,7 +45,7 @@ public class CoatingFluidCondition extends RecipeCondition {
     private @NotNull String requiredFluid = "";
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<CoatingFluidCondition> getType() {
         return TrueSteamRecipeConditions.COATING_FLUID;
     }
 
@@ -71,7 +71,7 @@ public class CoatingFluidCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public CoatingFluidCondition createTemplate() {
         return new CoatingFluidCondition();
     }
 }

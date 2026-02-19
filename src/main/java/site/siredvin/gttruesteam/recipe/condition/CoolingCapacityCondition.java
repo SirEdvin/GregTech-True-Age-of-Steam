@@ -17,7 +17,7 @@ import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
 import site.siredvin.gttruesteam.api.ICoolingMachine;
 
 @NoArgsConstructor
-public class CoolingCapacityCondition extends RecipeCondition {
+public class CoolingCapacityCondition extends RecipeCondition<CoolingCapacityCondition> {
 
     // spotless:off
     public static final Codec<CoolingCapacityCondition> CODEC =
@@ -35,7 +35,7 @@ public class CoolingCapacityCondition extends RecipeCondition {
     private int requiredCapacity = 0;
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<CoolingCapacityCondition> getType() {
         return TrueSteamRecipeConditions.COOLING_CAPACITY;
     }
 
@@ -54,7 +54,7 @@ public class CoolingCapacityCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public CoolingCapacityCondition createTemplate() {
         return new CoolingCapacityCondition();
     }
 }

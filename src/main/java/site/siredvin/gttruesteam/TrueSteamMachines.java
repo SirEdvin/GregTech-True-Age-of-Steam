@@ -90,7 +90,7 @@ public class TrueSteamMachines {
 
     private static Pair<MachineDefinition, MachineDefinition> registerSteamMachine(String name,
                                                                                    BiFunction<IMachineBlockEntity, Boolean, MetaMachine> factory,
-                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition>, MachineDefinition> builder) {
+                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
         MachineDefinition lowTier = builder.apply(false,
                 GTTrueSteam.REGISTRATE.machine("lc_%s".formatted(name), holder -> factory.apply(holder, false))
                         .langValue("Lava Coated " + FormattingUtil.toEnglishName(name)));

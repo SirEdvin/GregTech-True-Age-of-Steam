@@ -128,7 +128,7 @@ public class TrueSteamRecipes {
         registerBoilerRecipes(provider);
 
         METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("boiling_water"))
-                .inputFluids(GTMaterials.Water.getFluid(18))
+                .inputFluids(GTMaterials.DistilledWater.getFluid(18))
                 .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(3000))
                 .circuitMeta(1)
                 .EUt(30)
