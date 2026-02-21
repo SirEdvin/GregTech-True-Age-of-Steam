@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "gttruesteam:husk_oh_the_boiler"
+          "name": "gttruesteam:husk_of_the_boiler"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "gttruesteam:blocks/husk_oh_the_boiler"
+  "random_sequence": "gttruesteam:blocks/husk_of_the_boiler"
 }

@@ -56,12 +56,14 @@ public class CoatingShrineRenderer extends DynamicRender<IRecipeLogicMachine, Co
                     var direction = coatingMachine.getFrontFacing().getOpposite();
                     var movingDirection = direction.getClockWise();
                     var level = coatingMachine.getLevel();
-                    var progress = recipeLogic.getProgressPercent() - 1;
+                    var progress = recipeLogic.getProgressPercent() - 0.5;
                     poseStack.pushPose();
-                    poseStack.translate(direction.getStepX() * 1.5, 0.8, direction.getStepZ() * 1.5);
+                    poseStack.translate(direction.getStepX() * 2 + 0.5, 0.8, direction.getStepZ() * 2 + 0.5);
                     poseStack.translate(movingDirection.getStepX() * progress, 0,
                             movingDirection.getStepZ() * progress);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
+                    if (direction.getStepX() != 0) {
+                        poseStack.mulPose(Axis.YP.rotationDegrees(90));
+                    }
                     var stack = firstItemStack.getItems()[0];
                     var model = Minecraft.getInstance().getItemRenderer().getModel(stack, level, null, packedLight);
                     Minecraft.getInstance().getItemRenderer().render(
