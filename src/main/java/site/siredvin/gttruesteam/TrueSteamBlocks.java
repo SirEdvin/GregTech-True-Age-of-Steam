@@ -58,7 +58,7 @@ public class TrueSteamBlocks {
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
 
-    public static BlockEntry<Block> BoilerHusk = GTTrueSteam.REGISTRATE.block("husk_oh_the_boiler", Block::new)
+    public static BlockEntry<Block> BoilerHusk = GTTrueSteam.REGISTRATE.block("husk_of_the_boiler", Block::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
             .addLayer(() -> RenderType::solid)

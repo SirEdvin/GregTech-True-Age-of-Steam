@@ -51,7 +51,7 @@ public class CoatingShrine {
                     .where("S", Predicates.blockTag(BlockTags.STAIRS))
                     .where("B",
                             Predicates.custom(x -> x.getBlockState().isSolid(), BLOCK_SUPPLIER)
-                                    .addTooltips(Component.literal("Any soild block can be used")))
+                                    .addTooltips(Component.literal("Any solid block can be used")))
                     .where("|", Predicates.blockTag(BlockTags.WALLS))
                     .where("#", Predicates.any())
                     .where("C", Predicates.blocks(TrueSteamBlocks.BronzeGlass.get()))

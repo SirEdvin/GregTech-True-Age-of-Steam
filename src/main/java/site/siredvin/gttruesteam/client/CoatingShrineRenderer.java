@@ -23,7 +23,7 @@ public class CoatingShrineRenderer extends DynamicRender<IRecipeLogicMachine, Co
 
     // spotless:off
     @SuppressWarnings("deprecation")
-    public static final Codec<CoatingShrineRenderer> CODEC =  Codec.unit(CoatingShrineRenderer::new);
+    public static final Codec<CoatingShrineRenderer> CODEC = Codec.unit(CoatingShrineRenderer::new);
     public static final DynamicRenderType<IRecipeLogicMachine, CoatingShrineRenderer> TYPE = new DynamicRenderType<>(CoatingShrineRenderer.CODEC);
     // spotless:on
 
