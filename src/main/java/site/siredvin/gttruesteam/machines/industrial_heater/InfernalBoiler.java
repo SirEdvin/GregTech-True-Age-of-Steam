@@ -30,7 +30,7 @@ public class InfernalBoiler {
             .multiblock("infernal_boiler", InfernalBoilerMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(TrueSteamRecipeTypes.METAPHYSICAL_BOILING)
-            .appearanceBlock(() -> GCYMBlocks.CASING_INDUSTRIAL_STEAM.get())
+            .appearanceBlock(() -> TrueSteamBlocks.InfernalAlloyCasing.get())
             .recipeModifier(new InfernalBoilerRecipeModifier())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" CHC ", "COOOC", "COOOC", "COOOC", " CMC ")
