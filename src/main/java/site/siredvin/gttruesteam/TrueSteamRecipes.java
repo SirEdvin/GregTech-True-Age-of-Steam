@@ -224,5 +224,12 @@ public class TrueSteamRecipes {
                 'C', TrueSteamBlocks.SlightlyCorrosionProofCasing.asStack(),
                 'S', CustomTags.MV_CIRCUITS,
                 'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.Aluminium));
+
+        SCANNER_RECIPES.recipeBuilder(TrueSteamItems.PurifiedInfernalDust.getId())
+                .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug)
+                .chancedOutput(TrueSteamItems.PurifiedInfernalDust.asStack(), 500, 500)
+                .duration(200)
+                .EUt(30)
+                .save(provider);
     }
 }

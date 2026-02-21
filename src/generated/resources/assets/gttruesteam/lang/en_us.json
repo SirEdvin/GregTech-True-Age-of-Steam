@@ -19,6 +19,7 @@
   "gttruesteam.coating": "Coating",
   "gttruesteam.fluid_cooling": "Fluid cooling",
   "gttruesteam.metaphysical_boiling": "Metaphysical boiling",
+  "item.gttruesteam.purified_infernal_dust": "Purified Infernal Dust",
   "item_tooltip.gttruesteam.coating_shrine_1": "§6Coating allows you to infuse items with fluid properties. Fluid in the middle impact recipes.",
   "item_tooltip.gttruesteam.coating_shrine_2": "§7Coating is primitive and imperfect process, fluid in the middle will be consume each 100 crafts. You can right click on controller to get about of charges left.",
   "item_tooltip.gttruesteam.cooling_box_1": "§3Surprisingly effective device, that works by using cooling coils to accumulate cooling capacity and discharge it to cool fluids or items",

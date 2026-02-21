@@ -90,6 +90,7 @@ public class GTTrueSteam {
     private void addMaterials(MaterialEvent event) {
         TrueSteamMaterials.init();
         TrueSteamBlocks.sayHi();
+        TrueSteamItems.sayHi();
     }
 
     /**
