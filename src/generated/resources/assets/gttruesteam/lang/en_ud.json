@@ -2,6 +2,7 @@
   "block.gttruesteam.bronze_glass": "ssɐן⅁ ǝzuoɹᗺ",
   "block.gttruesteam.coating_shrine": "ǝuıɹɥS buıʇɐoƆ",
   "block.gttruesteam.cooling_box": "xoᗺ buıןooƆ",
+  "block.gttruesteam.frost_overproofed_casing": "buısɐƆ pǝɟooɹdɹǝʌO ʇsoɹℲ",
   "block.gttruesteam.frostbite_magnalium_coil_block": "ʞɔoןᗺ ןıoƆ ɯnıןɐubɐW ǝʇıqʇsoɹℲ",
   "block.gttruesteam.husk_of_the_boiler": "ɹǝןıoᗺ ǝɥ⟘ ɟO ʞsnH",
   "block.gttruesteam.ia_liquid": "ɹǝןıoᗺ pınbıꞀ ןɐuɹǝɟuI",
@@ -13,6 +14,7 @@
   "block.gttruesteam.lc_liquid": "ɹǝןıoᗺ pınbıꞀ pǝʇɐoƆ ɐʌɐꞀ",
   "block.gttruesteam.lc_solar": "ɹǝןıoᗺ ɹɐןoS pǝʇɐoƆ ɐʌɐꞀ",
   "block.gttruesteam.lc_solid": "ɹǝןıoᗺ pıןoS pǝʇɐoƆ ɐʌɐꞀ",
+  "block.gttruesteam.regulated_cryo_chamber": "ɹǝqɯɐɥƆ oʎɹƆ pǝʇɐןnbǝᴚ",
   "block.gttruesteam.slightly_corrosion_proof_casing": "buısɐƆ ɟooɹԀ uoısoɹɹoƆ ʎןʇɥbıןS",
   "condition.gttruesteam.coating_fluid": ":pınןɟ buıʇɐoƆ",
   "condition.gttruesteam.cooling_capacity": "%d :pǝɹınbǝɹ buıןooƆ",
@@ -45,5 +47,6 @@
   "tooltip.gttruesteam.coating_charges": " :sǝbɹɐɥɔ buıʇɐoƆ",
   "tooltip.gttruesteam.cooling_coils_capacity": "ʞη %dɟ§ :ʎʇıɔɐdɐƆ buıןooƆ ǝsɐᗺq§",
   "tooltip.gttruesteam.cooling_consumed": "%d :pǝɯnsuoɔ buıןooƆ",
-  "tooltip.gttruesteam.overheatable": "ǝןqɐ-ɟ§ʇɐǝɥɹǝʌOɔ§"
+  "tooltip.gttruesteam.overheatable": "ǝןqɐ-ɟ§ʇɐǝɥɹǝʌOɔ§",
+  "tooltip.gttruesteam.rcc_reduction": "%s :ɹoʇɔɐɟ uoıʇɔnpǝɹ uoıʇɐɹnᗡ"
 }

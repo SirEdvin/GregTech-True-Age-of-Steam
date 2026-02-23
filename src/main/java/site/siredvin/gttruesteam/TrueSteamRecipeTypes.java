@@ -37,6 +37,9 @@ public class TrueSteamRecipeTypes {
     public static String INFERNAL_CYCLES_DATA_KEY = "infernal_cycles";
     public static String OVERHEATED_KEY = "overheated";
     public static String COOLING_CONSUMED = "cooling_consumed";
+
+    public static String OVERHEATED_WIDGET_ID = "overheatedWidget";
+    public static String INTERNAL_CYCLED_WIDGET_ID = "infernalCyclesWidget";
     //
     // public static GTRecipeType INDUSTRIAL_FLUID_PRESSURIZER = GTRecipeTypes
     // .register("industrial_fluid_pressurizer", GTRecipeTypes.MULTIBLOCK)
@@ -67,19 +70,27 @@ public class TrueSteamRecipeTypes {
             .setIconSupplier(() -> InfernalBoiler.MACHINE.asStack())
             .setUiBuilder((recipe, widgetGroup) -> {
                 if (recipe.data.contains(INFERNAL_CYCLES_DATA_KEY)) {
-                    widgetGroup.addWidget(new LabelWidget(
-                            -7,
-                            widgetGroup.getSize().height,
-                            Component.translatable(TrueSteamLang.CHARGING_CYCLES_KEY,
-                                    recipe.data.getInt(INFERNAL_CYCLES_DATA_KEY))));
-                    widgetGroup.setSizeHeight(widgetGroup.getSizeHeight() + 10);
+                    if (widgetGroup.widgets.stream().noneMatch(x -> x.getId().equals(INTERNAL_CYCLED_WIDGET_ID))) {
+                        var infernalCyclesWidget = new LabelWidget(
+                                -7,
+                                widgetGroup.getSize().height,
+                                Component.translatable(TrueSteamLang.CHARGING_CYCLES_KEY,
+                                        recipe.data.getInt(INFERNAL_CYCLES_DATA_KEY)));
+                        infernalCyclesWidget.setId(INTERNAL_CYCLED_WIDGET_ID);
+                        widgetGroup.addWidget(infernalCyclesWidget);
+                        widgetGroup.setSizeHeight(widgetGroup.getSizeHeight() + 10);
+                    }
                 }
                 if (recipe.data.contains(OVERHEATED_KEY)) {
-                    widgetGroup.addWidget(new LabelWidget(
-                            -7,
-                            widgetGroup.getSize().height,
-                            TrueSteamLang.OVERHEATABLE));
-                    widgetGroup.setSizeHeight(widgetGroup.getSizeHeight() + 10);
+                    if (widgetGroup.widgets.stream().noneMatch(x -> x.getId().equals(OVERHEATED_WIDGET_ID))) {
+                        var overheatedWidget = new LabelWidget(
+                                -7,
+                                widgetGroup.getSize().height,
+                                TrueSteamLang.OVERHEATABLE);
+                        overheatedWidget.setId(OVERHEATED_WIDGET_ID);
+                        widgetGroup.addWidget(overheatedWidget);
+                        widgetGroup.setSizeHeight(widgetGroup.getSizeHeight() + 10);
+                    }
                 }
             });
     public static GTRecipeType COATING = register("coating", GTRecipeTypes.MULTIBLOCK, "Coating")

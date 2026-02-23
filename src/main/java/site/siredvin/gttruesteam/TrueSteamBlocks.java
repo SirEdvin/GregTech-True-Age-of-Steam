@@ -55,6 +55,8 @@ public class TrueSteamBlocks {
             GTCEu.id("block/casings/gcym/corrosion_proof_casing"));
     public static BlockEntry<Block> InfernalAlloyCasing = createCasingBlock("infernal_alloy_casing",
             GTTrueSteam.id("block/infernal_alloy_casing"));
+    public static BlockEntry<Block> FrostOverproofedCasing = createCasingBlock("frost_overproofed_casing",
+            GTTrueSteam.id("block/frost_overproofed_casing"));
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
 

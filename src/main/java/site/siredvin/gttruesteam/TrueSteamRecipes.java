@@ -76,6 +76,14 @@ public class TrueSteamRecipes {
                 .outputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(4000))
                 .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 500)
                 .addCondition(new CoolingCapacityCondition(5000))
+                .duration(200)
+                .save(provider);
+        FLUID_COOLING.recipeBuilder(GTTrueSteam.id("cooling_water_into_ice"))
+                .inputFluids(GTMaterials.Water.getFluid(1000))
+                .outputFluids(GTMaterials.Ice.getFluid(1000))
+                .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 250)
+                .addCondition(new CoolingCapacityCondition(2000))
+                .duration(200)
                 .save(provider);
         CENTRIFUGE_RECIPES.recipeBuilder(GTTrueSteam.id("infernal_slurry_separation"))
                 .inputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(1000))
@@ -244,5 +252,12 @@ public class TrueSteamRecipes {
                 .inputItems(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy, 4)
                 .outputItems(TrueSteamMachines.InfernalDrum).duration(200).circuitMeta(2)
                 .addMaterialInfo(true).save(provider);
+
+        TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamBlocks.FrostOverproofedCasing.getId())
+                .inputItems(GTBlocks.CASING_ALUMINIUM_FROSTPROOF)
+                .outputItems(TrueSteamBlocks.FrostOverproofedCasing)
+                .duration(200)
+                .addCondition(new CoatingFluidCondition(GTMaterials.Ice.getFluid()))
+                .save(provider);
     }
 }

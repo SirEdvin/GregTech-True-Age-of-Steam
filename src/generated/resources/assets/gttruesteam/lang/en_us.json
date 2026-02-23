@@ -2,6 +2,7 @@
   "block.gttruesteam.bronze_glass": "Bronze Glass",
   "block.gttruesteam.coating_shrine": "Coating Shrine",
   "block.gttruesteam.cooling_box": "Cooling Box",
+  "block.gttruesteam.frost_overproofed_casing": "Frost Overproofed Casing",
   "block.gttruesteam.frostbite_magnalium_coil_block": "Frostbite Magnalium Coil Block",
   "block.gttruesteam.husk_of_the_boiler": "Husk Of The Boiler",
   "block.gttruesteam.ia_liquid": "Infernal Liquid Boiler",
@@ -13,6 +14,7 @@
   "block.gttruesteam.lc_liquid": "Lava Coated Liquid Boiler",
   "block.gttruesteam.lc_solar": "Lava Coated Solar Boiler",
   "block.gttruesteam.lc_solid": "Lava Coated Solid Boiler",
+  "block.gttruesteam.regulated_cryo_chamber": "Regulated Cryo Chamber",
   "block.gttruesteam.slightly_corrosion_proof_casing": "Slightly Corrosion Proof Casing",
   "condition.gttruesteam.coating_fluid": "Coating fluid:",
   "condition.gttruesteam.cooling_capacity": "Cooling required: %d",
@@ -45,5 +47,6 @@
   "tooltip.gttruesteam.coating_charges": "Coating charges: ",
   "tooltip.gttruesteam.cooling_coils_capacity": "§bBase Cooling Capacity: §f%d ηK",
   "tooltip.gttruesteam.cooling_consumed": "Cooling consumed: %d",
-  "tooltip.gttruesteam.overheatable": "§cOverheat§f-able"
+  "tooltip.gttruesteam.overheatable": "§cOverheat§f-able",
+  "tooltip.gttruesteam.rcc_reduction": "Duration reduction factor: %s"
 }
