@@ -1,0 +1,9 @@
+{
+    "ldlib": {
+        "connection": "gttruesteam:block/coils/machine_coil_estranged_steel_bloom_ctm",
+        "emissive": true
+    },
+    "shimmer": {
+        "bloom": true
+    }
+}

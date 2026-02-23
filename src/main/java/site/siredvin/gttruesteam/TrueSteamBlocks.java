@@ -59,6 +59,8 @@ public class TrueSteamBlocks {
             GTTrueSteam.id("block/frost_overproofed_casing"));
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
+    public static BlockEntry<CoolingCoilBlock> COIL_ESTRANGED_STEEL = createCoolingCoil(
+            TSCoilType.ESTRANGED_STEEL);
 
     public static BlockEntry<Block> BoilerHusk = GTTrueSteam.REGISTRATE.block("husk_of_the_boiler", Block::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)

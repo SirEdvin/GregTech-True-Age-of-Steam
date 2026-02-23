@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
@@ -16,6 +17,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
+import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
@@ -200,6 +202,13 @@ public class TrueSteamRecipes {
                 .outputItems(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.asStack())
                 .duration(200).EUt(30).save(provider);
 
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_ESTRANGED_STEEL.getId())
+                .inputItems(TagPrefix.foil, TrueSteamMaterials.EstrangedSteel, 8)
+                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.StainlessSteel, 8)
+                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
+                .outputItems(TrueSteamBlocks.COIL_ESTRANGED_STEEL.asStack())
+                .duration(200).EUt(30).save(provider);
+
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.InfernalAlloy.getResourceLocation())
                 .inputItems(TagPrefix.ingot, TrueSteamMaterials.AluminiumBronze)
                 .outputItems(TagPrefix.ingot, TrueSteamMaterials.InfernalAlloy)
@@ -258,6 +267,29 @@ public class TrueSteamRecipes {
                 .outputItems(TrueSteamBlocks.FrostOverproofedCasing)
                 .duration(200)
                 .addCondition(new CoatingFluidCondition(GTMaterials.Ice.getFluid()))
+                .save(provider);
+
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.EnderTemperedSteel.getResourceLocation())
+                .inputItems(TagPrefix.dust, GTMaterials.StainlessSteel)
+                .inputItems(TagPrefix.dust, GTMaterials.EnderPearl)
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.EnderTemperedSteel)
+                .EUt(30)
+                .duration(100)
+                .circuitMeta(1)
+                .save(provider);
+
+        TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.EstrangedSteel.getResourceLocation())
+                .inputItems(TagPrefix.ingot, TrueSteamMaterials.EnderTemperedSteel)
+                .outputItems(TagPrefix.ingot, TrueSteamMaterials.EstrangedSteel)
+                .duration(200)
+                .addCondition(new CoatingFluidCondition(GTMaterials.LiquidEnderAir.getFluid()))
+                .save(provider);
+
+        VACUUM_RECIPES.recipeBuilder(RegulatedCryoChamber.MACHINE.getId())
+                .inputItems(GTMultiMachines.VACUUM_FREEZER.asStack())
+                .outputItems(RegulatedCryoChamber.MACHINE.asStack())
+                .EUt(120)
+                .duration(200)
                 .save(provider);
     }
 }

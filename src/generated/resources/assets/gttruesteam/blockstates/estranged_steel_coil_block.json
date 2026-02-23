@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "gttruesteam:block/estranged_steel_coil_block"
+    },
+    "active=true": {
+      "model": "gttruesteam:block/estranged_steel_coil_block_active"
+    }
+  }
+}

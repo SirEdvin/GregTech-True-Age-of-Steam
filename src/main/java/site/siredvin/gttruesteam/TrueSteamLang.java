@@ -73,5 +73,8 @@ public class TrueSteamLang {
 
     public static void sayHi() {
         // GTTrueSteam.REGISTRATE.addRawLang(TrueSteamRecipes.)
+        GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.liquid_ender_air", "Liquid ender air");
+        GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.blaze", "Liquid blaze");
+        GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.ice", "Liquid ice");
     }
 }

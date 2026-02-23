@@ -14,7 +14,9 @@ import site.siredvin.gttruesteam.api.ICoolingCoilType;
 public enum TSCoilType implements StringRepresentable, ICoolingCoilType {
 
     FROSTBITE_MAGNALIUM("frostbite_magnalium", 10_000, 5, 1, 0.9f, TrueSteamMaterials.FrostbiteMagnalium,
-            GTTrueSteam.id("block/coils/machine_coil_frostbite_magnalium"));
+            GTTrueSteam.id("block/coils/machine_coil_frostbite_magnalium")),
+    ESTRANGED_STEEL("estranged_steel", 30_000, 10, 2, 0.8f, TrueSteamMaterials.EstrangedSteel,
+            GTTrueSteam.id("block/coils/machine_coil_estranged_steel"));
 
     @NotNull
     @Getter

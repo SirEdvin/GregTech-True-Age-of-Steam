@@ -101,6 +101,7 @@ public class GTTrueSteam {
     private void modifyMaterials(PostMaterialEvent event) {
         GTMaterials.Blaze.getFluidBuilder().block();
         GTMaterials.Ice.getFluidBuilder().block();
+        GTMaterials.LiquidEnderAir.getFluidBuilder().block();
     }
 
     /**
