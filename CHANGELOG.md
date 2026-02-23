@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Infernal alloy fluid pipes to handle temperature of blaze-related fluids
+- Infernal drum to handle temperature of blaze-related fluids
+- Cooling coils now have new, currently unused parameter
+
+### Changed
+
+- Secondary colors of most of alloy
+- Blaze-related fluids now have same temperature as liquid blaze
+
 ## [0.1.2] - 2026-02-21
 
 ### Added

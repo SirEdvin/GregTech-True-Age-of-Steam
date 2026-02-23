@@ -231,5 +231,18 @@ public class TrueSteamRecipes {
                 .duration(200)
                 .EUt(30)
                 .save(provider);
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "infernal_drum", TrueSteamMachines.InfernalDrum.asStack(),
+                " h ",
+                "PRP", "PRP", 'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy), 'R',
+                new MaterialEntry(TagPrefix.rodLong, TrueSteamMaterials.InfernalAlloy));
+        VanillaRecipeHelper.addShapelessRecipe(provider, "infernal_drum", TrueSteamMachines.InfernalDrum.asStack(),
+                TrueSteamMachines.InfernalDrum.asStack());
+
+        ASSEMBLER_RECIPES.recipeBuilder("infernal_drum").EUt(16)
+                .inputItems(TagPrefix.rodLong, TrueSteamMaterials.InfernalAlloy, 2)
+                .inputItems(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy, 4)
+                .outputItems(TrueSteamMachines.InfernalDrum).duration(200).circuitMeta(2)
+                .addMaterialInfo(true).save(provider);
     }
 }

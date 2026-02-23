@@ -40,7 +40,7 @@ public class TrueSteamMaterials {
         ActivatedBlaze = new Material.Builder(GTTrueSteam.id("activated_blaze"))
                 .components(Blaze, 1, NetherAir, 3, Redstone, 1)
                 .flags(MaterialFlags.DISABLE_DECOMPOSITION)
-                .liquid()
+                .liquid(4000)
                 .color(0xfff94d, false).secondaryColor(0xff1f0a).iconSet(FINE)
                 .buildAndRegister();
         OverheatedInfernalSlurry = new Material.Builder(GTTrueSteam.id("overheated_infernal_slurry"))
@@ -58,7 +58,7 @@ public class TrueSteamMaterials {
         DilutedBlaze = new Material.Builder(GTTrueSteam.id("diluted_blaze"))
                 .components(Blaze, 2, Sulfur, 1)
                 .flags(MaterialFlags.DISABLE_DECOMPOSITION)
-                .liquid()
+                .liquid(4000)
                 .color(0xfff94d, false).secondaryColor(0xff1f0a).iconSet(FINE)
                 .buildAndRegister();
     }
@@ -72,7 +72,7 @@ public class TrueSteamMaterials {
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
                         MaterialFlags.GENERATE_FRAME)
-                .color(0x0F5132).iconSet(METALLIC).buildAndRegister();
+                .color(0x0F5132).secondaryColor(0x104c52).iconSet(METALLIC).buildAndRegister();
         LavaCoatedSteel = new Material.Builder(GTTrueSteam.id("lava_coated_steel"))
                 .components(Steel, 1)
                 .ingot(3)
@@ -91,18 +91,20 @@ public class TrueSteamMaterials {
                         MaterialFlags.GENERATE_ROD,
                         MaterialFlags.GENERATE_FRAME,
                         MaterialFlags.GENERATE_FOIL)
-                .color(0x81aceb).secondaryColor(0x2f0b51).iconSet(METALLIC).buildAndRegister();
+                .color(0x81aceb).secondaryColor(0x57739e).iconSet(METALLIC).buildAndRegister();
         AluminiumBronze = new Material.Builder(GTTrueSteam.id("aluminium_bronze"))
                 .components(Aluminium, 1, Bronze, 1)
                 .ingot(3)
-                .flags().color(0xD89C7D).secondaryColor(0x756ac9c).iconSet(METALLIC).buildAndRegister();
+                .flags().color(0xD89C7D).secondaryColor(0x916954).iconSet(METALLIC).buildAndRegister();
         InfernalAlloy = new Material.Builder(GTTrueSteam.id("infernal_alloy"))
                 .ingot(3)
                 .flags(
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
-                        MaterialFlags.GENERATE_FRAME)
-                .color(0xdb4c24).secondaryColor(0x756ac9c).iconSet(METALLIC).buildAndRegister();
+                        MaterialFlags.GENERATE_FRAME,
+                        MaterialFlags.GENERATE_LONG_ROD)
+                .fluidPipeProperties(4100, 10, false)
+                .color(0xdb4c24).secondaryColor(0x6b2511).iconSet(METALLIC).buildAndRegister();
     }
 
     private static void initMisc() {}

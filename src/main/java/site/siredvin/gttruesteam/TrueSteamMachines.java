@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.model.machine.overlays.WorkableOverlays;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.model.builder.MachineModelBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -81,6 +82,9 @@ public class TrueSteamMachines {
                                     (isHigherPressure ? 2.0 : 1.5) *
                                     FluidType.BUCKET_VOLUME / 20000)))
                     .register());
+
+    public static MachineDefinition InfernalDrum = GTMachineUtils.registerDrum(GTTrueSteam.REGISTRATE,
+            TrueSteamMaterials.InfernalAlloy, 16 * FluidType.BUCKET_VOLUME, "Infernal alloy drum");
 
     public static void sayHi() {}
 

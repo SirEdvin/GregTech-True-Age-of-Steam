@@ -13,6 +13,8 @@ public interface ICoolingCoilType extends ICoilType {
 
     int getCoolingRate();
 
+    float getActiveCoolingReduction();
+
     @NotNull
     String getName();
 
