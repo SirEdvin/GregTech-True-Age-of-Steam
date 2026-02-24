@@ -30,6 +30,8 @@ public class CoolingCoilBlock extends ActiveBlock {
         super.appendHoverText(stack, level, tooltip, flag);
         if (GTUtil.isShiftDown()) {
             tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_CAPACITY_KEY, coilType.getCoolingCapacity()));
+            tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_REDUCTION_KEY,
+                    coilType.getActiveCoolingReduction() * 100));
         } else {
             tooltip.add(Component.translatable("block.gtceu.wire_coil.tooltip_extended_info"));
         }

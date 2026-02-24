@@ -32,8 +32,8 @@ public class RegulatedCryoChamber {
                     .where('#', Predicates.air())
                     .build())
             .tooltips(
-                    TrueSteamLang.COOLING_BOX_TOOLTIP_1,
-                    TrueSteamLang.COOLING_BOX_TOOLTIP_2)
+                    TrueSteamLang.RCC_TOOLTIP_1,
+                    TrueSteamLang.RCC_TOOLTIP_2)
             .workableCasingModel(
                     GTTrueSteam.id("block/frost_overproofed_casing"),
                     GTCEu.id("block/multiblock/vacuum_freezer"))

@@ -4,8 +4,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
 
-import static com.gregtechceu.gtceu.api.GTValues.HV;
-import static com.gregtechceu.gtceu.api.GTValues.VA;
+import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 
@@ -27,8 +26,10 @@ public class TrueSteamMaterials {
     public static Material FrostbiteMagnalium;
     public static Material AluminiumBronze;
     public static Material InfernalAlloy;
-    public static Material EnderTemperedSteel;
+    public static Material ConceptualizedSteel;
     public static Material EstrangedSteel;
+    public static Material StainlessInfernalSteel;
+    public static Material InfernalCompound;
 
     private static Material buildSteam(String name, int temp, int color, int secondaryColor) {
         return new Material.Builder(GTTrueSteam.id(name))
@@ -110,12 +111,15 @@ public class TrueSteamMaterials {
                         MaterialFlags.GENERATE_LONG_ROD)
                 .fluidPipeProperties(4100, 10, false)
                 .color(0xdb4c24).secondaryColor(0x6b2511).iconSet(METALLIC).buildAndRegister();
-        EnderTemperedSteel = new Material.Builder(GTTrueSteam.id("ender_tempered_steel"))
+        ConceptualizedSteel = new Material.Builder(GTTrueSteam.id("conceptualized_steel"))
                 .ingot(3)
+                .flags(
+                        MaterialFlags.GENERATE_FINE_WIRE)
                 .blast(b -> b.temp(1700, BlastProperty.GasTier.LOW)
                         .blastStats(VA[HV], 1100))
-                .components(StainlessSteel, 1, EnderPearl, 1)
+                .components(StainlessSteel, 1, EnderPearl, 1, Amethyst, 1)
                 .color(0xb3f5ea).secondaryColor(0x032620)
+                .cableProperties(V[HV], 1, 2)
                 .iconSet(METALLIC).buildAndRegister();
         EstrangedSteel = new Material.Builder(GTTrueSteam.id("estranged_steel"))
                 .ingot(3)
@@ -125,6 +129,24 @@ public class TrueSteamMaterials {
                         MaterialFlags.GENERATE_LONG_ROD,
                         MaterialFlags.GENERATE_FOIL)
                 .color(0x785eeb).secondaryColor(0x6446eb).iconSet(METALLIC).buildAndRegister();
+        StainlessInfernalSteel = new Material.Builder(GTTrueSteam.id("stainless_infernal_steel"))
+                .ingot(3)
+                .flags(
+                        MaterialFlags.GENERATE_PLATE,
+                        MaterialFlags.GENERATE_ROD,
+                        MaterialFlags.GENERATE_LONG_ROD,
+                        MaterialFlags.GENERATE_BOLT_SCREW)
+                .blast(b -> b.temp(1700, BlastProperty.GasTier.LOW)
+                        .blastStats(VA[HV], 1100))
+                .color(0xe64c24).secondaryColor(0x822511).iconSet(SHINY)
+                .buildAndRegister();
+        InfernalCompound = new Material.Builder(GTTrueSteam.id("infernal_compound"))
+                .gem()
+                .flags(
+                        MaterialFlags.GENERATE_LENS,
+                        MaterialFlags.CRYSTALLIZABLE)
+                .color(0xe64c24).secondaryColor(0x822511).iconSet(SHINY)
+                .buildAndRegister();
     }
 
     private static void initMisc() {}

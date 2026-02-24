@@ -12,5 +12,24 @@ public class TrueSteamItems {
             .defaultModel()
             .register();
 
+    public static ItemEntry<Item> ReEtchedCircuit = GTTrueSteam.REGISTRATE
+            .item("reeteched_circuit", Item::new)
+            .lang("Re-Etched Circuit")
+            .initialProperties(Item.Properties::new)
+            .defaultModel()
+            .register();
+
+    public static ItemEntry<Item> InfernalCircuit = GTTrueSteam.REGISTRATE
+            .item("infernal_circuit", Item::new)
+            .initialProperties(() -> new Item.Properties().stacksTo(64).fireResistant())
+            .defaultModel()
+            .register();
+
+    public static ItemEntry<Item> RawInfernalCircuit = GTTrueSteam.REGISTRATE
+            .item("raw_infernal_circuit", Item::new)
+            .initialProperties(() -> new Item.Properties().stacksTo(64).fireResistant())
+            .defaultModel()
+            .register();
+
     public static void sayHi() {}
 }

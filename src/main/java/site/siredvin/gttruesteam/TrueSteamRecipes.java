@@ -10,6 +10,8 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import com.mojang.datafixers.util.Pair;
@@ -23,6 +25,8 @@ import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
 import java.util.function.Consumer;
 
+import static com.gregtechceu.gtceu.api.GTValues.MV;
+import static com.gregtechceu.gtceu.api.GTValues.VA;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.FLUID_COOLING;
 import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
@@ -130,6 +134,14 @@ public class TrueSteamRecipes {
         generateBoilerRecipe(GTMachines.STEAM_SOLAR_BOILER.second(), TrueSteamMachines.SOLAR, provider);
         generateBoilerRecipe(GTMachines.STEAM_LIQUID_BOILER.second(), TrueSteamMachines.LIQUID, provider);
         generateBoilerRecipe(GTMachines.STEAM_SOLID_BOILER.second(), TrueSteamMachines.SOLID, provider);
+    }
+
+    private static void registerReEtchingRecipe(String tier, TagKey<Item> tag, int amount,
+                                                Consumer<FinishedRecipe> provider) {
+        CHEMICAL_BATH_RECIPES.recipeBuilder(GTTrueSteam.id("reetched_from_" + tier))
+                .inputItems(tag).inputFluids(GTMaterials.SulfuricAcid.getFluid(100))
+                .outputItems(TrueSteamItems.ReEtchedCircuit, amount)
+                .EUt(128).duration(100).save(provider);
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
@@ -269,27 +281,71 @@ public class TrueSteamRecipes {
                 .addCondition(new CoatingFluidCondition(GTMaterials.Ice.getFluid()))
                 .save(provider);
 
-        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.EnderTemperedSteel.getResourceLocation())
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.ConceptualizedSteel.getResourceLocation())
                 .inputItems(TagPrefix.dust, GTMaterials.StainlessSteel)
                 .inputItems(TagPrefix.dust, GTMaterials.EnderPearl)
-                .outputItems(TagPrefix.dust, TrueSteamMaterials.EnderTemperedSteel)
+                .inputItems(TagPrefix.dust, GTMaterials.Amethyst)
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.ConceptualizedSteel, 2)
+                .EUt(30)
+                .duration(100)
+                .circuitMeta(1)
+                .save(provider);
+
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.StainlessInfernalSteel.getResourceLocation())
+                .inputItems(TagPrefix.dust, GTMaterials.StainlessSteel, 7)
+                .inputItems(TagPrefix.dust, GTMaterials.Netherrack, 5)
+                .inputItems(TrueSteamItems.PurifiedInfernalDust, 2)
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.StainlessInfernalSteel, 14)
+                .EUt(30)
+                .duration(100)
+                .circuitMeta(1)
+                .save(provider);
+
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.InfernalCompound.getResourceLocation())
+                .inputItems(TagPrefix.dust, GTMaterials.Amethyst, 2)
+                .inputItems(TagPrefix.dust, GTMaterials.Netherrack, 2)
+                .inputItems(TrueSteamItems.PurifiedInfernalDust, 2)
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.InfernalCompound, 6)
                 .EUt(30)
                 .duration(100)
                 .circuitMeta(1)
                 .save(provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.EstrangedSteel.getResourceLocation())
-                .inputItems(TagPrefix.ingot, TrueSteamMaterials.EnderTemperedSteel)
+                .inputItems(TagPrefix.ingot, TrueSteamMaterials.ConceptualizedSteel)
                 .outputItems(TagPrefix.ingot, TrueSteamMaterials.EstrangedSteel)
                 .duration(200)
                 .addCondition(new CoatingFluidCondition(GTMaterials.LiquidEnderAir.getFluid()))
                 .save(provider);
 
-        VACUUM_RECIPES.recipeBuilder(RegulatedCryoChamber.MACHINE.getId())
-                .inputItems(GTMultiMachines.VACUUM_FREEZER.asStack())
-                .outputItems(RegulatedCryoChamber.MACHINE.asStack())
-                .EUt(120)
-                .duration(200)
+        registerReEtchingRecipe("mv", CustomTags.MV_CIRCUITS, 1, provider);
+        registerReEtchingRecipe("hv", CustomTags.HV_CIRCUITS, 2, provider);
+        registerReEtchingRecipe("ev", CustomTags.EV_CIRCUITS, 4, provider);
+        registerReEtchingRecipe("iv", CustomTags.IV_CIRCUITS, 8, provider);
+
+        LASER_ENGRAVER_RECIPES.recipeBuilder(TrueSteamItems.RawInfernalCircuit.getId())
+                .inputItems(TrueSteamItems.ReEtchedCircuit)
+                .notConsumable(TagPrefix.lens, TrueSteamMaterials.InfernalCompound)
+                .outputItems(TrueSteamItems.RawInfernalCircuit)
+                .duration(900).EUt(VA[MV]).save(provider);
+
+        CIRCUIT_ASSEMBLER_RECIPES.recipeBuilder(TrueSteamItems.InfernalCircuit.getId()).EUt(24).duration(400)
+                .inputItems(TrueSteamItems.RawInfernalCircuit, 2)
+                .inputItems(CustomTags.RESISTORS, 2)
+                .inputItems(CustomTags.DIODES, 2)
+                .inputItems(TagPrefix.wireFine, TrueSteamMaterials.ConceptualizedSteel, 4)
+                .inputItems(TagPrefix.bolt, TrueSteamMaterials.StainlessInfernalSteel, 4)
+                .outputItems(TrueSteamItems.InfernalCircuit, 2)
                 .save(provider);
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, RegulatedCryoChamber.MACHINE.getId(),
+                RegulatedCryoChamber.MACHINE.asStack(),
+                "CCC",
+                "IFI",
+                "WIW",
+                'C', TrueSteamBlocks.FrostOverproofedCasing,
+                'F', GTMultiMachines.VACUUM_FREEZER.asStack(),
+                'I', TrueSteamItems.InfernalCircuit,
+                'W', new MaterialEntry(TagPrefix.cableGtSingle, TrueSteamMaterials.ConceptualizedSteel));
     }
 }

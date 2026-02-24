@@ -6,11 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-02-24
+
 ### Added
 
 - Infernal alloy fluid pipes to handle temperature of blaze-related fluids
 - Infernal drum to handle temperature of blaze-related fluids
 - Cooling coils now have new, currently unused parameter
+- Infernal circuit
+- New multiblock: Regulated Cryo Chamber
+- Second cooling coil
+- Some new materials
 
 ### Changed
 

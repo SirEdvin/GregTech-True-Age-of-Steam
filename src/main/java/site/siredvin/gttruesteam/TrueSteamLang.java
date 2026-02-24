@@ -8,6 +8,8 @@ public class TrueSteamLang {
     public static String COIL_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("cooling_coils"));
     public static String COIL_COOLING_CAPACITY_KEY = Util.makeDescriptionId("tooltip",
             GTTrueSteam.id("cooling_coils_capacity"));
+    public static String COIL_COOLING_REDUCTION_KEY = Util.makeDescriptionId("tooltip",
+            GTTrueSteam.id("cooling_coils_reduction"));
     public static String COOLING_CAPACITY_MESSAGE_KEY = Util.makeDescriptionId("message",
             GTTrueSteam.id("cooling_capacity"));
     public static String COATING_CHARGES_MESSAGE_KEY = Util.makeDescriptionId("message",
@@ -28,6 +30,9 @@ public class TrueSteamLang {
             "All cooling coils should be the same");
     public static MutableComponent COIL_COOLING_CAPACITY = GTTrueSteam.REGISTRATE.addRawLang(COIL_COOLING_CAPACITY_KEY,
             "§bBase Cooling Capacity: §f%d ηK");
+    public static MutableComponent COIL_COOLING_REDUCTION = GTTrueSteam.REGISTRATE.addRawLang(
+            COIL_COOLING_REDUCTION_KEY,
+            "§bMax duration reduction: §f%d%%");
     public static MutableComponent CHARGING_CYCLES = GTTrueSteam.REGISTRATE.addRawLang(CHARGING_CYCLES_KEY,
             "Charging for %d cycles");
     public static MutableComponent OVERHEATABLE = GTTrueSteam.REGISTRATE.addLang("tooltip",
@@ -65,6 +70,14 @@ public class TrueSteamLang {
             "item_tooltip",
             GTTrueSteam.id("infernal_boiler_3"),
             "§7  Second one is boiler charging. Periodically boiler need to run specific recipes, that can restore its charge, or it will start throttling and dropping heat.");
+    public static MutableComponent RCC_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("rcc_1"),
+            "§3Slightly better aluminium box");
+    public static MutableComponent RCC_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("rcc_2"),
+            "§7Slighly better version of vacuum freezer, but without batching. When working continuously, reduce recipe duration based on coils and also has some parallel capacity based on coil levels. When level of coil better than voltage requirement of recipe, switches to perfect OC");
 
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");
