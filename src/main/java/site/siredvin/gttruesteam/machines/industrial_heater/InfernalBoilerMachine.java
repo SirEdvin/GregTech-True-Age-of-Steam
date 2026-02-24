@@ -14,7 +14,7 @@ public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine
     public InfernalBoilerMachine(IMachineBlockEntity holder) {
         super(holder);
         this.subscribeServerTick(() -> {
-            if (!this.isActive() || this.getRecipeLogic().getInfernalCharges() <= 0) {
+            if (!this.isActive()) {
                 this.resetCounter++;
                 if (this.resetCounter >= 20 * this.getCoilType().getLevel()) {
                     this.getRecipeLogic().decreaseCycleCounter();

@@ -8,7 +8,7 @@ public class TrueSteamItems {
 
     public static ItemEntry<Item> PurifiedInfernalDust = GTTrueSteam.REGISTRATE
             .item("purified_infernal_dust", Item::new)
-            .initialProperties(() -> new Item.Properties().stacksTo(1).fireResistant())
+            .initialProperties(() -> new Item.Properties().fireResistant())
             .defaultModel()
             .register();
 
