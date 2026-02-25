@@ -16,9 +16,9 @@ public class RegulatedCryoChamber {
     // Coil-Assisted Freezer
     public static MultiblockMachineDefinition MACHINE = GTTrueSteam.REGISTRATE
             .multiblock("regulated_cryo_chamber", RegulatedCryoChamberMachine::new)
-            .rotationState(RotationState.ALL)
+            .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.VACUUM_RECIPES)
-            .appearanceBlock(TrueSteamBlocks.FrostOverproofedCasing)
+            .appearanceBlock(() -> TrueSteamBlocks.FrostOverproofedCasing.get())
             .recipeModifier(new RegulatedCryoChamberRecipeModifier())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("XXX", "CCC", "CCC", "XXX")
