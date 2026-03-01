@@ -150,11 +150,11 @@ public class TrueSteamRecipes {
         registerBoilerRecipes(provider);
 
         METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("boiling_water"))
-                .inputFluids(GTMaterials.DistilledWater.getFluid(18))
-                .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(3000))
+                .inputFluids(GTMaterials.DistilledWater.getFluid(36))
+                .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(6000))
                 .circuitMeta(1)
                 .EUt(30)
-                .duration(900)
+                .duration(640)
                 .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
 
         ALLOY_SMELTER_RECIPES.recipeBuilder(GTTrueSteam.id("bronze_glass"))

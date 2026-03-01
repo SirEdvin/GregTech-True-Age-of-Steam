@@ -16,6 +16,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
+import site.siredvin.gttruesteam.config.InfernalBoilerConfig;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,9 +28,6 @@ public class InfernalBoilerRecipeModifier implements RecipeModifier {
 
     public static ModifierFunction SUPREME_CHARGING = ModifierFunction.builder().durationMultiplier(0.25).build();
 
-    public static OverclockingLogic SUBCLOCKING = OverclockingLogic.create(OverclockingLogic.PERFECT_DURATION_FACTOR,
-            OverclockingLogic.PERFECT_HALF_VOLTAGE_FACTOR, false);
-
     private static ModifierFunction buildOverheatingFunction(int level) {
         return (recipe) -> {
             var copy = recipe.copy();
@@ -38,13 +36,14 @@ public class InfernalBoilerRecipeModifier implements RecipeModifier {
                 var insides = x.content;
                 if (insides instanceof FluidIngredient fluidIngredient) {
                     var stackCopy = fluidIngredient.copy();
-                    stackCopy.setAmount(stackCopy.getAmount() * (2 + 2 * level));
+                    double scalingFactor = InfernalBoilerConfig.basicSupremeCoef.get() +
+                            InfernalBoilerConfig.coilSupremeCoef.get() * level;
+                    stackCopy.setAmount((int) (stackCopy.getAmount() * scalingFactor));
                     return new Content(stackCopy, x.chance, x.maxChance, x.tierChanceBoost);
                 }
                 return x;
             }).collect(Collectors.toList());
             copy.outputs.put(GTRecipeCapabilities.FLUID, newFluids);
-            copy.duration = (int) (copy.duration * (1.5 + 0.5 * level));
             return copy;
         };
     }
@@ -52,7 +51,7 @@ public class InfernalBoilerRecipeModifier implements RecipeModifier {
     @Override
     public @NotNull ModifierFunction getModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof InfernalBoilerMachine infernalBoilerMachine)) return ModifierFunction.NULL;
-        var level = infernalBoilerMachine.getCoilType().getLevel();
+        int level = (int) ((infernalBoilerMachine.getCoilType().getCoilTemperature() / 900.0) - 1);
         var logic = infernalBoilerMachine.getRecipeLogic();
         if (recipe.data.contains(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY)) {
             if (logic.getHeatLevel() == HeatLevel.SUPREME)
@@ -63,10 +62,10 @@ public class InfernalBoilerRecipeModifier implements RecipeModifier {
             return ModifierFunction.NULL;
         }
         var heatLevel = logic.getHeatLevel();
-        var maxParallels = heatLevel.getMaxParallels() * level;
-        var realParallels = ParallelLogic.getParallelAmount(infernalBoilerMachine, recipe, maxParallels);
+        var maxParallels = heatLevel.getMaxParallels();
+        var realParallels = ParallelLogic.getParallelAmountWithoutEU(infernalBoilerMachine, recipe, maxParallels);
         if (realParallels == 0) return ModifierFunction.NULL;
-        var ocModifier = SUBCLOCKING.getModifier(infernalBoilerMachine, recipe,
+        var ocModifier = OverclockingLogic.NON_PERFECT_OVERCLOCK.getModifier(infernalBoilerMachine, recipe,
                 infernalBoilerMachine.getOverclockVoltage());
         var parallelModifier = ModifierFunction.builder().modifyAllContents(ContentModifier.multiplier(realParallels))
                 .parallels(realParallels).build();

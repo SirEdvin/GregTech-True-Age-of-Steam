@@ -66,6 +66,13 @@ repositories {
     maven {
         url = "https://thedarkcolour.github.io/KotlinForForge/"
     }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 
 }
 
@@ -153,6 +160,8 @@ dependencies {
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
     modImplementation("dev.toma.configuration:configuration-forge-${minecraft_version}:${configuration_version}")
+
+    modRuntimeOnly("maven.modrinth:ae2:15.2.13")
 
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'

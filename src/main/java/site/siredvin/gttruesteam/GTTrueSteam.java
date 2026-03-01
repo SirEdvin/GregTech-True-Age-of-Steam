@@ -15,13 +15,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import site.siredvin.gttruesteam.config.TrueSteamConfig;
 
 @Mod(GTTrueSteam.MOD_ID)
 @SuppressWarnings("removal")
@@ -45,6 +48,8 @@ public class GTTrueSteam {
         modEventBus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         modEventBus.addGenericListener(MachineDefinition.class, this::registerMachines);
         modEventBus.addGenericListener(SoundEntry.class, this::registerSounds);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TrueSteamConfig.COMMON_SPEC, "gttruesteam.toml");
 
         // Most other events are fired on Forge's bus.
         // If we want to use annotations to register event listeners,
