@@ -1,20 +1,29 @@
 package site.siredvin.gttruesteam;
 
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternStringError;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class TrueSteamPredicates {
 
     public static String COOLING_COIL_TYPE_MARK = "CoolingCoilType";
+    public static String MACHINE_TYPE_MARK = "MachineType";
+    public static String MACHINE_POS_LIST_MARK = "MachinePos";
+    public static List<Block> MV_MACHINES = new ArrayList<>();
 
     public static TraceabilityPredicate coolingCoils() {
         return new TraceabilityPredicate(blockWorldState -> {
@@ -37,5 +46,65 @@ public class TrueSteamPredicates {
                 .map(coil -> BlockInfo.fromBlockState(coil.getValue().get().defaultBlockState()))
                 .toArray(BlockInfo[]::new))
                 .addTooltips(TrueSteamLang.COIL_ERROR);
+    }
+
+    private static final String[] STOP_WORDS = new String[] {
+            "hatch", "hp_", "hull", "buffer", "converter", "transformer", "pipeline", "chest", "tank"
+    };
+
+    private static boolean isMVMachine(MachineDefinition m) {
+        if (m.getTier() != GTValues.MV)
+            return false;
+        var id = m.getId().toString();
+        for (var word : STOP_WORDS) {
+            if (id.contains(word))
+                return false;
+        }
+        return true;
+    }
+
+    private static void ensureList() {
+        if (MV_MACHINES.isEmpty()) {
+            MV_MACHINES = GTRegistries.MACHINES.values().stream()
+                    .filter(TrueSteamPredicates::isMVMachine).map(MachineDefinition::getBlock).toList();
+        }
+    }
+
+    public static TraceabilityPredicate singleBlockMachines() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            ensureList();
+            var block = blockWorldState.getBlockState().getBlock();
+            var isMachine = MV_MACHINES.contains(block);
+            if (!isMachine)
+                return false;
+            @SuppressWarnings("DataFlowIssue")
+            var currentBlock = ForgeRegistries.BLOCKS.getKey(block).toString();
+            Object currentRecipeType = blockWorldState.getMatchContext().getOrPut(MACHINE_TYPE_MARK, currentBlock);
+            if (!currentRecipeType.equals(currentBlock)) {
+                blockWorldState.setError(new PatternStringError(TrueSteamLang.COIL_ERROR_KEY));
+                return false;
+            }
+            List<BlockPos> machinePoses = blockWorldState.getMatchContext().getOrPut(MACHINE_POS_LIST_MARK,
+                    new ArrayList<>());
+            machinePoses.add(blockWorldState.getPos());
+            return true;
+        }, () -> {
+            ensureList();
+            return MV_MACHINES.stream()
+                    .map(m -> new BlockInfo(m.defaultBlockState(), true))
+                    .toArray(BlockInfo[]::new);
+        });
+
+        /*
+         * () -> Stream.of(GTMachines.ASSEMBLER[GTValues.LV], GTMachines.EXTRACTOR[GTValues.LV],
+         * GTMachines.COMPRESSOR[GTValues.LV])
+         * .map(m -> new BlockInfo(m.defaultBlockState(), true))
+         * .toArray(BlockInfo[]::new)
+         */
+        /*
+         * () -> Stream.of(GTMachines.ASSEMBLER[0], GTMachines.EXTRACTOR[0], GTMachines.COMPRESSOR[0])
+         * .map(m -> BlockInfo.fromBlockState(m.defaultBlockState()))
+         * .toArray(BlockInfo[]::new)
+         */
     }
 }

@@ -14,15 +14,22 @@ public class TrueSteamLang {
             GTTrueSteam.id("cooling_capacity"));
     public static String COATING_CHARGES_MESSAGE_KEY = Util.makeDescriptionId("message",
             GTTrueSteam.id("coating_charges"));
+
     public static String CHARGING_CYCLES_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("charging_cycles"));
-    public static String COOLING_REQUIRED_KEY = Util.makeDescriptionId("condition", GTTrueSteam.id("cooling_capacity"));
     public static String COOLING_CONSUMED_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("cooling_consumed"));
     public static String RCC_REDUCTION_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("rcc_reduction"));
+
+    public static String COOLING_REQUIRED_KEY = Util.makeDescriptionId("condition", GTTrueSteam.id("cooling_capacity"));
+    public static String INNER_RECIPE_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
+            GTTrueSteam.id("inner_recipe_type"));
 
     public static MutableComponent COATING_FLUID_CONDITION = GTTrueSteam.REGISTRATE.addLang("condition",
             GTTrueSteam.id("coating_fluid"), "Coating fluid:");
     public static MutableComponent COOLING_CAPACITY_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(COOLING_REQUIRED_KEY,
             "Cooling required: %d");
+    public static MutableComponent INNER_RECIPE_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
+            INNER_RECIPE_TYPE_CONDITION_KEY,
+            "Recipe inside: ");
 
     public static MutableComponent COATING_CHARGES = GTTrueSteam.REGISTRATE.addLang("tooltip",
             GTTrueSteam.id("coating_charges"), "Coating charges: ");

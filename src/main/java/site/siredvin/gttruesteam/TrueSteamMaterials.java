@@ -112,7 +112,7 @@ public class TrueSteamMaterials {
                 .fluidPipeProperties(4100, 10, false)
                 .color(0xdb4c24).secondaryColor(0x6b2511).iconSet(METALLIC).buildAndRegister();
         ConceptualizedSteel = new Material.Builder(GTTrueSteam.id("conceptualized_steel"))
-                .ingot(3)
+                .ingot(3).fluid()
                 .flags(
                         MaterialFlags.GENERATE_FINE_WIRE)
                 .blast(b -> b.temp(1700, BlastProperty.GasTier.LOW)

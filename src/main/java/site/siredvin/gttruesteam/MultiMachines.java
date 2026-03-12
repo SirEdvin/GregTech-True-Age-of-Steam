@@ -1,5 +1,6 @@
 package site.siredvin.gttruesteam;
 
+import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
@@ -13,5 +14,6 @@ public class MultiMachines {
         CoolingBox.sayHi();
         CoatingShrine.sayHi();
         RegulatedCryoChamber.sayHi();
+        ConceptInfusionMatrix.sayHi();
     }
 }

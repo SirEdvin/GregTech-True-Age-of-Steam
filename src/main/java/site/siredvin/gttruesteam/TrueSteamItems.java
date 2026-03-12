@@ -31,5 +31,11 @@ public class TrueSteamItems {
             .defaultModel()
             .register();
 
+    public static ItemEntry<Item> EmptyCatalyst = GTTrueSteam.REGISTRATE
+            .item("empty_catalyst", Item::new)
+            .initialProperties(() -> new Item.Properties().stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static void sayHi() {}
 }

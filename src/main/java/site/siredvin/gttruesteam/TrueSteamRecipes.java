@@ -285,7 +285,7 @@ public class TrueSteamRecipes {
                 .inputItems(TagPrefix.dust, GTMaterials.StainlessSteel)
                 .inputItems(TagPrefix.dust, GTMaterials.EnderPearl)
                 .inputItems(TagPrefix.dust, GTMaterials.Amethyst)
-                .outputItems(TagPrefix.dust, TrueSteamMaterials.ConceptualizedSteel, 2)
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.ConceptualizedSteel, 3)
                 .EUt(30)
                 .duration(100)
                 .circuitMeta(1)
@@ -347,5 +347,7 @@ public class TrueSteamRecipes {
                 'F', GTMultiMachines.VACUUM_FREEZER.asStack(),
                 'I', TrueSteamItems.InfernalCircuit,
                 'W', new MaterialEntry(TagPrefix.cableGtSingle, TrueSteamMaterials.ConceptualizedSteel));
+
+        TrueSteamConcepts.CONCEPTS.forEach(c -> c.registerRecipes(provider));
     }
 }

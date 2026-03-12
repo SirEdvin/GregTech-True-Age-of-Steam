@@ -17,7 +17,7 @@ public class CoolingBox {
             .multiblock("cooling_box", CoolingBoxMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TrueSteamRecipeTypes.FLUID_COOLING)
-            .appearanceBlock(TrueSteamBlocks.SlightlyCorrosionProofCasing)
+            .appearanceBlock(() -> TrueSteamBlocks.SlightlyCorrosionProofCasing.get())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("CCMCC", "CSSSC", "CSSSC", "CSSSC", "CCCCC")
                     .aisle("COOOC", "S   S", "S   S", "S   S", "CIIIC")

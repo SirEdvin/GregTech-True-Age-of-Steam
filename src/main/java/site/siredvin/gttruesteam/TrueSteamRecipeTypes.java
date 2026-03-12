@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
@@ -62,6 +63,12 @@ public class TrueSteamRecipeTypes {
                 return "";
             })
             .setSound(GTSoundEntries.TURBINE);
+    public static GTRecipeType CONCEPT_INFUSION = register("concept_infusion", GTRecipeTypes.MULTIBLOCK,
+            "Concept infusion")
+            .setMaxIOSize(2, 1, 2, 0)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+            .setIconSupplier(() -> ConceptInfusionMatrix.MACHINE.getItem().getDefaultInstance());
     public static GTRecipeType METAPHYSICAL_BOILING = register("metaphysical_boiling", GTRecipeTypes.MULTIBLOCK,
             "Metaphysical boiling")
             .setMaxIOSize(1, 1, 1, 2)
@@ -100,6 +107,7 @@ public class TrueSteamRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setUiBuilder((recipe, widgetGroup) -> {
                 List<Fluid> fluids = new ArrayList<>();
+                // noinspection rawtypes
                 for (RecipeCondition condition : recipe.conditions) {
                     if (condition instanceof CoatingFluidCondition coatingFluid) {
                         fluids.add(coatingFluid.getRequiredFluidRecord());
