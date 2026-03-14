@@ -1,8 +1,10 @@
 package site.siredvin.gttruesteam;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import site.siredvin.gttruesteam.api.Concept;
+import site.siredvin.gttruesteam.common.CombinedConcept;
 import site.siredvin.gttruesteam.common.RecipeConcept;
 
 import java.util.ArrayList;
@@ -15,7 +17,10 @@ public class TrueSteamConcepts {
     public static Concept ExtractionConcept = register(
             RecipeConcept.create("extraction", 0x113c44, GTRecipeTypes.EXTRACTOR_RECIPES, 0));
     public static Concept CompressionConcept = register(
-            RecipeConcept.create("compression", 0x434d14, GTRecipeTypes.COMPRESSOR_RECIPES, 1));
+            RecipeConcept.create(
+                    "compression", 0x434d14, GTRecipeTypes.COMPRESSOR_RECIPES, 1,
+                    List.of(MaterialFlags.GENERATE_ROD, MaterialFlags.GENERATE_LONG_ROD,
+                            MaterialFlags.GENERATE_SPRING)));
     public static Concept HeatingConcept = register(
             RecipeConcept.create("heating", 0x872913, GTRecipeTypes.FLUID_HEATER_RECIPES, 2));
     public static Concept PolarizationConcept = register(
@@ -23,6 +28,9 @@ public class TrueSteamConcepts {
                     "polarization", 0x1993b0,
                     GTRecipeTypes.POLARIZER_RECIPES, 3, Collections.emptyList(),
                     builder -> builder.secondaryColor(0x9c2c16)));
+
+    public static Concept CoolingConcept = register(
+            CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept)));
 
     public static Concept register(Concept concept) {
         CONCEPTS.add(concept);

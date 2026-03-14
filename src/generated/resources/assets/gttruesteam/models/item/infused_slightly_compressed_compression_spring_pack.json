@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gttruesteam:item/slightly_compressed_compression_spring_pack"
+  }
+}

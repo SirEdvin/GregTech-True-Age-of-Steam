@@ -3,7 +3,6 @@ package site.siredvin.gttruesteam.common;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
-import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
@@ -12,42 +11,36 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import lombok.Getter;
 import site.siredvin.gttruesteam.GTTrueSteam;
 import site.siredvin.gttruesteam.TrueSteamItems;
-import site.siredvin.gttruesteam.TrueSteamMaterials;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
-import site.siredvin.gttruesteam.api.Concept;
 import site.siredvin.gttruesteam.recipe.condition.InnerRecipeTypeCondition;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.SHINY;
 
-public class RecipeConcept implements Concept {
-
-    @Getter
-    private Material material;
+public class RecipeConcept extends AbstractConcept {
 
     @Getter
     private int circuit;
 
     @Getter
-    private ItemEntry<Item> catalyst;
-
-    @Getter
     private GTRecipeType recipeType;
 
-    public RecipeConcept(Material material, ItemEntry<Item> catalyst, GTRecipeType recipeType, int circuit) {
-        this.material = material;
-        this.catalyst = catalyst;
-        this.recipeType = recipeType;
+    public RecipeConcept(Material material, Material infusingMaterial, ItemEntry<Item> catalyst, int circuit,
+                         GTRecipeType recipeType) {
+        super(material, infusingMaterial, List.of(catalyst));
         this.circuit = circuit;
+        this.recipeType = recipeType;
     }
 
     @Override
     public void registerRecipes(Consumer<FinishedRecipe> provider) {
+        var catalyst = this.catalysts.get(0);
         TrueSteamRecipeTypes.CONCEPT_INFUSION.recipeBuilder(catalyst.getId())
                 .inputItems(TrueSteamItems.EmptyCatalyst)
                 .EUt(8)
@@ -56,13 +49,7 @@ public class RecipeConcept implements Concept {
                 .outputItems(catalyst)
                 .addCondition(new InnerRecipeTypeCondition(recipeType.registryName.toLanguageKey()))
                 .save(provider);
-        GTRecipeTypes.MIXER_RECIPES.recipeBuilder(material.getResourceLocation())
-                .notConsumable(catalyst)
-                .inputFluids(TrueSteamMaterials.ConceptualizedSteel.getFluid(144))
-                .outputFluids(material.getFluid(144))
-                .EUt(256)
-                .duration(600)
-                .save(provider);
+        super.registerRecipes(provider);
     }
 
     public static RecipeConcept create(String name, int primaryColor, GTRecipeType recipeType, int circuit) {
@@ -86,11 +73,13 @@ public class RecipeConcept implements Concept {
             buildingHook.accept(materialBuilder);
         }
         var material = materialBuilder.buildAndRegister();
+        var infusingMaterial = new Material.Builder(GTTrueSteam.id(name + "_infused_air"))
+                .gas().color(primaryColor).buildAndRegister();
         var catalyst = GTTrueSteam.REGISTRATE
                 .item(name + "_catalyst", Item::new)
                 .initialProperties(() -> new Item.Properties().stacksTo(8))
                 .defaultModel()
                 .register();
-        return new RecipeConcept(material, catalyst, recipeType, circuit);
+        return new RecipeConcept(material, infusingMaterial, catalyst, circuit, recipeType);
     }
 }

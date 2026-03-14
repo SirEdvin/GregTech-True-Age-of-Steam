@@ -6,14 +6,20 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
 
 import com.tterrag.registrate.util.entry.ItemEntry;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public interface Concept {
 
+    @NotNull
     Material getMaterial();
 
-    ItemEntry<Item> getCatalyst();
+    @NotNull
+    Material getInfusedAir();
+
+    List<ItemEntry<Item>> getCatalysts();
 
     void registerRecipes(Consumer<FinishedRecipe> provider);
 }

@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
+import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
@@ -142,6 +143,52 @@ public class TrueSteamRecipes {
                 .inputItems(tag).inputFluids(GTMaterials.SulfuricAcid.getFluid(100))
                 .outputItems(TrueSteamItems.ReEtchedCircuit, amount)
                 .EUt(128).duration(100).save(provider);
+    }
+
+    private static void registerSpringRecipes(Consumer<FinishedRecipe> provider) {
+        COMPRESSOR_RECIPES.recipeBuilder(TrueSteamItems.CompressionSpringPack.getId())
+                .inputItems(TagPrefix.spring, TrueSteamConcepts.CompressionConcept.getMaterial(), 3)
+                .outputItems(TrueSteamItems.CompressionSpringPack).duration(100).EUt(64).save(provider);
+        COMPRESSOR_RECIPES.recipeBuilder(TrueSteamItems.SlightlyCompressedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.InfusedCompressionSpringPack)
+                .outputItems(TrueSteamItems.SlightlyCompressedCompressionSpringPack.asStack())
+                .duration(100).EUt(64).save(provider);
+        COMPRESSOR_RECIPES.recipeBuilder(TrueSteamItems.SomewhatCompressedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.InfusedSlightlyCompressedCompressionSpringPack)
+                .outputItems(TrueSteamItems.SomewhatCompressedCompressionSpringPack.asStack())
+                .duration(100).EUt(64).save(provider);
+
+        COMPRESSOR_RECIPES.recipeBuilder(TrueSteamItems.CompressedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.InfusedSomewhatCompressedCompressionSpringPack)
+                .outputItems(TrueSteamItems.CompressedCompressionSpringPack.asStack())
+                .duration(100).EUt(64).save(provider);
+
+        CHEMICAL_BATH_RECIPES.recipeBuilder(TrueSteamItems.InfusedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.CompressionSpringPack)
+                .inputFluids(TrueSteamConcepts.CompressionConcept.getInfusedAir().getFluid(100))
+                .chancedItemOutputLogic(ChanceLogic.XOR)
+                .chancedOutput(TrueSteamItems.InfusedCompressionSpringPack.asStack(), 9000, 0)
+                .chancedOutput(TrueSteamItems.InfusedSlightlyCompressedCompressionSpringPack.asStack(), 1000, 0)
+                .duration(100).EUt(64).save(provider);
+        CHEMICAL_BATH_RECIPES.recipeBuilder(TrueSteamItems.InfusedSlightlyCompressedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.SlightlyCompressedCompressionSpringPack)
+                .inputFluids(TrueSteamConcepts.CompressionConcept.getInfusedAir().getFluid(100))
+                .chancedItemOutputLogic(ChanceLogic.XOR)
+                .chancedOutput(TrueSteamItems.InfusedSlightlyCompressedCompressionSpringPack.asStack(), 9000, 0)
+                .chancedOutput(TrueSteamItems.InfusedSomewhatCompressedCompressionSpringPack.asStack(), 1000, 0)
+                .duration(100).EUt(64).save(provider);
+        CHEMICAL_BATH_RECIPES.recipeBuilder(TrueSteamItems.InfusedSomewhatCompressedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.SomewhatCompressedCompressionSpringPack)
+                .inputFluids(TrueSteamConcepts.CompressionConcept.getInfusedAir().getFluid(100))
+                .chancedItemOutputLogic(ChanceLogic.XOR)
+                .chancedOutput(TrueSteamItems.InfusedSomewhatCompressedCompressionSpringPack.asStack(), 9000, 0)
+                .chancedOutput(TrueSteamItems.InfusedCompressedCompressionSpringPack.asStack(), 1000, 0)
+                .duration(100).EUt(64).save(provider);
+        CHEMICAL_BATH_RECIPES.recipeBuilder(TrueSteamItems.InfusedCompressedCompressionSpringPack.getId())
+                .inputItems(TrueSteamItems.CompressedCompressionSpringPack)
+                .inputFluids(TrueSteamConcepts.CompressionConcept.getInfusedAir().getFluid(100))
+                .outputItems(TrueSteamItems.InfusedCompressedCompressionSpringPack)
+                .duration(100).EUt(64).save(provider);
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
@@ -349,5 +396,7 @@ public class TrueSteamRecipes {
                 'W', new MaterialEntry(TagPrefix.cableGtSingle, TrueSteamMaterials.ConceptualizedSteel));
 
         TrueSteamConcepts.CONCEPTS.forEach(c -> c.registerRecipes(provider));
+
+        registerSpringRecipes(provider);
     }
 }
