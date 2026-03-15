@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.industrial_fluid_pressurizer.IndustrialFluidPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 
@@ -41,14 +42,13 @@ public class TrueSteamRecipeTypes {
 
     public static String OVERHEATED_WIDGET_ID = "overheatedWidget";
     public static String INTERNAL_CYCLED_WIDGET_ID = "infernalCyclesWidget";
-    //
-    // public static GTRecipeType INDUSTRIAL_FLUID_PRESSURIZER = GTRecipeTypes
-    // .register("industrial_fluid_pressurizer", GTRecipeTypes.MULTIBLOCK)
-    // .setMaxIOSize(1, 0, 2, 2)
-    // .setEUIO(IO.IN)
-    // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
-    // .setIconSupplier(() -> IndustrialFluidPressurizer.MACHINE.getItem().getDefaultInstance())
-    // .setSound(GTSoundEntries.COMPRESSOR);
+
+    public static GTRecipeType INDUSTRIAL_FLUID_PRESSURIZER = register("industrial_fluid_pressurizer", GTRecipeTypes.MULTIBLOCK, "Fluid pressuring")
+            .setMaxIOSize(1, 1, 2, 2)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+            .setIconSupplier(() -> IndustrialFluidPressurizer.MACHINE.getItem().getDefaultInstance())
+            .setSound(GTSoundEntries.COMPRESSOR);
 
     public static GTRecipeType FLUID_COOLING = register("fluid_cooling", GTRecipeTypes.MULTIBLOCK, "Fluid cooling")
             .setMaxIOSize(1, 0, 1, 1)
