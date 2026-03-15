@@ -135,7 +135,8 @@ public class TrueSteamMaterials {
                         MaterialFlags.GENERATE_PLATE,
                         MaterialFlags.GENERATE_ROD,
                         MaterialFlags.GENERATE_LONG_ROD,
-                        MaterialFlags.GENERATE_BOLT_SCREW)
+                        MaterialFlags.GENERATE_BOLT_SCREW,
+                        MaterialFlags.GENERATE_FRAME)
                 .blast(b -> b.temp(1700, BlastProperty.GasTier.LOW)
                         .blastStats(VA[HV], 1100))
                 .color(0xe64c24).secondaryColor(0x822511).iconSet(SHINY)

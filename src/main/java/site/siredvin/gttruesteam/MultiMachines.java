@@ -5,6 +5,7 @@ import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
+import site.siredvin.gttruesteam.machines.volcanic_boiler.VolcanicPressureBoiler;
 
 public class MultiMachines {
 
@@ -15,5 +16,6 @@ public class MultiMachines {
         CoatingShrine.sayHi();
         RegulatedCryoChamber.sayHi();
         ConceptInfusionMatrix.sayHi();
+        VolcanicPressureBoiler.sayHi();
     }
 }

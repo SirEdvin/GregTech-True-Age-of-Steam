@@ -63,6 +63,9 @@ public class TrueSteamBlocks {
     public static BlockEntry<Block> ConceptualizedSteelSolidCasing = createCasingBlock(
             "conceptualized_steel_solid_casing",
             GTTrueSteam.id("block/conceptualized_steel_solid_casing"));
+    public static BlockEntry<Block> StainlessInfernalSteelCasing = createCasingBlock(
+            "stainless_infernal_steel_casing",
+            GTCEu.id("block/casings/solid/machine_casing_stainless_steel"));
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
     public static BlockEntry<CoolingCoilBlock> COIL_ESTRANGED_STEEL = createCoolingCoil(

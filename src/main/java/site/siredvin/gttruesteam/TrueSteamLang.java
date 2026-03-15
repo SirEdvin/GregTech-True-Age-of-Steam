@@ -85,6 +85,14 @@ public class TrueSteamLang {
             "item_tooltip",
             GTTrueSteam.id("rcc_2"),
             "§7Slighly better version of vacuum freezer, but without batching. When working continuously, reduce recipe duration based on coils and also has some parallel capacity based on coil levels. When level of coil better than voltage requirement of recipe, switches to perfect OC");
+    public static MutableComponent VOLCANIC_BOILER_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("volcanic_pressure_boiler_1"),
+            "§cMassive EV-tier pressure boiler forged from Stainless Infernal Steel.§f Generates superhot steam at industrial scale using extreme heat and pressure.");
+    public static MutableComponent VOLCANIC_BOILER_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("volcanic_pressure_boiler_2"),
+            "§7Parallel capacity scales with heating coil temperature — each 900K of coil heat allows one additional simultaneous reaction. Supports standard overclock using EV-tier energy hatches.");
 
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");

@@ -20,6 +20,7 @@ import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
+import site.siredvin.gttruesteam.machines.volcanic_boiler.VolcanicPressureBoiler;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
@@ -173,6 +174,7 @@ public class TrueSteamRecipes {
 
         casingRecipe(TrueSteamMaterials.CorrosionTemperedBrass, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
         casingRecipe(TrueSteamMaterials.InfernalAlloy, TrueSteamBlocks.InfernalAlloyCasing, provider);
+        casingRecipe(TrueSteamMaterials.StainlessInfernalSteel, TrueSteamBlocks.StainlessInfernalSteelCasing, provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())
                 .inputItems(TagPrefix.ingot, GTMaterials.Steel)
@@ -236,6 +238,24 @@ public class TrueSteamRecipes {
                 'C', TrueSteamBlocks.InfernalAlloyCasing.asStack(),
                 'S', CustomTags.MV_CIRCUITS,
                 'T', new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Copper));
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, VolcanicPressureBoiler.MACHINE.getId(),
+                VolcanicPressureBoiler.MACHINE.asStack(),
+                "TST",
+                "SCS",
+                "TST",
+                'C', TrueSteamBlocks.StainlessInfernalSteelCasing.asStack(),
+                'S', CustomTags.EV_CIRCUITS,
+                'T', new MaterialEntry(TagPrefix.cableGtSingle, TrueSteamMaterials.StainlessInfernalSteel));
+
+        METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("volcanic_boiling_water"))
+                .inputFluids(GTMaterials.DistilledWater.getFluid(144))
+                .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(24000))
+                .circuitMeta(3)
+                .EUt(480)
+                .duration(640)
+                .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true)
+                .save(provider);
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, CoatingShrine.MACHINE.getId(),
                 CoatingShrine.MACHINE.asStack(),
