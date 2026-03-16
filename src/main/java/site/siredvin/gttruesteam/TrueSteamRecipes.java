@@ -200,6 +200,32 @@ public class TrueSteamRecipes {
                 .duration(100).EUt(64).save(provider);
     }
 
+    private static void registerPressurizerRecipe(Consumer<FinishedRecipe> provider, Material original, Material output,
+                                                  int EuT, int duration) {
+        TrueSteamRecipeTypes.INDUSTRIAL_GAS_PRESSURIZER.recipeBuilder(output.getResourceLocation())
+                .inputFluids(original.getFluid(256000))
+                .outputFluids(output.getFluid(9600))
+                .circuitMeta(1)
+                .addData(TrueSteamRecipeTypes.ASSUMED_PERCENTAGE, 75)
+                .EUt(EuT).duration(duration).save(provider);
+        TrueSteamRecipeTypes.INDUSTRIAL_GAS_PRESSURIZER
+                .recipeBuilder(output.getResourceLocation().withSuffix("_boosted"))
+                .inputFluids(original.getFluid(256000))
+                .circuitMeta(2)
+                .inputItems(TrueSteamItems.InfusedCompressedCompressionSpringPack)
+                .outputFluids(output.getFluid(12800))
+                .outputItems(TagPrefix.spring, TrueSteamConcepts.CompressionConcept.getMaterial(), 3)
+                .addData(TrueSteamRecipeTypes.ASSUMED_PERCENTAGE, 100)
+                .EUt(EuT).duration(duration).save(provider);
+    }
+
+    private static void registerPressurizerRecipes(Consumer<FinishedRecipe> provider) {
+        registerPressurizerRecipe(provider, TrueSteamMaterials.SuperhotSteam, TrueSteamMaterials.DenseSuperhotSteam,
+                130, 100);
+        registerPressurizerRecipe(provider, TrueSteamMaterials.HellishSteam, TrueSteamMaterials.DenseHellishSteam, 256,
+                200);
+    }
+
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
         steamFuel(TrueSteamMaterials.SuperhotSteam, 2.1, provider);
         registerInfernalChargingLoop(provider);
@@ -428,5 +454,6 @@ public class TrueSteamRecipes {
                 TrueSteamBlocks.ConceptualizedSteelSolidCasing);
 
         registerSpringRecipes(provider);
+        registerPressurizerRecipes(provider);
     }
 }

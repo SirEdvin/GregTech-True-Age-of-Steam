@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
-import site.siredvin.gttruesteam.machines.industrial_fluid_pressurizer.IndustrialGasPressurizer;
+import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 
@@ -39,13 +39,14 @@ public class TrueSteamRecipeTypes {
     public static String INFERNAL_CYCLES_DATA_KEY = "infernal_cycles";
     public static String OVERHEATED_KEY = "overheated";
     public static String COOLING_CONSUMED = "cooling_consumed";
+    public static String ASSUMED_PERCENTAGE = "assumed_percentage";
 
     public static String OVERHEATED_WIDGET_ID = "overheatedWidget";
     public static String INTERNAL_CYCLED_WIDGET_ID = "infernalCyclesWidget";
 
     public static GTRecipeType INDUSTRIAL_GAS_PRESSURIZER = register("industrial_gas_pressurizer",
             GTRecipeTypes.MULTIBLOCK, "Gas pressuring")
-            .setMaxIOSize(1, 1, 2, 2)
+            .setMaxIOSize(2, 1, 2, 2)
             .setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setIconSupplier(() -> IndustrialGasPressurizer.MACHINE.getItem().getDefaultInstance())

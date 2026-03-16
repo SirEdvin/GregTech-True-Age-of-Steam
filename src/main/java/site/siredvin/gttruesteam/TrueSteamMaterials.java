@@ -3,6 +3,8 @@ package site.siredvin.gttruesteam;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
+import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
+import com.gregtechceu.gtceu.api.fluids.FluidState;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.*;
@@ -11,7 +13,11 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 public class TrueSteamMaterials {
 
     // Steam related gases
+    public static Material HellishWater;
     public static Material SuperhotSteam;
+    public static Material HellishSteam;
+    public static Material DenseSuperhotSteam;
+    public static Material DenseHellishSteam;
 
     // Coolants
     public static Material ActivatedBlaze;
@@ -31,15 +37,31 @@ public class TrueSteamMaterials {
     public static Material StainlessInfernalSteel;
     public static Material InfernalCompound;
 
-    private static Material buildSteam(String name, int temp, int color, int secondaryColor) {
-        return new Material.Builder(GTTrueSteam.id(name))
+    private static void initSteams() {
+        SuperhotSteam = new Material.Builder(GTTrueSteam.id("superhot_steam"))
                 .components(Hydrogen, 2, Oxygen, 1)
                 .flags(MaterialFlags.DISABLE_DECOMPOSITION)
-                .gas(temp).color(color).secondaryColor(secondaryColor).buildAndRegister();
-    }
-
-    private static void initSteams() {
-        SuperhotSteam = buildSteam("superhot_steam", 700, 0x7A7A7A, 0xFF6A00);
+                .gas(new FluidBuilder()
+                        .state(FluidState.GAS)
+                        .temperature(700)
+                        .customStill())
+                .color(0x7A7A7A).secondaryColor(0xFF6A00).buildAndRegister();
+        HellishWater = new Material.Builder(GTTrueSteam.id("hellish_water"))
+                .liquid(700).color(0x780408).secondaryColor(0x6C2DC7).buildAndRegister();
+        HellishSteam = new Material.Builder(GTTrueSteam.id("hellish_steam"))
+                .gas(new FluidBuilder()
+                        .state(FluidState.GAS)
+                        .temperature(1000)
+                        .customStill())
+                .color(0x780408).secondaryColor(0x6C2DC7).buildAndRegister();
+        DenseHellishSteam = new Material.Builder(GTTrueSteam.id("dense_hellish_steam"))
+                .gas(new FluidBuilder()
+                        .state(FluidState.GAS)
+                        .temperature(1000)
+                        .customStill())
+                .color(0x780408).secondaryColor(0x780408).buildAndRegister();
+        DenseSuperhotSteam = new Material.Builder(GTTrueSteam.id("dense_superhot_steam"))
+                .gas(1200).color(0x7A7A7A).secondaryColor(0x7A7A7A).buildAndRegister();
     }
 
     private static void initEnrichers() {
