@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 
 import com.mojang.datafixers.util.Pair;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
@@ -60,6 +61,14 @@ public class TrueSteamRecipes {
                 .EUt(16)
                 .circuitMeta(1)
                 .save(provider);
+    }
+
+    private static void pipeCasingRecipe(Material casingMaterial, BlockEntry<Block> casingOutput,
+                                         Consumer<FinishedRecipe> provider) {
+        VanillaRecipeHelper.addShapedRecipe(provider, true, casingOutput.getId(), casingOutput.asStack(),
+                "P|P", "|F|", "P|P", 'P', new MaterialEntry(TagPrefix.plate, casingMaterial),
+                'F', new MaterialEntry(TagPrefix.frameGt, casingMaterial), '|',
+                new MaterialEntry(TagPrefix.pipeNormalFluid, casingMaterial));
     }
 
     public static void registerInfernalChargingLoop(Consumer<FinishedRecipe> provider) {
@@ -395,7 +404,28 @@ public class TrueSteamRecipes {
                 'I', TrueSteamItems.InfernalCircuit,
                 'W', new MaterialEntry(TagPrefix.cableGtSingle, TrueSteamMaterials.ConceptualizedSteel));
 
+        CHEMICAL_RECIPES.recipeBuilder(TrueSteamMaterials.ActivatedBlaze.getResourceLocation().withSuffix("_burning"))
+                .inputFluids(TrueSteamMaterials.ActivatedBlaze.getFluid(8000))
+                .inputFluids(GTMaterials.Oxygen.getFluid(4000))
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 16)
+                .duration(400).EUt(120).save(provider);
+
+        CHEMICAL_BATH_RECIPES.recipeBuilder(TrueSteamItems.EmptyCatalyst.getId())
+                .inputItems(TagPrefix.gemExquisite, TrueSteamMaterials.InfernalCompound)
+                .inputFluids(GTMaterials.DyeBlack.getFluid(720)).outputItems(TrueSteamItems.EmptyCatalyst)
+                .duration(200).EUt(250).save(provider);
+
         TrueSteamConcepts.CONCEPTS.forEach(c -> c.registerRecipes(provider));
+
+        casingRecipe(TrueSteamMaterials.ConceptualizedSteel, TrueSteamBlocks.ConceptualizedSteelSolidCasing, provider);
+        pipeCasingRecipe(TrueSteamMaterials.ConceptualizedSteel, TrueSteamBlocks.ConceptualizedSteelPipeCasing,
+                provider);
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, ConceptInfusionMatrix.MACHINE.getId(),
+                ConceptInfusionMatrix.MACHINE.asStack(),
+                "III", "HCH", "WHW", 'I', TrueSteamItems.InfernalCircuit, 'H', CustomTags.HV_CIRCUITS, 'W',
+                new MaterialEntry(TagPrefix.wireGtDouble, TrueSteamMaterials.ConceptualizedSteel), 'C',
+                TrueSteamBlocks.ConceptualizedSteelSolidCasing);
 
         registerSpringRecipes(provider);
     }

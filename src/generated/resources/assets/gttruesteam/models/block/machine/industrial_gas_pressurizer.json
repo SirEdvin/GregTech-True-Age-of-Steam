@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
-  "machine": "gttruesteam:industrial_fluid_pressurizer",
+  "machine": "gttruesteam:industrial_gas_pressurizer",
   "texture_overrides": {
     "all": "gtceu:block/casings/solid/machine_casing_clean_stainless_steel"
   },

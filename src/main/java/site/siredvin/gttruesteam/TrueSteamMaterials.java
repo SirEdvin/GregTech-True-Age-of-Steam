@@ -113,11 +113,15 @@ public class TrueSteamMaterials {
                 .color(0xdb4c24).secondaryColor(0x6b2511).iconSet(METALLIC).buildAndRegister();
         ConceptualizedSteel = new Material.Builder(GTTrueSteam.id("conceptualized_steel"))
                 .ingot(3).fluid()
-                .flags(
-                        MaterialFlags.GENERATE_FINE_WIRE)
                 .blast(b -> b.temp(1700, BlastProperty.GasTier.LOW)
                         .blastStats(VA[HV], 1100))
                 .components(StainlessSteel, 1, EnderPearl, 1, Amethyst, 1)
+                .flags(
+                        MaterialFlags.GENERATE_PLATE,
+                        MaterialFlags.GENERATE_ROD,
+                        MaterialFlags.GENERATE_FRAME,
+                        MaterialFlags.GENERATE_FINE_WIRE)
+                .fluidPipeProperties(2600, 100, true, true, true, false)
                 .color(0xb3f5ea).secondaryColor(0x032620)
                 .cableProperties(V[HV], 1, 2)
                 .iconSet(METALLIC).buildAndRegister();
