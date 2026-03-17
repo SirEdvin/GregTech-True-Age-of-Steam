@@ -6,15 +6,14 @@
 <figcaption>Coating Shrine</figcaption>
 </figure>
 
-| | |
-|---|---|
-| **Type** | Multiblock |
-| **Voltage tier** | Pre-LV |
-| **Energy** | None |
-| **Fluid endurance** | 100 crafts per fill |
+|                     |                     |
+|---------------------|---------------------|
+| **Type**            | Multiblock          |
+| **Unlock at**       | ULV                 |
+| **Energy input** | None |
 </div>
 
-The Coating Shrine is a **pre-LV multiblock** that allows you to infuse materials with fluid properties.
+The Coating Shrine is a **pre-LV multiblock** that allows you to infuse materials with fluid properties. It is the first multiblock of this addon, that helps you to create new materials. 
 
 ## How it works
 
@@ -24,9 +23,3 @@ A single fluid fill provides **100 crafting operations** before it is consumed a
 
 !!! tip
     Right-click the controller to see how many crafting operations remain for the current fluid.
-
-## Key characteristics
-
-- Available before LV — no electricity required
-- Recipe availability depends entirely on which fluid is loaded
-- Fluid is consumed gradually: 100 crafts per fill

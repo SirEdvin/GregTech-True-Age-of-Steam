@@ -3,42 +3,42 @@
 <div class="grid cards" markdown>
 
 -   <figure markdown>
-    ![Lava-Coated Boiler](../images/lava-coated-boiler.png)
-    <figcaption>Lava-Coated Boiler</figcaption>
+    ![Lava-Coated Boilers](../images/lava-coated-boiler.png)
+    <figcaption>Lava-Coated Boilers</figcaption>
     </figure>
 
-    | | |
-    |---|---|
-    | **Type** | Single-block |
-    | **Voltage tier** | LV |
-    | **Output** | ×1.5 vs High Pressure |
+    |                    |                       |
+    |--------------------|-----------------------|
+    | **Type**           | Single-block          |
+    | **Unlock at tier** | ULV                   |
+    | **Output**         | ×1.5 vs High Pressure |
 
 -   <figure markdown>
-    ![Infernal Single-Block Boiler](../images/infernal-single-block-boiler.png)
-    <figcaption>Infernal Single-Block Boiler</figcaption>
+    ![Infernal Single-Block Boilers](../images/infernal-single-block-boiler.png)
+    <figcaption>Infernal Single-Block Boilers</figcaption>
     </figure>
 
-    | | |
-    |---|---|
-    | **Type** | Single-block |
-    | **Voltage tier** | MV |
-    | **Output** | ×2.0 vs High Pressure |
+    |                    | |
+    |--------------------|---|
+    | **Type**           | Single-block |
+    | **Unlock at tier** | MV |
+    | **Output**         | ×2.0 vs High Pressure |
 
 </div>
 
 The addon adds two new tiers of single-block boilers that extend the vanilla GregTech boiler line beyond the High Pressure variants.
 
-## Lava-Coated Boiler
+## Lava-Coated Boilers
 
-| Property | Value |
-|----------|-------|
+| Property | Value                                           |
+|----------|-------------------------------------------------|
 | Crafted from | High Pressure Boiler + Lava-Coated Steel Plates |
 | Output | **×1.5** of the equivalent High Pressure Boiler |
-| Unlock | Same tier as High Pressure Boilers |
+| Unlock | ULV                                             |
 
 The Lava-Coated Boiler is a direct upgrade path from the High Pressure line. Craft lava-coated steel plates and combine them with an existing High Pressure Boiler to produce one.
 
-## Infernal Single-Block Boiler
+## Infernal Single-Block Boilers
 
 | Property | Value |
 |----------|-------|

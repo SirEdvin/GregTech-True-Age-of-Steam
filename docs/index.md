@@ -14,7 +14,7 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     **Coating Shrine** &nbsp;·&nbsp; :material-flash-off: Pre-LV
 
-    Infuse materials with fluid properties. The loaded fluid determines which recipes are available and lasts for 100 crafting operations.
+    Mysterious multiblock that helps you infuse soild materials with properties of fluids.
 
     [:octicons-arrow-right-24: Read more](multiblocks/coating-shrine.md)
 
@@ -24,7 +24,7 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     **Infernal Boiler** &nbsp;·&nbsp; :material-lightning-bolt: MV
 
-    High-throughput superheated steam production with heat levels and a charge system. Reaches Supreme tier for boosted fluid output.
+    Boiler build from infernal alloy materials, capable of producing enormous amount of energy in steam form if maintained properly.
 
     [:octicons-arrow-right-24: Read more](multiblocks/infernal-boiler.md)
 
@@ -34,32 +34,8 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     **Cooling Box** &nbsp;·&nbsp; :material-lightning-bolt: MV
 
-    Passively accumulates cooling capacity to recycle the charging fluid consumed by the Infernal Boiler.
+    Multiblock for passive cooling for different fluids and gases.
 
     [:octicons-arrow-right-24: Read more](multiblocks/cooling-box.md)
 
--   ![Single-Block Boilers](images/single-block-boilers.png)
-
-    ---
-
-    **Single-Block Boilers** &nbsp;·&nbsp; :material-lightning-bolt: LV – MV
-
-    Two new boiler tiers: Lava-Coated (×1.5 output, LV) and Infernal (×2 output, MV).
-
-    [:octicons-arrow-right-24: Read more](machines/single-block-boilers.md)
-
 </div>
-
-## Progression overview
-
-The addon is designed around a steam production loop:
-
-1. Start with the **Coating Shrine** to prepare materials in the pre-LV era.
-2. Build the **Infernal Boiler** once MV unlocks become available for large-scale superheated steam.
-3. Use the **Cooling Box** to recycle the charging fluid consumed by the boiler.
-4. Supplement production with **new single-block boiler tiers** where a multiblock is overkill.
-
-## Source & contributing
-
-Source code is on [GitHub](https://github.com/SirEdvin/GregTech-True-Age-of-Steam). Bug reports and pull requests are welcome.
-I 
