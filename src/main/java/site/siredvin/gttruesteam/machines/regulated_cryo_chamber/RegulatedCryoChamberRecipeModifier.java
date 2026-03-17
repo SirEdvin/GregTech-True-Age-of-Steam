@@ -17,7 +17,7 @@ public class RegulatedCryoChamberRecipeModifier implements RecipeModifier {
         if (!(machine instanceof RegulatedCryoChamberMachine regulatedCryoChamberMachine)) return ModifierFunction.NULL;
         var coils = regulatedCryoChamberMachine.getCoilType();
         var maxParallels = 1 + coils.getLevel();
-        var realParallels = ParallelLogic.getParallelAmount(regulatedCryoChamberMachine, recipe, maxParallels);
+        var realParallels = ParallelLogic.getParallelAmountWithoutEU(regulatedCryoChamberMachine, recipe, maxParallels);
         if (realParallels == 0) return ModifierFunction.NULL;
         // Calculate OC level here.
         // Basically, MV is 2 and if coil level is bigger we got perfect OC, else - not

@@ -56,5 +56,8 @@ nav:
       - Coating Shrine: multiblocks/coating-shrine.md
       - Infernal Boiler: multiblocks/infernal-boiler.md
       - Cooling Box: multiblocks/cooling-box.md
+      - Regulated Cryo Chamber: multiblocks/rcc.md
+      - Concept Infusion Matrix: multiblocks/concept-infusion-matrix.md
+      - Industrial gas pressurizer: multiblocks/industrial-gas-pressurizer.md
   - Machines:
       - Single-Block Boilers: machines/single-block-boilers.md
