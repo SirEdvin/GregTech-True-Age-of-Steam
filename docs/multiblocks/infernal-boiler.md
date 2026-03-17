@@ -1,16 +1,16 @@
 # Infernal Boiler
 
-<div class="grid" markdown>
+<div style="float: right; margin: 0 0 1rem 1.5rem; max-width: 260px;" markdown>
 <figure markdown>
 ![Infernal Boiler](../images/infernal-boiler.png)
 <figcaption>Infernal Boiler</figcaption>
 </figure>
 
-| |            |
-|---|------------|
+| | |
+|---|---|
 | **Type** | Multiblock |
-| **Voltage tier** | MV         |
-| **Energy input** | Up to 3    |
+| **Voltage tier** | MV |
+| **Energy input** | Up to 3 |
 </div>
 
 Infused with the power of infernal alloy, the Infernal Boiler is the first powerhouse of the addon's steam production. It produces **superheated steam** rather than ordinary steam, making it far more energy-dense than vanilla GregTech boilers.

@@ -1,15 +1,15 @@
 # Coating Shrine
 
-<div class="grid" markdown>
+<div style="float: right; margin: 0 0 1rem 1.5rem; max-width: 260px;" markdown>
 <figure markdown>
 ![Coating Shrine](../images/coating-shrine.png)
 <figcaption>Coating Shrine</figcaption>
 </figure>
 
-|                     |                     |
-|---------------------|---------------------|
-| **Type**            | Multiblock          |
-| **Unlock at**       | ULV                 |
+| | |
+|---|---|
+| **Type** | Multiblock |
+| **Unlock at** | ULV |
 | **Energy input** | None |
 </div>
 

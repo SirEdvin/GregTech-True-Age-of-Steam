@@ -1,14 +1,14 @@
 # Cooling Box
 
-<div class="grid" markdown>
+<div style="float: right; margin: 0 0 1rem 1.5rem; max-width: 260px;" markdown>
 <figure markdown>
 ![Cooling Box](../images/cooling-box.png)
 <figcaption>Cooling Box</figcaption>
 </figure>
 
-|                  | |
-|------------------|---|
-| **Type**         | Multiblock |
+| | |
+|---|---|
+| **Type** | Multiblock |
 | **Voltage tier** | MV |
 | **Energy input** | None |
 </div>
