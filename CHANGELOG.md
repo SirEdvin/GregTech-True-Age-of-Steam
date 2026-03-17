@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Concept infusion matrix multiblock
+- Industrial gas pressurizer multiblock
+- Compression concept material
+- Extraction concept materials
+- Heating concept materials
+- Cooling concept materials
+- Polarization concept materials
+- Hellish waster and hellish steam
+- Documentation (!)
+
+### Changed
+
+- RCC now use EU-free parallels per coil level
+- Infernal boiler now correctly uses parallels in supreme heat state.
+
 ## [0.2.3] - 2026-03-01
 
 ### Changed

@@ -228,6 +228,7 @@ public class TrueSteamRecipes {
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
         steamFuel(TrueSteamMaterials.SuperhotSteam, 2.1, provider);
+        steamFuel(TrueSteamMaterials.HellishSteam, 2.5, provider);
         registerInfernalChargingLoop(provider);
         registerBoilerRecipes(provider);
 

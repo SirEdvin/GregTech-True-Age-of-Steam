@@ -21,7 +21,7 @@ The boiler has two independent systems that interact to determine its output: **
 
 ### Heat
 
-Each completed crafting operation increases the boiler's heat. Heat is divided into levels, and crossing a threshold raises the current level. The higher the level, the more parallels boiler can use. At the latest level - Supreme heat, parallels are combined with superheating effect to produce truly enormous amount of superheated steam.
+Each completed crafting operation increases the boiler's heat. Heat is divided into levels, and crossing a threshold raises the current level. The higher the level, the more parallels boiler can use. At the latest level - Supreme heat, parallels are boosted by superheating effect to produce truly enormous amount of superheated steam. When boiler is superheat it can use only maximum amount of parallels is can use.
 
 While boiler isn't active, heat level starts to drop. Better coils slow the idle heat decay, making it easier to sustain Supreme level between batches.
 
