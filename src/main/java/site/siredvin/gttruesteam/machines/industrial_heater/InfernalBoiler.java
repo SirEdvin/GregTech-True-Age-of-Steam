@@ -92,7 +92,7 @@ public class InfernalBoiler {
             .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
             .model(GTMachineModels.createWorkableCasingMachineModel(
                     GTTrueSteam.id("block/infernal_alloy_casing"),
-                    GTCEu.id("block/multiblock/generator/large_bronze_boiler")))
+                    GTTrueSteam.id("block/machines/infernal_boiler")))
             .register();
 
     public static void sayHi() {}
