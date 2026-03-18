@@ -97,6 +97,7 @@ public class GTTrueSteam {
         TrueSteamBlocks.sayHi();
         TrueSteamItems.sayHi();
         TrueSteamConcepts.sayHi();
+        TrueSteamSteams.sayHi();
     }
 
     /**

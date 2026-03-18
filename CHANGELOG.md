@@ -17,11 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Polarization concept materials
 - Hellish waster and hellish steam
 - Documentation (!)
+- Dense steam variants
+- Hellish steam
+- Supercritical steam variants
 
 ### Changed
 
 - RCC now use EU-free parallels per coil level
 - Infernal boiler now correctly uses parallels in supreme heat state.
+
+### Fixed
+
+- Endlessly escalating distilled water loop
 
 ## [0.2.3] - 2026-03-01
 

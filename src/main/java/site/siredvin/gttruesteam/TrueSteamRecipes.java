@@ -35,15 +35,6 @@ import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILIN
 
 public class TrueSteamRecipes {
 
-    private static void steamFuel(Material current, double density, Consumer<FinishedRecipe> provider) {
-        STEAM_TURBINE_FUELS.recipeBuilder(GTTrueSteam.id(current.getName() + "_fuel"))
-                .inputFluids(
-                        current.getFluid((int) (320 / density)))
-                .outputFluids(
-                        GTMaterials.DistilledWater.getFluid(4))
-                .duration(10).EUt(-32).save(provider);
-    }
-
     private static void casingRecipe(Material casingMaterial, BlockEntry<Block> casingOutput,
                                      Consumer<FinishedRecipe> provider) {
         VanillaRecipeHelper.addShapedRecipe(provider, true, casingOutput.getId(), casingOutput.asStack(),
@@ -200,45 +191,9 @@ public class TrueSteamRecipes {
                 .duration(100).EUt(64).save(provider);
     }
 
-    private static void registerPressurizerRecipe(Consumer<FinishedRecipe> provider, Material original, Material output,
-                                                  int EuT, int duration) {
-        TrueSteamRecipeTypes.INDUSTRIAL_GAS_PRESSURIZER.recipeBuilder(output.getResourceLocation())
-                .inputFluids(original.getFluid(256000))
-                .outputFluids(output.getFluid(9600))
-                .circuitMeta(1)
-                .addData(TrueSteamRecipeTypes.ASSUMED_PERCENTAGE, 75)
-                .EUt(EuT).duration(duration).save(provider);
-        TrueSteamRecipeTypes.INDUSTRIAL_GAS_PRESSURIZER
-                .recipeBuilder(output.getResourceLocation().withSuffix("_boosted"))
-                .inputFluids(original.getFluid(256000))
-                .circuitMeta(2)
-                .inputItems(TrueSteamItems.InfusedCompressedCompressionSpringPack)
-                .outputFluids(output.getFluid(12800))
-                .outputItems(TagPrefix.spring, TrueSteamConcepts.CompressionConcept.getMaterial(), 3)
-                .addData(TrueSteamRecipeTypes.ASSUMED_PERCENTAGE, 100)
-                .EUt(EuT).duration(duration).save(provider);
-    }
-
-    private static void registerPressurizerRecipes(Consumer<FinishedRecipe> provider) {
-        registerPressurizerRecipe(provider, TrueSteamMaterials.SuperhotSteam, TrueSteamMaterials.DenseSuperhotSteam,
-                130, 100);
-        registerPressurizerRecipe(provider, TrueSteamMaterials.HellishSteam, TrueSteamMaterials.DenseHellishSteam, 256,
-                200);
-    }
-
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
-        steamFuel(TrueSteamMaterials.SuperhotSteam, 2.1, provider);
-        steamFuel(TrueSteamMaterials.HellishSteam, 2.5, provider);
         registerInfernalChargingLoop(provider);
         registerBoilerRecipes(provider);
-
-        METAPHYSICAL_BOILING.recipeBuilder(GTTrueSteam.id("boiling_water"))
-                .inputFluids(GTMaterials.DistilledWater.getFluid(36))
-                .outputFluids(TrueSteamMaterials.SuperhotSteam.getFluid(6000))
-                .circuitMeta(1)
-                .EUt(30)
-                .duration(640)
-                .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
 
         ALLOY_SMELTER_RECIPES.recipeBuilder(GTTrueSteam.id("bronze_glass"))
                 .inputItems(TagPrefix.block, GTMaterials.Glass)
@@ -443,6 +398,7 @@ public class TrueSteamRecipes {
                 .duration(200).EUt(250).save(provider);
 
         TrueSteamConcepts.CONCEPTS.forEach(c -> c.registerRecipes(provider));
+        TrueSteamSteams.STEAMS.forEach(c -> c.registerRecipes(provider));
 
         casingRecipe(TrueSteamMaterials.ConceptualizedSteel, TrueSteamBlocks.ConceptualizedSteelSolidCasing, provider);
         pipeCasingRecipe(TrueSteamMaterials.ConceptualizedSteel, TrueSteamBlocks.ConceptualizedSteelPipeCasing,
@@ -455,6 +411,5 @@ public class TrueSteamRecipes {
                 TrueSteamBlocks.ConceptualizedSteelSolidCasing);
 
         registerSpringRecipes(provider);
-        registerPressurizerRecipes(provider);
     }
 }
