@@ -100,5 +100,6 @@
   "tooltip.gttruesteam.cooling_coils_reduction": "§bMax duration reduction: §f%d%%",
   "tooltip.gttruesteam.cooling_consumed": "Cooling consumed: %d",
   "tooltip.gttruesteam.overheatable": "§cOverheat§f-able",
+  "tooltip.gttruesteam.perfect_condition": "Perfect condition:",
   "tooltip.gttruesteam.rcc_reduction": "Duration reduction factor: %s"
 }

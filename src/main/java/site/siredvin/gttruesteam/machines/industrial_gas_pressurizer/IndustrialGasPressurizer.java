@@ -11,9 +11,11 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.*;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 
 import site.siredvin.gttruesteam.GTTrueSteam;
+import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 
 public class IndustrialGasPressurizer {
@@ -50,10 +52,16 @@ public class IndustrialGasPressurizer {
                     .where("i",
                             Predicates.ability(PartAbility.EXPORT_FLUIDS)
                                     .or(Predicates.ability(PartAbility.IMPORT_ITEMS))
-                                    .or(Predicates.ability(PartAbility.EXPORT_FLUIDS))
+                                    .or(Predicates.ability(PartAbility.EXPORT_ITEMS))
                                     .or(Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())))
                     .where("p", Predicates.ability(PartAbility.INPUT_ENERGY))
                     .build())
+            .additionalDisplay((controller, tooltips) -> {
+                if (controller instanceof IndustrialGasPressurizerMachine pressurizerMachine) {
+                    tooltips.add(TrueSteamLang.PERFECT_CONDITION);
+                    tooltips.add(Component.literal("    " + pressurizerMachine.getState().readableName()));
+                }
+            })
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/implosion_compressor"))

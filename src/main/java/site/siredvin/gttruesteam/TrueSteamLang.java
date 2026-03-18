@@ -14,6 +14,7 @@ public class TrueSteamLang {
             GTTrueSteam.id("cooling_capacity"));
     public static String COATING_CHARGES_MESSAGE_KEY = Util.makeDescriptionId("message",
             GTTrueSteam.id("coating_charges"));
+    public static String PERFECT_CONDITION_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("perfect_condition"));
 
     public static String CHARGING_CYCLES_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("charging_cycles"));
     public static String COOLING_CONSUMED_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("cooling_consumed"));
@@ -48,6 +49,8 @@ public class TrueSteamLang {
             "Cooling consumed: %d");
     public static MutableComponent RCC_REDUCTION = GTTrueSteam.REGISTRATE.addRawLang(RCC_REDUCTION_KEY,
             "Duration reduction factor: %s");
+    public static MutableComponent PERFECT_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(PERFECT_CONDITION_KEY,
+            "Perfect condition:");
 
     public static MutableComponent COATING_SHRINE_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip",

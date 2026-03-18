@@ -13,6 +13,7 @@ public class TrueSteamConfig {
     }
 
     private static void setupConfig(ForgeConfigSpec.Builder builder) {
+        SteamsConfig.setupConfig(builder);
         InfernalBoilerConfig.setupConfig(builder);
         GasPressurizerConfig.setupConfig(builder);
     }
