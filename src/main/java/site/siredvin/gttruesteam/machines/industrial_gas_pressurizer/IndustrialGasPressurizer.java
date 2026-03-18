@@ -62,6 +62,10 @@ public class IndustrialGasPressurizer {
                     tooltips.add(Component.literal("    " + pressurizerMachine.getState().readableName()));
                 }
             })
+            .tooltips(
+                    TrueSteamLang.IGP_TOOLTIP_1,
+                    TrueSteamLang.IGP_TOOLTIP_2,
+                    TrueSteamLang.IGP_TOOLTIP_3)
             .workableCasingModel(
                     GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/implosion_compressor"))

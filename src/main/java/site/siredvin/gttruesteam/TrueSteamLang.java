@@ -89,6 +89,26 @@ public class TrueSteamLang {
             GTTrueSteam.id("rcc_2"),
             "§7Slighly better version of vacuum freezer, but without batching. When working continuously, reduce recipe duration based on coils and also has some parallel capacity based on coil levels. When level of coil better than voltage requirement of recipe, switches to perfect OC");
 
+    public static MutableComponent CIM_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("cim_1"),
+            "§3Everything is just a concept, waiting to be materialized");
+    public static MutableComponent CIM_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("cim_2"),
+            "§7Large matrix that can be used for creating a concept catalysts, special symbols of specific concepts, that can be used to modify conceptualized steel properties.");
+    public static MutableComponent CIM_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("cim_3"),
+            "§7MV machines inside decided which concept it will be. They need to be all the same and need to run all the time during crafting.");
+
+    public static MutableComponent IGP_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("igp_1"),
+            "§bMore dense versions of steam is always appreciate");
+    public static MutableComponent IGP_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("igp_2"),
+            "§7Machine for compressing gases into their dense variants. By default you lose up to 25% of initial gas mass without perfect conditions.");
+    public static MutableComponent IGP_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("igp_3"),
+            "§7Achieving perfect condition is no simple feat. It can occur on two seconds intervals are require all input hatches to be filled from 35% to 85% of its capacity. Some hatches (like ME hatches) don't have capacity, which makes perfect condition impossible.");
+
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");
     public static MutableComponent COATING_CHARGES_MESSAGE = GTTrueSteam.REGISTRATE

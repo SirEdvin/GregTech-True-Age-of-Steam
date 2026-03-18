@@ -42,7 +42,7 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     ---
 
-    **Concept Infusion Matrix* &nbsp;·&nbsp; :material-lightning-bolt: HV
+    **Concept Infusion Matrix** &nbsp;·&nbsp; :material-lightning-bolt: HV
 
     Multiblock that allows producing of concept catalyst and opens access to large variety of cometals.
 

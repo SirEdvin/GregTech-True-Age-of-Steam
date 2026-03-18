@@ -119,6 +119,7 @@ public class ConceptInfusionMatrix {
                     list.add(Component.literal("Is machine working: " + matrixMachine.isMachinesRunning()));
                 }
             })
+            .tooltips(TrueSteamLang.CIM_TOOLTIP_1, TrueSteamLang.CIM_TOOLTIP_2, TrueSteamLang.CIM_TOOLTIP_3)
             .workableCasingModel(
                     GTTrueSteam.id("block/conceptualized_steel_solid_casing"),
                     GTCEu.id("block/multiblock/vacuum_freezer"))

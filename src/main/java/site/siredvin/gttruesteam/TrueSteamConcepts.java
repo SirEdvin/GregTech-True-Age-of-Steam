@@ -20,7 +20,8 @@ public class TrueSteamConcepts {
             RecipeConcept.create(
                     "compression", 0x434d14, GTRecipeTypes.COMPRESSOR_RECIPES, 1,
                     List.of(MaterialFlags.GENERATE_ROD, MaterialFlags.GENERATE_LONG_ROD,
-                            MaterialFlags.GENERATE_SPRING)));
+                            MaterialFlags.GENERATE_SPRING, MaterialFlags.GENERATE_PLATE,
+                            MaterialFlags.GENERATE_FRAME)));
     public static Concept HeatingConcept = register(
             RecipeConcept.create("heating", 0x872913, GTRecipeTypes.FLUID_HEATER_RECIPES, 2));
     public static Concept PolarizationConcept = register(

@@ -20,6 +20,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
@@ -409,6 +410,12 @@ public class TrueSteamRecipes {
                 "III", "HCH", "WHW", 'I', TrueSteamItems.InfernalCircuit, 'H', CustomTags.HV_CIRCUITS, 'W',
                 new MaterialEntry(TagPrefix.wireGtDouble, TrueSteamMaterials.ConceptualizedSteel), 'C',
                 TrueSteamBlocks.ConceptualizedSteelSolidCasing);
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, IndustrialGasPressurizer.MACHINE.getId(),
+                IndustrialGasPressurizer.MACHINE.asStack(),
+                "III", "HCH", "WHW", 'I', TrueSteamItems.InfernalCircuit, 'H', CustomTags.HV_CIRCUITS, 'W',
+                new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.CompressionConcept.getMaterial()), 'C',
+                new MaterialEntry(TagPrefix.frameGt, TrueSteamConcepts.CompressionConcept.getMaterial()));
 
         registerSpringRecipes(provider);
     }
