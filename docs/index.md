@@ -4,7 +4,7 @@
 
 It introduces new machines and multiblocks all connected to an ultimate goal: increased and more efficient steam output.
 
-## Machines & Multiblocks
+## Multiblocks
 
 <div class="grid cards" markdown>
 
@@ -37,5 +37,25 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
     Multiblock for passive cooling for different fluids and gases.
 
     [:octicons-arrow-right-24: Read more](multiblocks/cooling-box.md)
+
+-   ![Concept Infusion Matrix](images/concept-infusion-matrix.png)
+
+    ---
+
+    **Concept Infusion Matrix* &nbsp;·&nbsp; :material-lightning-bolt: HV
+
+    Multiblock that allows producing of concept catalyst and opens access to large variety of cometals.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/concept-infusion-matrix.md)
+
+-   ![Industrial Gas Pressurizer](images/industrial-gas-pressurizer.png)
+
+    ---
+
+    **Industrial Gas Pressurizer** &nbsp;·&nbsp; :material-lightning-bolt: HV
+
+    Multiblock for compressing steams into dense form.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/industrial-gas-pressurizer.md)
 
 </div>
