@@ -122,7 +122,7 @@ public class ConceptInfusionMatrix {
             .tooltips(TrueSteamLang.CIM_TOOLTIP_1, TrueSteamLang.CIM_TOOLTIP_2, TrueSteamLang.CIM_TOOLTIP_3)
             .workableCasingModel(
                     GTTrueSteam.id("block/conceptualized_steel_solid_casing"),
-                    GTCEu.id("block/multiblock/vacuum_freezer"))
+                    GTTrueSteam.id("block/machines/concept_infusion_matrix"))
             .register();
 
     public static void sayHi() {}
