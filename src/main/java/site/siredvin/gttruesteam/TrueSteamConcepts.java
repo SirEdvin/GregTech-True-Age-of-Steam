@@ -30,6 +30,10 @@ public class TrueSteamConcepts {
                     GTRecipeTypes.POLARIZER_RECIPES, 3, Collections.emptyList(),
                     builder -> builder.secondaryColor(0x9c2c16)));
 
+    public static Concept SteamConcept = register(
+            RecipeConcept.create(
+                    "steam", 0xc9c9c9, GTRecipeTypes.STEAM_TURBINE_FUELS, 4, Collections.emptyList()));
+
     public static Concept CoolingConcept = register(
             CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept)));
 
