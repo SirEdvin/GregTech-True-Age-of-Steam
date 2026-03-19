@@ -23,7 +23,9 @@ public class TrueSteamConcepts {
                             MaterialFlags.GENERATE_SPRING, MaterialFlags.GENERATE_PLATE,
                             MaterialFlags.GENERATE_FRAME)));
     public static Concept HeatingConcept = register(
-            RecipeConcept.create("heating", 0x872913, GTRecipeTypes.FLUID_HEATER_RECIPES, 2));
+            RecipeConcept.create("heating", 0x872913, GTRecipeTypes.FLUID_HEATER_RECIPES, 2, List.of(
+                    MaterialFlags.GENERATE_PLATE, MaterialFlags.GENERATE_ROD),
+                    builder -> builder.fluidPipeProperties(5400, 150, true)));
     public static Concept PolarizationConcept = register(
             RecipeConcept.create(
                     "polarization", 0x1993b0,

@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hellish steam
 - Supercritical steam variants
 - New infernal boiler textures (Thanks to MindBrain27)
+- Alternative boiler charging fluid based on nether trees.
 
 ### Changed
 

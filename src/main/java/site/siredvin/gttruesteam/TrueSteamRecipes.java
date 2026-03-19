@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -63,14 +64,29 @@ public class TrueSteamRecipes {
                 new MaterialEntry(TagPrefix.pipeNormalFluid, casingMaterial));
     }
 
-    public static void registerInfernalChargingLoop(Consumer<FinishedRecipe> provider) {
-        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.ActivatedBlaze.getResourceLocation())
-                .inputFluids(GTMaterials.Blaze.getFluid(1000), GTMaterials.NetherAir.getFluid(3000))
+    private static void registerInfernalActivationRecipes(Consumer<FinishedRecipe> provider, Material material,
+                                                          Material source) {
+        MIXER_RECIPES.recipeBuilder(material.getResourceLocation())
+                .inputFluids(source.getFluid(1000), GTMaterials.NetherAir.getFluid(3000))
                 .inputItems(TagPrefix.dust, GTMaterials.Redstone)
-                .outputFluids(TrueSteamMaterials.ActivatedBlaze.getFluid(4000))
+                .outputFluids(material.getFluid(4000))
                 .EUt(60)
                 .duration(200)
                 .save(provider);
+        MIXER_RECIPES.recipeBuilder(material.getResourceLocation().withSuffix("_slug"))
+                .inputFluids(source.getFluid(1000), GTMaterials.NetherAir.getFluid(3000))
+                .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug)
+                .outputFluids(material.getFluid(4000))
+                .circuitMeta(1)
+                .EUt(60)
+                .duration(200)
+                .save(provider);
+    }
+
+    public static void registerInfernalChargingLoop(Consumer<FinishedRecipe> provider) {
+        registerInfernalActivationRecipes(provider, TrueSteamMaterials.ActivatedBlaze, GTMaterials.Blaze);
+        registerInfernalActivationRecipes(provider, TrueSteamMaterials.ActivatedInfernalTar,
+                TrueSteamMaterials.InfernalTar);
         METAPHYSICAL_BOILING.recipeBuilder(TrueSteamMaterials.OverheatedInfernalSlurry.getResourceLocation())
                 .inputFluids(TrueSteamMaterials.ActivatedBlaze.getFluid(8000))
                 .outputFluids(TrueSteamMaterials.OverheatedInfernalSlurry.getFluid(8000))
@@ -79,9 +95,24 @@ public class TrueSteamRecipes {
                 .addData(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY, 512)
                 .duration(1000)
                 .save(provider);
+        METAPHYSICAL_BOILING.recipeBuilder(TrueSteamMaterials.OverheatedInfernalSludge.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.ActivatedInfernalTar.getFluid(8000))
+                .outputFluids(TrueSteamMaterials.OverheatedInfernalSludge.getFluid(8000))
+                .EUt(8)
+                .circuitMeta(2)
+                .addData(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY, 256)
+                .duration(1000)
+                .save(provider);
         FLUID_COOLING.recipeBuilder(TrueSteamMaterials.InfernalSlurry.getResourceLocation())
                 .inputFluids(TrueSteamMaterials.OverheatedInfernalSlurry.getFluid(4000))
                 .outputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(4000))
+                .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 500)
+                .addCondition(new CoolingCapacityCondition(5000))
+                .duration(200)
+                .save(provider);
+        FLUID_COOLING.recipeBuilder(TrueSteamMaterials.InfernalSludge.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.OverheatedInfernalSludge.getFluid(4000))
+                .outputFluids(TrueSteamMaterials.InfernalSludge.getFluid(4000))
                 .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 500)
                 .addCondition(new CoolingCapacityCondition(5000))
                 .duration(200)
@@ -96,6 +127,12 @@ public class TrueSteamRecipes {
         CENTRIFUGE_RECIPES.recipeBuilder(GTTrueSteam.id("infernal_slurry_separation"))
                 .inputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(1000))
                 .outputFluids(TrueSteamMaterials.DilutedBlaze.getFluid(250))
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 2)
+                .EUt(60)
+                .duration(100)
+                .save(provider);
+        CENTRIFUGE_RECIPES.recipeBuilder(GTTrueSteam.id("infernal_sludge_separation"))
+                .inputFluids(TrueSteamMaterials.InfernalSludge.getFluid(1000))
                 .outputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 2)
                 .EUt(60)
                 .duration(100)
@@ -329,6 +366,16 @@ public class TrueSteamRecipes {
                 .duration(100)
                 .circuitMeta(1)
                 .save(provider);
+
+        PYROLYSE_RECIPES.recipeBuilder(TrueSteamMaterials.InfernalTar.getResourceLocation().withSuffix("_crimson"))
+                .inputItems(ItemTags.CRIMSON_STEMS, 16)
+                .circuitMeta(1).outputFluids(TrueSteamMaterials.InfernalTar.getFluid(8000))
+                .duration(640).EUt(64).save(provider);
+
+        PYROLYSE_RECIPES.recipeBuilder(TrueSteamMaterials.InfernalTar.getResourceLocation().withSuffix("_warped"))
+                .inputItems(ItemTags.WARPED_STEMS, 16)
+                .circuitMeta(1).outputFluids(TrueSteamMaterials.InfernalTar.getFluid(8000))
+                .duration(640).EUt(64).save(provider);
 
         MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.StainlessInfernalSteel.getResourceLocation())
                 .inputItems(TagPrefix.dust, GTMaterials.StainlessSteel, 7)

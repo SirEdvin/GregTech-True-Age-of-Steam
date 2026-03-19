@@ -19,6 +19,10 @@ public class TrueSteamMaterials {
     public static Material InfernalSlurry;
     public static Material DilutedBlaze;
     public static Material InfernalSlug;
+    public static Material InfernalTar;
+    public static Material ActivatedInfernalTar;
+    public static Material OverheatedInfernalSludge;
+    public static Material InfernalSludge;
 
     // Ingots
     public static Material CorrosionTemperedBrass;
@@ -55,6 +59,22 @@ public class TrueSteamMaterials {
                 .flags(MaterialFlags.DISABLE_DECOMPOSITION)
                 .liquid(4000)
                 .color(0xfff94d, false).secondaryColor(0xff1f0a).iconSet(FINE)
+                .buildAndRegister();
+        InfernalTar = new Material.Builder(GTTrueSteam.id("infernal_tar"))
+                .liquid(350)
+                .flags(MaterialFlags.FLAMMABLE, MaterialFlags.STICKY)
+                .color(0x451a1a).buildAndRegister();
+        ActivatedInfernalTar = new Material.Builder(GTTrueSteam.id("activate_infernal_tar"))
+                .liquid(2500)
+                .flags(MaterialFlags.FLAMMABLE, MaterialFlags.STICKY)
+                .color(0x561a1a).buildAndRegister();
+        OverheatedInfernalSludge = new Material.Builder(GTTrueSteam.id("overheated_infernal_sludge"))
+                .liquid(600)
+                .color(0x8c2a2a).iconSet(FINE)
+                .buildAndRegister();
+        InfernalSludge = new Material.Builder(GTTrueSteam.id("infernal_sludge"))
+                .liquid(300)
+                .color(0x6b2020).iconSet(FINE)
                 .buildAndRegister();
     }
 
