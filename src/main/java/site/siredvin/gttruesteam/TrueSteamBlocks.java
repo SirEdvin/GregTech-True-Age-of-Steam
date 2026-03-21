@@ -26,6 +26,7 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 import site.siredvin.gttruesteam.common.TSCoilType;
+import site.siredvin.gttruesteam.common.TooltipBlockItem;
 
 import java.util.function.Supplier;
 
@@ -111,7 +112,8 @@ public class TrueSteamBlocks {
                     GTTrueSteam.id("block/heating_casing"),
                     GTTrueSteam.id("block/heating_casing"))))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
-            .item(BlockItem::new)
+            .item((b, p) -> new TooltipBlockItem(b, p, TrueSteamLang.BEATING_HUSK_TOOLTIP_1,
+                    TrueSteamLang.BEATING_HUSK_TOOLTIP_2))
             .build()
             .register();
 

@@ -88,11 +88,12 @@ public class SteamRecord {
                 .duration(640)
                 .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
         METAPHYSICAL_BOILING.recipeBuilder(criticalSteam.getResourceLocation())
-                .inputFluids(basicSteam.getFluid(Constants.METAPHYSICS_STEAM_BOILING_OUTPUT))
+                .inputFluids(configuration.water()
+                        .getFluid(Constants.METAPHYSICS_STEAM_BOILING_OUTPUT / configuration.waterConversionRate()))
                 .outputFluids(criticalSteam.getFluid(Constants.METAPHYSICS_STEAM_BOILING_OUTPUT))
-                .circuitMeta(1)
+                .circuitMeta(3)
                 .EUt(30)
-                .duration(640)
+                .duration(960)
                 .addCondition(new BeatingHuskCondition())
                 .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
         registerPressurizeRecipe(provider, denseSteam, basicSteam);

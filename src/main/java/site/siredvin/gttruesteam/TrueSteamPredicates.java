@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
+import site.siredvin.gttruesteam.common.AlwaysAirTraceabilityPredicate;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 
 import java.util.*;
@@ -99,7 +100,7 @@ public class TrueSteamPredicates {
     }
 
     public static TraceabilityPredicate optionalBeatingBoilerHusk() {
-        return new TraceabilityPredicate(blockWorldState -> {
+        return new AlwaysAirTraceabilityPredicate(blockWorldState -> {
             var blockState = blockWorldState.getBlockState();
             var isBeatingHusk = blockState.is(TrueSteamBlocks.BeatingBoilerHusk.get());
             Boolean currentBeatingHuskMark = blockWorldState.getMatchContext().getOrPut(BEATING_BOILER_HUSK_MARK,
@@ -110,6 +111,7 @@ public class TrueSteamPredicates {
             }
             return true;
         }, () -> new BlockInfo[] { BlockInfo.fromBlock(Blocks.AIR),
-                BlockInfo.fromBlock(TrueSteamBlocks.BeatingBoilerHusk.get()) });
+                BlockInfo.fromBlock(TrueSteamBlocks.BeatingBoilerHusk.get()) })
+                .addTooltips(TrueSteamLang.OPTIONAL_UPGRADE);
     }
 }

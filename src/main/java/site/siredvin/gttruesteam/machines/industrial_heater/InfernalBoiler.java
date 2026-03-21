@@ -55,11 +55,11 @@ public class InfernalBoiler {
                     .build())
             .shapeInfo(definition -> MultiblockShapeInfo.builder()
                     .aisle(" CPC ", "CIIIC", "CIIIC", "CIIIC", " EEE ")
-                    .aisle(" SSS ", "S###S", "S###S", "S###S", " SSS ")
-                    .aisle(" CCC ", "C###C", "C###C", "C###C", " CCC ")
-                    .aisle(" SSS ", "S###S", "S###S", "S###S", " SSS ")
-                    .aisle(" CCC ", "C###C", "C###C", "C###C", " CCC ")
-                    .aisle(" SSS ", "S###S", "S###S", "S###S", " SSS ")
+                    .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
+                    .aisle(" CCC ", "C#K#C", "CK#KC", "C#K#C", " CCC ")
+                    .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
+                    .aisle(" CCC ", "C#K#C", "CK#KC", "C#K#C", " CCC ")
+                    .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
                     .aisle(" CHC ", "COOOC", "COOOC", "COOOC", " CMC ")
                     .where('P', definition, Direction.NORTH)
                     .where('C', TrueSteamBlocks.InfernalAlloyCasing)
@@ -68,6 +68,7 @@ public class InfernalBoiler {
                     .where('H', GTMachines.MAINTENANCE_HATCH, Direction.SOUTH)
                     .where('#', Blocks.AIR)
                     .where(' ', Blocks.AIR)
+                    .where('K', TrueSteamBlocks.BeatingBoilerHusk)
                     .where('E', GTMachines.ENERGY_INPUT_HATCH[2], Direction.NORTH)
                     .where('I', GTMachines.FLUID_IMPORT_HATCH[2], Direction.NORTH)
                     .where('O', GTMachines.FLUID_EXPORT_HATCH[2], Direction.SOUTH)
@@ -80,11 +81,12 @@ public class InfernalBoiler {
                 if (iMultiController.isFormed()) {
                     if (iMultiController instanceof InfernalBoilerMachine infernalBoilerMachine) {
                         var logic = infernalBoilerMachine.getRecipeLogic();
-                        components.add(Component.literal("Cycles until throttle: " + logic.getInfernalCharges()));
-                        components.add(
-                                Component.literal("Current heat level: ").append(logic.getHeatLevel().component()));
+                        components.add(Component.translatable(TrueSteamLang.INFERNAL_CYCLES_UNTIL_THROTTLE_KEY,
+                                logic.getInfernalCharges()));
+                        components.add(Component.translatable(TrueSteamLang.INFERNAL_HEAT_LEVEL_KEY)
+                                .append(logic.getHeatLevel().component()));
                         if (infernalBoilerMachine.isBeatingHuskPresent())
-                            components.add(Component.literal("Beating husks present"));
+                            components.add(TrueSteamLang.INFERNAL_BEATING_HUSKS_PRESENT);
                     }
                 }
             }))

@@ -29,6 +29,10 @@ While boiler isn't active, heat level starts to drop. Better coils slow the idle
 
 The boiler requires charges to operate. When charges run out, it can **only** process recipes that restore charges — all other recipes are locked until the charge is replenished.
 
+### Notes
+
+- Beating husks is optional upgrade that will allow production of critical steam variants.
+
 
 ??? note "How to handle switching between recipes"
     

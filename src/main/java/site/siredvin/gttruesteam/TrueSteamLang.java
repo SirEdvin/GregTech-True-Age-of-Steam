@@ -23,6 +23,11 @@ public class TrueSteamLang {
     public static String COOLING_CONSUMED_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("cooling_consumed"));
     public static String RCC_REDUCTION_KEY = Util.makeDescriptionId("tooltip", GTTrueSteam.id("rcc_reduction"));
 
+    public static String INFERNAL_CYCLES_UNTIL_THROTTLE_KEY = Util.makeDescriptionId("message",
+            GTTrueSteam.id("infernal_cycles_until_throttle"));
+    public static String INFERNAL_HEAT_LEVEL_KEY = Util.makeDescriptionId("message",
+            GTTrueSteam.id("infernal_heat_level"));
+
     public static String COOLING_REQUIRED_KEY = Util.makeDescriptionId("condition", GTTrueSteam.id("cooling_capacity"));
     public static String INNER_RECIPE_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
             GTTrueSteam.id("inner_recipe_type"));
@@ -54,6 +59,12 @@ public class TrueSteamLang {
             "§bMax duration reduction: §f%d%%");
     public static MutableComponent CHARGING_CYCLES = GTTrueSteam.REGISTRATE.addRawLang(CHARGING_CYCLES_KEY,
             "Charging for %d cycles");
+    public static MutableComponent INFERNAL_CYCLES_UNTIL_THROTTLE = GTTrueSteam.REGISTRATE.addRawLang(
+            INFERNAL_CYCLES_UNTIL_THROTTLE_KEY, "Cycles until throttle: %d");
+    public static MutableComponent INFERNAL_HEAT_LEVEL = GTTrueSteam.REGISTRATE.addRawLang(
+            INFERNAL_HEAT_LEVEL_KEY, "Current heat level: ");
+    public static MutableComponent INFERNAL_BEATING_HUSKS_PRESENT = GTTrueSteam.REGISTRATE.addLang("message",
+            GTTrueSteam.id("infernal_beating_husks_present"), "Beating husks present");
     public static MutableComponent OVERHEATABLE = GTTrueSteam.REGISTRATE.addLang("tooltip",
             GTTrueSteam.id("overheatable"), "§cOverheat§f-able");
     public static MutableComponent COOLING_CONSUMED = GTTrueSteam.REGISTRATE.addRawLang(COOLING_CONSUMED_KEY,
@@ -62,6 +73,9 @@ public class TrueSteamLang {
             "Duration reduction factor: %s");
     public static MutableComponent PERFECT_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(PERFECT_CONDITION_KEY,
             "Perfect condition:");
+    public static MutableComponent OPTIONAL_UPGRADE = GTTrueSteam.REGISTRATE.addLang("message",
+            GTTrueSteam.id("optional_upgrade"),
+            "§7This is optional upgrade for multiblock, air can be used instead.");
 
     public static MutableComponent COATING_SHRINE_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip",
@@ -119,6 +133,13 @@ public class TrueSteamLang {
     public static MutableComponent IGP_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("igp_3"),
             "§7Achieving perfect condition is no simple feat. It can occur on two seconds intervals are require all input hatches to be filled from 35% to 85% of its capacity. Some hatches (like ME hatches) don't have capacity, which makes perfect condition impossible.");
+
+    public static MutableComponent BEATING_HUSK_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("beating_husk_1"),
+            "§4This husk is no longer empty, it is beating like a heart full of energy...");
+    public static MutableComponent BEATING_HUSK_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("beating_husk_2"),
+            "§7Optional upgrade for §cInfernal boiler §7that allows better heating recipes");
 
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");
