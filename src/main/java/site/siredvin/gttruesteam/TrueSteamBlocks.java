@@ -102,6 +102,19 @@ public class TrueSteamBlocks {
             .build()
             .register();
 
+    public static BlockEntry<Block> BeatingBoilerHusk = GTTrueSteam.REGISTRATE.block("beating_boiler_husk", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+            .addLayer(() -> RenderType::solid)
+            .exBlockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
+                    GTTrueSteam.id("block/beating_boiler_husk_side"),
+                    GTTrueSteam.id("block/heating_casing"),
+                    GTTrueSteam.id("block/heating_casing"))))
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .item(BlockItem::new)
+            .build()
+            .register();
+
     public static BlockEntry<GlassBlock> BronzeGlass = GTTrueSteam.REGISTRATE.block("bronze_glass", GlassBlock::new)
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))

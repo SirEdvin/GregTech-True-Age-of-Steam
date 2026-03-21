@@ -6,6 +6,9 @@ import net.minecraft.network.chat.MutableComponent;
 public class TrueSteamLang {
 
     public static String COIL_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("cooling_coils"));
+    public static String MACHINE_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("machine"));
+    public static String BEATING_HUSK_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("beating_husk"));
+
     public static String COIL_COOLING_CAPACITY_KEY = Util.makeDescriptionId("tooltip",
             GTTrueSteam.id("cooling_coils_capacity"));
     public static String COIL_COOLING_REDUCTION_KEY = Util.makeDescriptionId("tooltip",
@@ -31,11 +34,19 @@ public class TrueSteamLang {
     public static MutableComponent INNER_RECIPE_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
             INNER_RECIPE_TYPE_CONDITION_KEY,
             "Recipe inside: ");
+    public static MutableComponent BEATING_HUSK_CONDITION = GTTrueSteam.REGISTRATE.addLang(
+            "condition", GTTrueSteam.id("beating_husk"),
+            "Beating husks required");
 
     public static MutableComponent COATING_CHARGES = GTTrueSteam.REGISTRATE.addLang("tooltip",
             GTTrueSteam.id("coating_charges"), "Coating charges: ");
     public static MutableComponent COIL_ERROR = GTTrueSteam.REGISTRATE.addRawLang(COIL_ERROR_KEY,
             "All cooling coils should be the same");
+    public static MutableComponent MACHINE_ERROR = GTTrueSteam.REGISTRATE.addRawLang(MACHINE_ERROR_KEY,
+            "All machines should be the same");
+    public static MutableComponent BEATING_HUSK_ERROR = GTTrueSteam.REGISTRATE.addRawLang(BEATING_HUSK_ERROR_KEY,
+            "All slots should be occupied by beating husk if at least one present");
+
     public static MutableComponent COIL_COOLING_CAPACITY = GTTrueSteam.REGISTRATE.addRawLang(COIL_COOLING_CAPACITY_KEY,
             "§bBase Cooling Capacity: §f%d ηK");
     public static MutableComponent COIL_COOLING_REDUCTION = GTTrueSteam.REGISTRATE.addRawLang(

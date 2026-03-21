@@ -10,6 +10,7 @@ import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
@@ -23,6 +24,7 @@ public class TrueSteamPredicates {
     public static String COOLING_COIL_TYPE_MARK = "CoolingCoilType";
     public static String MACHINE_TYPE_MARK = "MachineType";
     public static String MACHINE_POS_LIST_MARK = "MachinePos";
+    public static String BEATING_BOILER_HUSK_MARK = "BeatingBoiler";
     public static List<Block> MV_MACHINES = new ArrayList<>();
 
     public static TraceabilityPredicate coolingCoils() {
@@ -81,7 +83,7 @@ public class TrueSteamPredicates {
             var currentBlock = ForgeRegistries.BLOCKS.getKey(block).toString();
             Object currentRecipeType = blockWorldState.getMatchContext().getOrPut(MACHINE_TYPE_MARK, currentBlock);
             if (!currentRecipeType.equals(currentBlock)) {
-                blockWorldState.setError(new PatternStringError(TrueSteamLang.COIL_ERROR_KEY));
+                blockWorldState.setError(new PatternStringError(TrueSteamLang.MACHINE_ERROR_KEY));
                 return false;
             }
             List<BlockPos> machinePoses = blockWorldState.getMatchContext().getOrPut(MACHINE_POS_LIST_MARK,
@@ -94,17 +96,20 @@ public class TrueSteamPredicates {
                     .map(m -> new BlockInfo(m.defaultBlockState(), true))
                     .toArray(BlockInfo[]::new);
         });
+    }
 
-        /*
-         * () -> Stream.of(GTMachines.ASSEMBLER[GTValues.LV], GTMachines.EXTRACTOR[GTValues.LV],
-         * GTMachines.COMPRESSOR[GTValues.LV])
-         * .map(m -> new BlockInfo(m.defaultBlockState(), true))
-         * .toArray(BlockInfo[]::new)
-         */
-        /*
-         * () -> Stream.of(GTMachines.ASSEMBLER[0], GTMachines.EXTRACTOR[0], GTMachines.COMPRESSOR[0])
-         * .map(m -> BlockInfo.fromBlockState(m.defaultBlockState()))
-         * .toArray(BlockInfo[]::new)
-         */
+    public static TraceabilityPredicate optionalBeatingBoilerHusk() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+            var isBeatingHusk = blockState.is(TrueSteamBlocks.BeatingBoilerHusk.get());
+            Boolean currentBeatingHuskMark = blockWorldState.getMatchContext().getOrPut(BEATING_BOILER_HUSK_MARK,
+                    isBeatingHusk);
+            if (currentBeatingHuskMark != isBeatingHusk) {
+                blockWorldState.setError(new PatternStringError(TrueSteamLang.BEATING_HUSK_ERROR_KEY));
+                return false;
+            }
+            return true;
+        }, () -> new BlockInfo[] { BlockInfo.fromBlock(Blocks.AIR),
+                BlockInfo.fromBlock(TrueSteamBlocks.BeatingBoilerHusk.get()) });
     }
 }

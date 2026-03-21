@@ -16,10 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 
-import site.siredvin.gttruesteam.GTTrueSteam;
-import site.siredvin.gttruesteam.TrueSteamBlocks;
-import site.siredvin.gttruesteam.TrueSteamLang;
-import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
+import site.siredvin.gttruesteam.*;
 
 public class InfernalBoiler {
 
@@ -32,11 +29,11 @@ public class InfernalBoiler {
             .recipeModifier(new InfernalBoilerRecipeModifier())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" CHC ", "COOOC", "COOOC", "COOOC", " CMC ")
-                    .aisle(" SSS ", "S###S", "S###S", "S###S", " SSS ")
-                    .aisle(" CCC ", "C###C", "C###C", "C###C", " CCC ")
-                    .aisle(" SSS ", "S###S", "S###S", "S###S", " SSS ")
-                    .aisle(" CCC ", "C###C", "C###C", "C###C", " CCC ")
-                    .aisle(" SSS ", "S###S", "S###S", "S###S", " SSS ")
+                    .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
+                    .aisle(" CCC ", "C#K#C", "CK#KC", "C#K#C", " CCC ")
+                    .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
+                    .aisle(" CCC ", "C#K#C", "CK#KC", "C#K#C", " CCC ")
+                    .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
                     .aisle(" CPC ", "CIIIC", "CIIIC", "CIIIC", " EEE ")
                     .where('P', Predicates.controller(Predicates.blocks(definition.get())))
                     .where('C', Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get()))
@@ -44,6 +41,7 @@ public class InfernalBoiler {
                     .where('M', Predicates.abilities(PartAbility.MUFFLER))
                     .where('H', Predicates.abilities(PartAbility.MAINTENANCE))
                     .where('#', Predicates.blocks(Blocks.AIR))
+                    .where('K', TrueSteamPredicates.optionalBeatingBoilerHusk())
                     .where(' ', Predicates.any())
                     .where('E',
                             Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get())
@@ -85,6 +83,8 @@ public class InfernalBoiler {
                         components.add(Component.literal("Cycles until throttle: " + logic.getInfernalCharges()));
                         components.add(
                                 Component.literal("Current heat level: ").append(logic.getHeatLevel().component()));
+                        if (infernalBoilerMachine.isBeatingHuskPresent())
+                            components.add(Component.literal("Beating husks present"));
                     }
                 }
             }))

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "gttruesteam:block/heating_casing",
+    "side": "gttruesteam:block/beating_boiler_husk_side",
+    "top": "gttruesteam:block/heating_casing"
+  }
+}

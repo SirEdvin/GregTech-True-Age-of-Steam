@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblo
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
 import org.jetbrains.annotations.NotNull;
+import site.siredvin.gttruesteam.TrueSteamPredicates;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 
 public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine {
@@ -32,6 +33,13 @@ public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine
     @Override
     public @NotNull InfernalBoilerRecipeLogic getRecipeLogic() {
         return (InfernalBoilerRecipeLogic) super.getRecipeLogic();
+    }
+
+    public boolean isBeatingHuskPresent() {
+        if (!this.isFormed) {
+            return false;
+        }
+        return getMultiblockState().getMatchContext().getOrDefault(TrueSteamPredicates.BEATING_BOILER_HUSK_MARK, false);
     }
 
     @Override

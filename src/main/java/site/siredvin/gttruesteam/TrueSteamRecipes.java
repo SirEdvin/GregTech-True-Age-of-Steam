@@ -270,6 +270,19 @@ public class TrueSteamRecipes {
                 " w ",
                 'C', GTMachines.STEAM_SOLAR_BOILER.second().asStack());
 
+        EXTRACTOR_RECIPES.recipeBuilder(TrueSteamBlocks.BoilerHusk.getId().withSuffix("_extraction"))
+                .inputItems(GTMachines.STEAM_SOLAR_BOILER.second().asStack())
+                .EUt(256).duration(200).save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.BeatingBoilerHusk.getId())
+                .inputItems(TrueSteamBlocks.BoilerHusk)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial(), 5)
+                .inputItems(TagPrefix.rod, TrueSteamConcepts.SteamConcept.getMaterial(), 4)
+                .outputItems(TrueSteamBlocks.BeatingBoilerHusk)
+                .circuitMeta(1)
+                .duration(200)
+                .EUt(256).save(provider);
+
         casingRecipe(TrueSteamMaterials.CorrosionTemperedBrass, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
         casingRecipe(TrueSteamMaterials.InfernalAlloy, TrueSteamBlocks.InfernalAlloyCasing, provider);
 

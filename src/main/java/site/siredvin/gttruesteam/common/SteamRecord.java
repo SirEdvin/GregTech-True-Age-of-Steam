@@ -10,6 +10,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import lombok.Builder;
 import lombok.Getter;
 import site.siredvin.gttruesteam.*;
+import site.siredvin.gttruesteam.recipe.condition.BeatingHuskCondition;
 
 import java.util.function.Consumer;
 
@@ -85,6 +86,14 @@ public class SteamRecord {
                 .circuitMeta(1)
                 .EUt(30)
                 .duration(640)
+                .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
+        METAPHYSICAL_BOILING.recipeBuilder(criticalSteam.getResourceLocation())
+                .inputFluids(basicSteam.getFluid(Constants.METAPHYSICS_STEAM_BOILING_OUTPUT))
+                .outputFluids(criticalSteam.getFluid(Constants.METAPHYSICS_STEAM_BOILING_OUTPUT))
+                .circuitMeta(1)
+                .EUt(30)
+                .duration(640)
+                .addCondition(new BeatingHuskCondition())
                 .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
         registerPressurizeRecipe(provider, denseSteam, basicSteam);
         registerPressurizeRecipe(provider, denseCriticalSteam, criticalSteam);
