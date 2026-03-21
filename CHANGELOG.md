@@ -22,11 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Supercritical steam variants
 - New infernal boiler textures (Thanks to MindBrain27)
 - Alternative boiler charging fluid based on nether trees.
+- New cooling coils from cooling cometal
 
 ### Changed
 
 - RCC now use EU-free parallels per coil level
 - Infernal boiler now correctly uses parallels in supreme heat state.
+- Estranged metal now produces tier 3 coils and requires cooling cometal
 
 ### Fixed
 

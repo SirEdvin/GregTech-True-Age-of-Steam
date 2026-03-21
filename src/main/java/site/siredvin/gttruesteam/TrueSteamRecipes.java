@@ -183,6 +183,29 @@ public class TrueSteamRecipes {
                 .EUt(128).duration(100).save(provider);
     }
 
+    private static void registerCoolingCoilsRecipes(Consumer<FinishedRecipe> provider) {
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.getId())
+                .inputItems(TagPrefix.foil, TrueSteamMaterials.FrostbiteMagnalium, 8)
+                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.Aluminium, 8)
+                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
+                .outputItems(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.asStack())
+                .duration(200).EUt(30).save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_ESTRANGED_STEEL.getId())
+                .inputItems(TagPrefix.foil, TrueSteamMaterials.EstrangedSteel, 8)
+                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.Titanium, 8)
+                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
+                .outputItems(TrueSteamBlocks.COIL_ESTRANGED_STEEL.asStack())
+                .duration(200).EUt(30).save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_COOLING_COMETAL.getId())
+                .inputItems(TagPrefix.foil, TrueSteamConcepts.CoolingConcept.getMaterial(), 8)
+                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.StainlessSteel, 8)
+                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
+                .outputItems(TrueSteamBlocks.COIL_COOLING_COMETAL.asStack())
+                .duration(200).EUt(30).save(provider);
+    }
+
     private static void registerSpringRecipes(Consumer<FinishedRecipe> provider) {
         COMPRESSOR_RECIPES.recipeBuilder(TrueSteamItems.CompressionSpringPack.getId())
                 .inputItems(TagPrefix.spring, TrueSteamConcepts.CompressionConcept.getMaterial(), 3)
@@ -282,20 +305,6 @@ public class TrueSteamRecipes {
                 .inputItems(TagPrefix.ingot, GTMaterials.Bronze)
                 .outputItems(TrueSteamBlocks.BronzeGlass, 1)
                 .duration(200).EUt(32).save(provider);
-
-        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.getId())
-                .inputItems(TagPrefix.foil, TrueSteamMaterials.FrostbiteMagnalium, 8)
-                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.Aluminium, 8)
-                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
-                .outputItems(TrueSteamBlocks.COIL_FROSTBITE_MAGNALIUM.asStack())
-                .duration(200).EUt(30).save(provider);
-
-        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.COIL_ESTRANGED_STEEL.getId())
-                .inputItems(TagPrefix.foil, TrueSteamMaterials.EstrangedSteel, 8)
-                .inputItems(TagPrefix.pipeSmallFluid, GTMaterials.StainlessSteel, 8)
-                .inputFluids(GTMaterials.TinAlloy.getFluid(144))
-                .outputItems(TrueSteamBlocks.COIL_ESTRANGED_STEEL.asStack())
-                .duration(200).EUt(30).save(provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.InfernalAlloy.getResourceLocation())
                 .inputItems(TagPrefix.ingot, TrueSteamMaterials.AluminiumBronze)
@@ -398,7 +407,7 @@ public class TrueSteamRecipes {
                 .save(provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.EstrangedSteel.getResourceLocation())
-                .inputItems(TagPrefix.ingot, TrueSteamMaterials.ConceptualizedSteel)
+                .inputItems(TagPrefix.ingot, TrueSteamConcepts.CoolingConcept.getMaterial())
                 .outputItems(TagPrefix.ingot, TrueSteamMaterials.EstrangedSteel)
                 .duration(200)
                 .addCondition(new CoatingFluidCondition(GTMaterials.LiquidEnderAir.getFluid()))
@@ -465,5 +474,6 @@ public class TrueSteamRecipes {
                 new MaterialEntry(TagPrefix.frameGt, TrueSteamConcepts.CompressionConcept.getMaterial()));
 
         registerSpringRecipes(provider);
+        registerCoolingCoilsRecipes(provider);
     }
 }

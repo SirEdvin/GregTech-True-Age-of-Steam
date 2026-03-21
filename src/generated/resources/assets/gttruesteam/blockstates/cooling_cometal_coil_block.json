@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "gttruesteam:block/cooling_cometal_coil_block"
+    },
+    "active=true": {
+      "model": "gttruesteam:block/cooling_cometal_coil_block_active"
+    }
+  }
+}

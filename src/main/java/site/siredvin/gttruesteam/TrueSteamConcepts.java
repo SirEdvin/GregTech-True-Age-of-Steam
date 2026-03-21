@@ -37,7 +37,8 @@ public class TrueSteamConcepts {
                     "steam", 0xc9c9c9, GTRecipeTypes.STEAM_TURBINE_FUELS, 4, Collections.emptyList()));
 
     public static Concept CoolingConcept = register(
-            CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept)));
+            CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept), List.of(
+                    MaterialFlags.GENERATE_FOIL)));
 
     public static Concept register(Concept concept) {
         CONCEPTS.add(concept);

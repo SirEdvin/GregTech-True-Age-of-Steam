@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 public interface ICoolingCoilType extends ICoilType {
 
     int getCoolingCapacity();
@@ -22,7 +24,7 @@ public interface ICoolingCoilType extends ICoilType {
 
     int getTier();
 
-    Material getMaterial();
+    Supplier<Material> getMaterialSupplier();
 
     ResourceLocation getTexture();
 
@@ -34,5 +36,9 @@ public interface ICoolingCoilType extends ICoilType {
     @Override
     default int getEnergyDiscount() {
         return 0;
+    }
+
+    default Material getMaterial() {
+        return getMaterialSupplier().get();
     }
 }

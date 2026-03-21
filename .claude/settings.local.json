@@ -7,7 +7,8 @@
       "mcp__intellij__get_all_open_file_paths",
       "mcp__intellij__get_repositories",
       "mcp__intellij__list_directory_tree",
-      "Bash(unzip:*)"
+      "Bash(unzip:*)",
+      "Skill(pixel-plugin:pixel-setup)"
     ]
   }
 }

@@ -44,7 +44,6 @@ public class TrueSteamBlocks {
         };
     }
 
-
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
         return createCasingBlock(name, Block::new, GTModels.cubeAllModel(texture), () -> Blocks.IRON_BLOCK,
                 () -> RenderType::solid);
@@ -85,6 +84,8 @@ public class TrueSteamBlocks {
             GTTrueSteam.id("block/conceptualized_steel_solid_casing"));
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
+    public static BlockEntry<CoolingCoilBlock> COIL_COOLING_COMETAL = createCoolingCoil(
+            TSCoilType.COOLING_COMETAL);
     public static BlockEntry<CoolingCoilBlock> COIL_ESTRANGED_STEEL = createCoolingCoil(
             TSCoilType.ESTRANGED_STEEL);
 
