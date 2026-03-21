@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
+import com.gregtechceu.gtceu.api.registry.registrate.provider.GTBlockstateProvider;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
@@ -30,21 +31,40 @@ import java.util.function.Supplier;
 
 public class TrueSteamBlocks {
 
+    public static NonNullBiConsumer<DataGenContext<Block, ? extends Block>, GTBlockstateProvider> createActiveModel(ResourceLocation texture) {
+        return (ctx, prov) -> {
+            Block block = ctx.getEntry();
+            ModelFile inactive = prov.models().cubeAll(ctx.getName(), texture);
+            ModelFile active = prov.models().cubeAll(ctx.getName() + "_active", texture.withSuffix("_active"));
+            prov.getVariantBuilder(block)
+                    .partialState().with(GTBlockStateProperties.ACTIVE, false).modelForState().modelFile(inactive)
+                    .addModel()
+                    .partialState().with(GTBlockStateProperties.ACTIVE, true).modelForState().modelFile(active)
+                    .addModel();
+        };
+    }
+
+
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
-        return createCasingBlock(name, Block::new, texture, () -> Blocks.IRON_BLOCK,
+        return createCasingBlock(name, Block::new, GTModels.cubeAllModel(texture), () -> Blocks.IRON_BLOCK,
+                () -> RenderType::solid);
+    }
+
+    public static BlockEntry<Block> createActiveCasingBlock(String name, ResourceLocation texture) {
+        return createCasingBlock(name, ActiveBlock::new, createActiveModel(texture), () -> Blocks.IRON_BLOCK,
                 () -> RenderType::solid);
     }
 
     public static BlockEntry<Block> createCasingBlock(String name,
                                                       NonNullFunction<BlockBehaviour.Properties, Block> blockSupplier,
-                                                      ResourceLocation texture,
+                                                      NonNullBiConsumer<DataGenContext<Block, ? extends Block>, GTBlockstateProvider> model,
                                                       NonNullSupplier<? extends Block> properties,
                                                       Supplier<Supplier<RenderType>> type) {
         return GTTrueSteam.REGISTRATE.block(name, blockSupplier)
                 .initialProperties(properties)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
                 .addLayer(type)
-                .exBlockstate(GTModels.cubeAllModel(texture))
+                .exBlockstate(model)
                 .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
                 .item(BlockItem::new)
                 .build()
@@ -57,7 +77,7 @@ public class TrueSteamBlocks {
             GTTrueSteam.id("block/infernal_alloy_casing"));
     public static BlockEntry<Block> FrostOverproofedCasing = createCasingBlock("frost_overproofed_casing",
             GTTrueSteam.id("block/frost_overproofed_casing"));
-    public static BlockEntry<Block> ConceptualizedSteelPipeCasing = createCasingBlock(
+    public static BlockEntry<Block> ConceptualizedSteelPipeCasing = createActiveCasingBlock(
             "conceptualized_steel_pipe_casing",
             GTTrueSteam.id("block/conceptualized_steel_pipe_casing"));
     public static BlockEntry<Block> ConceptualizedSteelSolidCasing = createCasingBlock(
