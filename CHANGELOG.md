@@ -30,7 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Endlessly escalating distilled water loop
+- Endlessly escalating distilled water loop'
+- Husk of the boiler texture
 
 ## [0.2.3] - 2026-03-01
 

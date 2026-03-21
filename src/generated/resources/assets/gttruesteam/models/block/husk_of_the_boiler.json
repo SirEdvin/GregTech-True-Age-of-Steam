@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "gtceu:block/casings/steam/steel/bottom",
     "side": "gtceu:block/casings/steam/steel/side",
-    "top": "gtceu:block/generators/boiler/solar/overlay_top"
+    "top": "gttruesteam:block/husk_of_the_boiler_top"
   }
 }

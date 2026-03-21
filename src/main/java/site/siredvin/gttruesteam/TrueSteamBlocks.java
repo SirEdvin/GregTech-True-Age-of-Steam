@@ -75,7 +75,7 @@ public class TrueSteamBlocks {
             .exBlockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(ctx.getName(),
                     GTCEu.id("block/casings/steam/steel/side"),
                     GTCEu.id("block/casings/steam/steel/bottom"),
-                    GTCEu.id("block/generators/boiler/solar/overlay_top"))))
+                    GTTrueSteam.id("block/husk_of_the_boiler_top"))))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
             .item(BlockItem::new)
             .build()
