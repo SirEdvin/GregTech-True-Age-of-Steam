@@ -23,9 +23,13 @@ public class TrueSteamLang {
     public static String COOLING_REQUIRED_KEY = Util.makeDescriptionId("condition", GTTrueSteam.id("cooling_capacity"));
     public static String INNER_RECIPE_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
             GTTrueSteam.id("inner_recipe_type"));
+    public static String MOB_SPAWNER_CURRENT_MOB_KEY = Util.makeDescriptionId("tooltip",
+            GTTrueSteam.id("mob_spawner_current_mob"));
 
     public static MutableComponent COATING_FLUID_CONDITION = GTTrueSteam.REGISTRATE.addLang("condition",
             GTTrueSteam.id("coating_fluid"), "Coating fluid:");
+    public static MutableComponent SPAWNER_MOB_CONDITION = GTTrueSteam.REGISTRATE.addLang("condition",
+            GTTrueSteam.id("spawner_mob"), "Mob type:");
     public static MutableComponent COOLING_CAPACITY_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(COOLING_REQUIRED_KEY,
             "Cooling required: %d");
     public static MutableComponent INNER_RECIPE_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
@@ -98,6 +102,23 @@ public class TrueSteamLang {
     public static MutableComponent CIM_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("cim_3"),
             "§7MV machines inside decided which concept it will be. They need to be all the same and need to run all the time during crafting.");
+
+    public static MutableComponent MOB_SPAWNER_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("mob_spawner_1"),
+            "§5Harness the power of spawners to produce mob loot at industrial scale");
+    public static MutableComponent MOB_SPAWNER_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("mob_spawner_2"),
+            "§7Build this multiblock around a mob spawner. Insert a sword and catalyst matching the mob, consume EU to produce mob essence fluid. Distill the essence to obtain loot.");
+    public static MutableComponent MOB_SPAWNER_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip",
+            GTTrueSteam.id("mob_spawner_3"),
+            "§7Sword Looting enchantment increases essence output (+50% per level). Sharpness reduces processing time (-10% per level). Swords lose 1 durability per craft; unbreakable swords are exempt.");
+    public static MutableComponent MOB_SPAWNER_CURRENT_MOB = GTTrueSteam.REGISTRATE.addRawLang(
+            MOB_SPAWNER_CURRENT_MOB_KEY, "Spawner mob: %s");
+    public static MutableComponent MOB_SPAWNER_NO_SPAWNER = GTTrueSteam.REGISTRATE.addLang(
+            "tooltip", GTTrueSteam.id("mob_spawner_no_spawner"), "§cNo spawner found in structure");
 
     public static MutableComponent IGP_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("igp_1"),

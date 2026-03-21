@@ -26,6 +26,7 @@ import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
+import site.siredvin.gttruesteam.machines.mob_spawner.MobSpawnerMultiblock;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 
 import java.util.ArrayList;
@@ -102,6 +103,13 @@ public class TrueSteamRecipeTypes {
                     }
                 }
             });
+    public static GTRecipeType MOB_SPAWNER = register("mob_spawner", GTRecipeTypes.MULTIBLOCK, "Mob Spawner")
+            .setMaxIOSize(2, 0, 1, 3)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+            .setIconSupplier(() -> MobSpawnerMultiblock.MACHINE.getItem().getDefaultInstance())
+            .setSound(GTSoundEntries.SCIENCE);
+
     public static GTRecipeType COATING = register("coating", GTRecipeTypes.MULTIBLOCK, "Coating")
             .setMaxIOSize(1, 1, 0, 0)
             .setEUIO(IO.NONE)

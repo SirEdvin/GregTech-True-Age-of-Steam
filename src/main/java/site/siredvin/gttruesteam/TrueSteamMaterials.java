@@ -13,6 +13,18 @@ public class TrueSteamMaterials {
     // Steam related gases
     public static Material HellishWater;
 
+    // Mob essences
+    public static Material ZombieEssence;
+    public static Material SkeletonEssence;
+    public static Material SpiderEssence;
+    public static Material CreeperEssence;
+    public static Material EndermanEssence;
+    public static Material BlazeEssence;
+    public static Material WitherSkeletonEssence;
+    public static Material GhastEssence;
+    public static Material MagmaSlimeEssence;
+    public static Material ZombiePiglinEssence;
+
     // Coolants
     public static Material ActivatedBlaze;
     public static Material OverheatedInfernalSlurry;
@@ -162,6 +174,49 @@ public class TrueSteamMaterials {
                 .buildAndRegister();
     }
 
+    private static void initMobEssences() {
+        ZombieEssence = new Material.Builder(GTTrueSteam.id("zombie_essence"))
+                .liquid()
+                .color(0x7ec850, false).secondaryColor(0x336600).iconSet(FINE)
+                .buildAndRegister();
+        SkeletonEssence = new Material.Builder(GTTrueSteam.id("skeleton_essence"))
+                .liquid()
+                .color(0xd4c9b0, false).secondaryColor(0x9e9480).iconSet(FINE)
+                .buildAndRegister();
+        SpiderEssence = new Material.Builder(GTTrueSteam.id("spider_essence"))
+                .liquid()
+                .color(0x8b3a9e, false).secondaryColor(0x3d1045).iconSet(FINE)
+                .buildAndRegister();
+        CreeperEssence = new Material.Builder(GTTrueSteam.id("creeper_essence"))
+                .liquid()
+                .color(0x44cc44, false).secondaryColor(0x005500).iconSet(FINE)
+                .buildAndRegister();
+        EndermanEssence = new Material.Builder(GTTrueSteam.id("enderman_essence"))
+                .liquid()
+                .color(0x2e0045, false).secondaryColor(0x150020).iconSet(FINE)
+                .buildAndRegister();
+        BlazeEssence = new Material.Builder(GTTrueSteam.id("blaze_essence"))
+                .liquid(1000)
+                .color(0xff8c00, false).secondaryColor(0xff4400).iconSet(FINE)
+                .buildAndRegister();
+        WitherSkeletonEssence = new Material.Builder(GTTrueSteam.id("wither_skeleton_essence"))
+                .liquid()
+                .color(0x2d2d2d, false).secondaryColor(0x000000).iconSet(FINE)
+                .buildAndRegister();
+        GhastEssence = new Material.Builder(GTTrueSteam.id("ghast_essence"))
+                .liquid()
+                .color(0xf0e8ff, false).secondaryColor(0xb0a0d0).iconSet(FINE)
+                .buildAndRegister();
+        MagmaSlimeEssence = new Material.Builder(GTTrueSteam.id("magma_slime_essence"))
+                .liquid(1000)
+                .color(0xc43c00, false).secondaryColor(0x7a2000).iconSet(FINE)
+                .buildAndRegister();
+        ZombiePiglinEssence = new Material.Builder(GTTrueSteam.id("zombie_piglin_essence"))
+                .liquid()
+                .color(0xe8a430, false).secondaryColor(0x7a4000).iconSet(FINE)
+                .buildAndRegister();
+    }
+
     private static void initMisc() {}
 
     public static void init() {
@@ -170,5 +225,6 @@ public class TrueSteamMaterials {
         initEnrichers();
         initMisc();
         initSolidMaterials();
+        initMobEssences();
     }
 }

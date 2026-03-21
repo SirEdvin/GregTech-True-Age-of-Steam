@@ -68,6 +68,9 @@ public class TrueSteamBlocks {
     public static BlockEntry<CoolingCoilBlock> COIL_ESTRANGED_STEEL = createCoolingCoil(
             TSCoilType.ESTRANGED_STEEL);
 
+    public static BlockEntry<Block> MobTrapCasing = createCasingBlock("mob_trap_casing",
+            GTCEu.id("block/casings/solid/machine_casing_steel"));
+
     public static BlockEntry<Block> BoilerHusk = GTTrueSteam.REGISTRATE.block("husk_of_the_boiler", Block::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))

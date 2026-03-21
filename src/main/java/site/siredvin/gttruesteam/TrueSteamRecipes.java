@@ -23,6 +23,8 @@ import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
+import site.siredvin.gttruesteam.machines.mob_spawner.MobSpawnerMultiblock;
+import site.siredvin.gttruesteam.machines.mob_spawner.MobSpawnerRecipes;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
@@ -229,6 +231,20 @@ public class TrueSteamRecipes {
                 .duration(100).EUt(64).save(provider);
     }
 
+    private static void registerMobSpawnerRecipes(Consumer<FinishedRecipe> provider) {
+        MobSpawnerRecipes.registerRecipes(provider);
+
+        // Crafting recipe for the Mob Spawner controller
+        VanillaRecipeHelper.addShapedRecipe(provider, true, MobSpawnerMultiblock.MACHINE.getId(),
+                MobSpawnerMultiblock.MACHINE.asStack(),
+                "ICI",
+                "CMC",
+                "ICI",
+                'I', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy),
+                'C', TrueSteamBlocks.MobTrapCasing.asStack(),
+                'M', new MaterialEntry(TagPrefix.frameGt, GTMaterials.Steel));
+    }
+
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
         registerInfernalChargingLoop(provider);
         registerBoilerRecipes(provider);
@@ -249,6 +265,7 @@ public class TrueSteamRecipes {
 
         casingRecipe(TrueSteamMaterials.CorrosionTemperedBrass, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
         casingRecipe(TrueSteamMaterials.InfernalAlloy, TrueSteamBlocks.InfernalAlloyCasing, provider);
+        casingRecipe(GTMaterials.Steel, TrueSteamBlocks.MobTrapCasing, provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())
                 .inputItems(TagPrefix.ingot, GTMaterials.Steel)
@@ -447,6 +464,7 @@ public class TrueSteamRecipes {
 
         TrueSteamConcepts.CONCEPTS.forEach(c -> c.registerRecipes(provider));
         TrueSteamSteams.STEAMS.forEach(c -> c.registerRecipes(provider));
+        registerMobSpawnerRecipes(provider);
 
         casingRecipe(TrueSteamMaterials.ConceptualizedSteel, TrueSteamBlocks.ConceptualizedSteelSolidCasing, provider);
         pipeCasingRecipe(TrueSteamMaterials.ConceptualizedSteel, TrueSteamBlocks.ConceptualizedSteelPipeCasing,

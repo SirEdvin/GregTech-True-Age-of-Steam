@@ -7,12 +7,14 @@ import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 import site.siredvin.gttruesteam.recipe.condition.InnerRecipeTypeCondition;
+import site.siredvin.gttruesteam.recipe.condition.SpawnerMobCondition;
 
 public class TrueSteamRecipeConditions {
 
     public static RecipeConditionType<CoatingFluidCondition> COATING_FLUID;
     public static RecipeConditionType<CoolingCapacityCondition> COOLING_CAPACITY;
     public static RecipeConditionType<InnerRecipeTypeCondition> INNER_RECIPE_TYPE;
+    public static RecipeConditionType<SpawnerMobCondition> SPAWNER_MOB;
 
     public static void registerConditions(GTCEuAPI.RegisterEvent<String, RecipeConditionType<?>> event) {
         COATING_FLUID = GTRegistries.RECIPE_CONDITIONS.register("coating_fluid", //
@@ -21,5 +23,7 @@ public class TrueSteamRecipeConditions {
                 new RecipeConditionType<>(CoolingCapacityCondition::new, CoolingCapacityCondition.CODEC));
         INNER_RECIPE_TYPE = GTRegistries.RECIPE_CONDITIONS.register("inner_recipe_type", //
                 new RecipeConditionType<>(InnerRecipeTypeCondition::new, InnerRecipeTypeCondition.CODEC));
+        SPAWNER_MOB = GTRegistries.RECIPE_CONDITIONS.register("spawner_mob", //
+                new RecipeConditionType<>(SpawnerMobCondition::new, SpawnerMobCondition.CODEC));
     }
 }
