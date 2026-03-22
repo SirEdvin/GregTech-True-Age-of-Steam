@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:husk_of_the_boiler",
+  "criteria": {
+    "has_coating_shrine": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:coating_shrine"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.coating_shrine.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:coating_shrine"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.coating_shrine.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_coating_shrine"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

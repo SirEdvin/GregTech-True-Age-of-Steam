@@ -1,0 +1,38 @@
+{
+  "criteria": {
+    "has_boiler_husk": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:husk_of_the_boiler"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.gttruesteam.husk_of_the_boiler.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:husk_of_the_boiler"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.gttruesteam.husk_of_the_boiler.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_boiler_husk"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -18,7 +18,9 @@ public class GTTrueSteamGTAddon implements IGTAddon {
     }
 
     @Override
-    public void initializeAddon() {}
+    public void initializeAddon() {
+        TrueSteamAdvancements.init();
+    }
 
     @Override
     public String addonModId() {

@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:coating_shrine",
+  "criteria": {
+    "has_frostbite_magnalium": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:frostbite_magnalium_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.frostbitten.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:frostbite_magnalium_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.frostbitten.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_frostbite_magnalium"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

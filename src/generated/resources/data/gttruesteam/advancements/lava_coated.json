@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:coating_shrine",
+  "criteria": {
+    "has_lava_coated_steel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:lava_coated_steel_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.lava_coated.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:lava_coated_steel_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.lava_coated.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_lava_coated_steel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
