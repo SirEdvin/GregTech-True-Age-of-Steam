@@ -1,6 +1,7 @@
 package site.siredvin.gttruesteam;
 
 import net.minecraft.advancements.CriteriaTriggers;
+
 import site.siredvin.gttruesteam.criteria.InfernalMaintainceCriterion;
 import site.siredvin.gttruesteam.criteria.PerfectConditionCriterion;
 

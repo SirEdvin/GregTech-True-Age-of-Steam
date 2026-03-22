@@ -2,8 +2,6 @@ package site.siredvin.gttruesteam;
 
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
@@ -13,6 +11,8 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.resources.ResourceLocation;
 
+import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
@@ -39,7 +39,8 @@ public class TrueSteamAdvancements {
                         BACKGROUND,
                         FrameType.TASK,
                         false, false, false)
-                .addCriterion("tick", InventoryChangeTrigger.TriggerInstance.hasItems(new net.minecraft.world.level.ItemLike[0]))
+                .addCriterion("tick",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(new net.minecraft.world.level.ItemLike[0]))
                 .save(provider, GTTrueSteam.id("root").toString());
 
         // Husk of the Boiler

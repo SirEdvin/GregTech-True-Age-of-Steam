@@ -1,12 +1,13 @@
 package site.siredvin.gttruesteam.criteria;
 
-import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.SerializationContext;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
+
+import com.google.gson.JsonObject;
 
 import java.util.function.Supplier;
 

@@ -7,9 +7,10 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.minecraft.server.level.ServerLevel;
+
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.level.ServerLevel;
 import site.siredvin.gttruesteam.TrueSteamCriteria;
 import site.siredvin.gttruesteam.TrueSteamStats;
 
@@ -33,7 +34,7 @@ public class IndustrialGasPressurizerRecipeLogic extends RecipeLogic {
 
     @Override
     public void onRecipeFinish() {
-        //noinspection DataFlowIssue
+        // noinspection DataFlowIssue
         if (machine instanceof IndustrialGasPressurizerMachine igp && !igp.getLevel().isClientSide) {
             if (igp.getState() == PerfectConditionState.REACHED && igp.getPlayerOwner() != null) {
                 var player = ((ServerLevel) igp.getLevel()).getServer()

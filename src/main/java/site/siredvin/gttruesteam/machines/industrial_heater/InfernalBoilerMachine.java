@@ -12,7 +12,6 @@ import site.siredvin.gttruesteam.TrueSteamPredicates;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 import site.siredvin.gttruesteam.TrueSteamStats;
 
-
 public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine {
 
     private int resetCounter = 0;
@@ -54,7 +53,7 @@ public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine
         var lastRecipe = logic.getLastRecipe();
         if (lastRecipe != null && lastRecipe.data.contains(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY)) {
             logic.setInfernalCharges(lastRecipe.data.getInt(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY));
-            //noinspection DataFlowIssue
+            // noinspection DataFlowIssue
             if (!this.getLevel().isClientSide && this.getPlayerOwner() != null) {
                 var player = ((ServerLevel) this.getLevel()).getServer()
                         .getPlayerList().getPlayer(this.getPlayerOwner().getUUID());

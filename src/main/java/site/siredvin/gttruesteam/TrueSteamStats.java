@@ -14,8 +14,10 @@ public class TrueSteamStats {
     public static Supplier<Stat<ResourceLocation>> PERFECT_CONDITION_RECIPE_CRAFTED;
 
     public static void init() {
-        INFERNAL_MAINTAIN_RECIPE_PERFORMED = register("infernal_maintain_recipe_performed", "Infernal boiler charged", StatFormatter.DEFAULT);
-        PERFECT_CONDITION_RECIPE_CRAFTED = register("perfect_condition_recipe_crafted", "Pressurized perfect condition reached", StatFormatter.DEFAULT);
+        INFERNAL_MAINTAIN_RECIPE_PERFORMED = register("infernal_maintain_recipe_performed", "Infernal boiler charged",
+                StatFormatter.DEFAULT);
+        PERFECT_CONDITION_RECIPE_CRAFTED = register("perfect_condition_recipe_crafted",
+                "Pressurized perfect condition reached", StatFormatter.DEFAULT);
     }
 
     private static Supplier<Stat<ResourceLocation>> register(String name, String displayName, StatFormatter formatter) {
