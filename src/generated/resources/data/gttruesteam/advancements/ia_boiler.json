@@ -1,0 +1,64 @@
+{
+  "parent": "gttruesteam:lc_boiler",
+  "criteria": {
+    "has_ia_liquid": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:ia_liquid"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ia_solar": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:ia_solar"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ia_solid": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:ia_solid"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.ia_boiler.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:ia_solid"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.ia_boiler.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_ia_solid",
+      "has_ia_liquid",
+      "has_ia_solar"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -89,7 +89,7 @@ public class TrueSteamAdvancements {
                 .save(provider, GTTrueSteam.id("lava_coated").toString());
 
         // Any of the three LC single-block boilers
-        Advancement.Builder.advancement()
+        Advancement lcBoiler = Advancement.Builder.advancement()
                 .parent(lavaCoated)
                 .display(
                         TrueSteamMachines.SOLID.getFirst().getItem().getDefaultInstance(),
@@ -110,6 +110,29 @@ public class TrueSteamAdvancements {
                                 TrueSteamMachines.SOLAR.getFirst().getItem()))
                 .requirements(RequirementsStrategy.OR)
                 .save(provider, GTTrueSteam.id("lc_boiler").toString());
+
+        // Any of the three infernal alloy single-block boilers
+        Advancement.Builder.advancement()
+                .parent(lcBoiler)
+                .display(
+                        TrueSteamMachines.SOLID.getSecond().getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "ia_boiler", "Infernal Alloy Boiler"),
+                        provider.desc(GTTrueSteam.MOD_ID, "ia_boiler",
+                                "Upgrade a Lava Coated boiler further with Infernal Alloy"),
+                        null,
+                        FrameType.GOAL,
+                        true, true, false)
+                .addCriterion("has_ia_solid",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamMachines.SOLID.getSecond().getItem()))
+                .addCriterion("has_ia_liquid",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamMachines.LIQUID.getSecond().getItem()))
+                .addCriterion("has_ia_solar",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamMachines.SOLAR.getSecond().getItem()))
+                .requirements(RequirementsStrategy.OR)
+                .save(provider, GTTrueSteam.id("ia_boiler").toString());
 
         // Blaze coating: Aluminium Bronze → Infernal Alloy
         Advancement infernalAlloy = Advancement.Builder.advancement()
