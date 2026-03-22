@@ -146,6 +146,67 @@ public class TrueSteamLang {
     public static MutableComponent COATING_CHARGES_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COATING_CHARGES_MESSAGE_KEY, "Left coating charges: %d");
 
+    // Advancement titles
+    public static MutableComponent ADV_ROOT_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.root.title", "Age of Steam");
+    public static MutableComponent ADV_ROOT_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.root.description",
+            "Forge your path in an age of superheated steam");
+
+    public static MutableComponent ADV_BRONZE_GLASS_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.bronze_glass_age.title", "Bronze Glass Age");
+    public static MutableComponent ADV_BRONZE_GLASS_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.bronze_glass_age.description",
+            "Smelt bronze glass, a transparent yet resilient window into the steam age");
+
+    public static MutableComponent ADV_SPRING_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.spring_into_action.title", "Spring Into Action");
+    public static MutableComponent ADV_SPRING_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.spring_into_action.description",
+            "Assemble a compression spring pack and begin storing mechanical energy");
+
+    public static MutableComponent ADV_PRESSURE_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.under_pressure.title", "Under Pressure");
+    public static MutableComponent ADV_PRESSURE_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.under_pressure.description",
+            "Push your springs to their limit and obtain a fully compressed spring pack");
+
+    public static MutableComponent ADV_INFUSED_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.infused_mastery.title", "Infused Mastery");
+    public static MutableComponent ADV_INFUSED_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.infused_mastery.description",
+            "Infuse the very essence of a concept into a compressed spring pack");
+
+    public static MutableComponent ADV_HELLISH_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.hellish_ambitions.title", "Hellish Ambitions");
+    public static MutableComponent ADV_HELLISH_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.hellish_ambitions.description",
+            "Smelt infernal alloy and craft the casing that can survive the deepest heat");
+
+    public static MutableComponent ADV_HEART_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.heart_of_the_boiler.title", "Heart of the Boiler");
+    public static MutableComponent ADV_HEART_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.heart_of_the_boiler.description",
+            "Install a beating boiler husk and awaken the living heart of the infernal boiler");
+
+    public static MutableComponent ADV_CHILL_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.chill_factor.title", "Chill Factor");
+    public static MutableComponent ADV_CHILL_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.chill_factor.description",
+            "Craft the frost overproofed casing to build machines that survive extreme cold");
+
+    public static MutableComponent ADV_CIRCUIT_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.circuit_forged_in_fire.title", "Circuit Forged in Fire");
+    public static MutableComponent ADV_CIRCUIT_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.circuit_forged_in_fire.description",
+            "Etch a circuit capable of withstanding infernal temperatures");
+
+    public static MutableComponent ADV_CONCEPT_TITLE = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.conceptualized_steel.title", "Conceptualized Steel");
+    public static MutableComponent ADV_CONCEPT_DESC = GTTrueSteam.REGISTRATE.addRawLang(
+            "advancements.gttruesteam.conceptualized_steel.description",
+            "Forge steel that transcends physical laws – reality is just a concept");
+
     public static void sayHi() {
         // GTTrueSteam.REGISTRATE.addRawLang(TrueSteamRecipes.)
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.liquid_ender_air", "Liquid ender air");

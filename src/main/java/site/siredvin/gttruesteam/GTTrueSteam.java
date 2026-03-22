@@ -13,6 +13,8 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -25,6 +27,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import site.siredvin.gttruesteam.config.TrueSteamConfig;
+
+import java.util.List;
 
 @Mod(GTTrueSteam.MOD_ID)
 @SuppressWarnings("removal")
@@ -39,6 +43,7 @@ public class GTTrueSteam {
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::gatherData);
 
         modEventBus.addListener(this::addMaterialRegistries);
         modEventBus.addListener(this::addMaterials);
@@ -64,6 +69,16 @@ public class GTTrueSteam {
     private void commonSetup(final FMLCommonSetupEvent event) {}
 
     private void clientSetup(final FMLClientSetupEvent event) {}
+
+    private void gatherData(GatherDataEvent event) {
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                new ForgeAdvancementProvider(
+                        event.getGenerator().getPackOutput(),
+                        event.getLookupProvider(),
+                        event.getExistingFileHelper(),
+                        List.of(new TrueSteamAdvancements())));
+    }
 
     /**
      * Create a ResourceLocation in the format "modid:path"
