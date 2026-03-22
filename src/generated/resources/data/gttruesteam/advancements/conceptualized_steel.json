@@ -1,12 +1,12 @@
 {
-  "parent": "gttruesteam:root",
+  "parent": "gttruesteam:purified_infernal_dust",
   "criteria": {
-    "has_boiler_husk": {
+    "has_conceptualized_steel": {
       "conditions": {
         "items": [
           {
             "items": [
-              "gttruesteam:husk_of_the_boiler"
+              "gttruesteam:conceptualized_steel_ingot"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.description"
+      "translate": "advancements.gttruesteam.conceptualized_steel.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "gttruesteam:husk_of_the_boiler"
+      "item": "gttruesteam:conceptualized_steel_ingot"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.title"
+      "translate": "advancements.gttruesteam.conceptualized_steel.title"
     }
   },
   "requirements": [
     [
-      "has_boiler_husk"
+      "has_conceptualized_steel"
     ]
   ],
   "sends_telemetry_event": true

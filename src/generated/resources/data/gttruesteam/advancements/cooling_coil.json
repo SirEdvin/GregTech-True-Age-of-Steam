@@ -1,0 +1,64 @@
+{
+  "parent": "gttruesteam:frostbitten",
+  "criteria": {
+    "has_cooling_cometal_coil": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:cooling_cometal_coil_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_estranged_steel_coil": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:estranged_steel_coil_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_frostbite_magnalium_coil": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:frostbite_magnalium_coil_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.cooling_coil.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:frostbite_magnalium_coil_block"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.cooling_coil.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_frostbite_magnalium_coil",
+      "has_cooling_cometal_coil",
+      "has_estranged_steel_coil"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

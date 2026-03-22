@@ -8,7 +8,44 @@
       "mcp__intellij__get_repositories",
       "mcp__intellij__list_directory_tree",
       "Bash(unzip:*)",
-      "Skill(pixel-plugin:pixel-setup)"
+      "Skill(pixel-plugin:pixel-setup)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -r \"GatherDataEvent\\\\|DataProvider\" /e/Users/sired/IdeaProjects/GregTech-True-Age-of-Steam/src/main --include=*.java)",
+      "Bash(cd /tmp)",
+      "Bash(jar -xf \"/c/Users/sired/.gradle/caches/modules-2/files-2.1/com.gregtechceu.gtceu/gtceu-1.20.1/7.5.1/71f4f6dab15e9aff7e78023c7ce0d5bd975be04e/gtceu-1.20.1-7.5.1-sources.jar\")",
+      "Bash(grep -r advancement /tmp/com/gregtechceu/gtceu --include=*.java)",
+      "Bash(grep -r \"ProviderType\\\\|addDataGenerator\" /tmp/com/gregtechceu/gtceu --include=*.java)",
+      "Bash(grep -r ProviderType /tmp/com/gregtechceu/gtceu --include=*.java)",
+      "Bash(grep -r class.*Provider.*extends /tmp/com/gregtechceu/gtceu/data --include=*.java)",
+      "Bash(tr ';' '\\\\n')",
+      "Bash(grep -i registrate C:/Users/sired/.gradle/caches/modules-2/files-2.1 -r --include=*.jar -l)",
+      "Bash(jar tf:*)",
+      "Bash(jar xf:*)",
+      "Bash(javap -p com/tterrag/registrate/providers/RegistrateAdvancementProvider.class)",
+      "Bash(javap -p com/tterrag/registrate/providers/ProviderType.class)",
+      "Bash(javap -p com/tterrag/registrate/util/entry/ItemEntry.class)",
+      "Bash(grep ItemProviderEntry cd /tmp)",
+      "Bash(javap -p /tmp/com/tterrag/registrate/util/entry/ItemProviderEntry.class)",
+      "Bash(javap -p /tmp/com/tterrag/registrate/util/entry/BlockEntry.class)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Skill(update-config)",
+      "Bash(jq:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; echo \"$f\" | grep -q 'TrueSteamAdvancements\\.java' && cd 'E:/Users/sired/IdeaProjects/GregTech-True-Age-of-Steam' && ./gradlew runData; } 2>/dev/null || true",
+            "timeout": 300,
+            "statusMessage": "Running datagen..."
+          }
+        ]
+      }
     ]
   }
 }

@@ -8,6 +8,7 @@ import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.resources.ResourceLocation;
 
@@ -25,16 +26,30 @@ public class TrueSteamAdvancements {
     }
 
     private static void generate(RegistrateAdvancementProvider provider) {
-        // Root: Husk of the Boiler
+        // Tab root - defines the advancement tab for this mod
+        Advancement root = Advancement.Builder.advancement()
+                .display(
+                        CoatingShrine.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "root", "True Age of Steam"),
+                        provider.desc(GTTrueSteam.MOD_ID, "root",
+                                "Delve into the secrets of infernal steam engineering"),
+                        BACKGROUND,
+                        FrameType.TASK,
+                        false, false, true)
+                .addCriterion("impossible", new ImpossibleTrigger.TriggerInstance())
+                .save(provider, GTTrueSteam.id("root").toString());
+
+        // Husk of the Boiler
         Advancement husk = Advancement.Builder.advancement()
+                .parent(root)
                 .display(
                         TrueSteamBlocks.BoilerHusk.asStack(),
                         provider.title(GTTrueSteam.MOD_ID, "husk_of_the_boiler", "Husk of the Boiler"),
                         provider.desc(GTTrueSteam.MOD_ID, "husk_of_the_boiler",
                                 "The empty shell of a boiler, waiting to be repurposed"),
-                        BACKGROUND,
+                        null,
                         FrameType.TASK,
-                        false, false, false)
+                        true, true, false)
                 .addCriterion("has_boiler_husk",
                         InventoryChangeTrigger.TriggerInstance.hasItems(TrueSteamBlocks.BoilerHusk))
                 .save(provider, GTTrueSteam.id("husk_of_the_boiler").toString());
@@ -102,7 +117,7 @@ public class TrueSteamAdvancements {
                         provider.desc(GTTrueSteam.MOD_ID, "infernal_alloy",
                                 "Bathe aluminium bronze in liquid blaze to forge the ultimate infernal material"),
                         null,
-                        FrameType.GOAL,
+                        FrameType.TASK,
                         true, true, false)
                 .addCriterion("has_infernal_alloy",
                         InventoryChangeTrigger.TriggerInstance.hasItems(

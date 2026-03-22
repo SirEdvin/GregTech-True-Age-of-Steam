@@ -1,12 +1,12 @@
 {
-  "parent": "gttruesteam:root",
+  "parent": "gttruesteam:corrosion_tempered",
   "criteria": {
-    "has_boiler_husk": {
+    "has_cooling_box": {
       "conditions": {
         "items": [
           {
             "items": [
-              "gttruesteam:husk_of_the_boiler"
+              "gttruesteam:cooling_box"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.description"
+      "translate": "advancements.gttruesteam.cooling_box.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "gttruesteam:husk_of_the_boiler"
+      "item": "gttruesteam:cooling_box"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.title"
+      "translate": "advancements.gttruesteam.cooling_box.title"
     }
   },
   "requirements": [
     [
-      "has_boiler_husk"
+      "has_cooling_box"
     ]
   ],
   "sends_telemetry_event": true

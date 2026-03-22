@@ -1,12 +1,12 @@
 {
-  "parent": "gttruesteam:root",
+  "parent": "gttruesteam:infernal_alloy",
   "criteria": {
-    "has_boiler_husk": {
+    "has_infernal_boiler": {
       "conditions": {
         "items": [
           {
             "items": [
-              "gttruesteam:husk_of_the_boiler"
+              "gttruesteam:infernal_boiler"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.description"
+      "translate": "advancements.gttruesteam.infernal_boiler.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "gttruesteam:husk_of_the_boiler"
+      "item": "gttruesteam:infernal_boiler"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.title"
+      "translate": "advancements.gttruesteam.infernal_boiler.title"
     }
   },
   "requirements": [
     [
-      "has_boiler_husk"
+      "has_infernal_boiler"
     ]
   ],
   "sends_telemetry_event": true

@@ -19,7 +19,7 @@
     "description": {
       "translate": "advancements.gttruesteam.infernal_alloy.description"
     },
-    "frame": "goal",
+    "frame": "task",
     "hidden": false,
     "icon": {
       "item": "gttruesteam:infernal_alloy_ingot"

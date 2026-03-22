@@ -1,12 +1,12 @@
 {
-  "parent": "gttruesteam:root",
+  "parent": "gttruesteam:infernal_boiler",
   "criteria": {
-    "has_boiler_husk": {
+    "has_purified_infernal_dust": {
       "conditions": {
         "items": [
           {
             "items": [
-              "gttruesteam:husk_of_the_boiler"
+              "gttruesteam:purified_infernal_dust"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.description"
+      "translate": "advancements.gttruesteam.purified_infernal_dust.description"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "gttruesteam:husk_of_the_boiler"
+      "item": "gttruesteam:purified_infernal_dust"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.gttruesteam.husk_of_the_boiler.title"
+      "translate": "advancements.gttruesteam.purified_infernal_dust.title"
     }
   },
   "requirements": [
     [
-      "has_boiler_husk"
+      "has_purified_infernal_dust"
     ]
   ],
   "sends_telemetry_event": true
