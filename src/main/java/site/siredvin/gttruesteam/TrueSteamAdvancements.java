@@ -9,6 +9,8 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.resources.ResourceLocation;
 
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
@@ -139,6 +141,36 @@ public class TrueSteamAdvancements {
                 .addCriterion("has_infernal_boiler",
                         InventoryChangeTrigger.TriggerInstance.hasItems(InfernalBoiler.MACHINE.getItem()))
                 .save(provider, GTTrueSteam.id("infernal_boiler").toString());
+
+        // First infernal maintain cycle
+        Advancement firstMaintain = Advancement.Builder.advancement()
+                .parent(infernalBoiler)
+                .display(
+                        InfernalBoiler.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "first_maintain", "Feed the Beast"),
+                        provider.desc(GTTrueSteam.MOD_ID, "first_maintain",
+                                "Perform a maintenance recipe to restore infernal boiler charges"),
+                        null,
+                        FrameType.GOAL,
+                        true, true, false)
+                .addCriterion("first_maintain",
+                        TrueSteamCriteria.INFERNAL_MAINTENANCE.atLeast(1))
+                .save(provider, GTTrueSteam.id("first_maintain").toString());
+
+        // 100 infernal maintain cycles
+        Advancement.Builder.advancement()
+                .parent(firstMaintain)
+                .display(
+                        InfernalBoiler.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "hundred_maintains", "Loyal Servant"),
+                        provider.desc(GTTrueSteam.MOD_ID, "hundred_maintains",
+                                "Perform 100 maintenance recipes to keep the infernal boiler charged"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("hundred_maintains",
+                        TrueSteamCriteria.INFERNAL_MAINTENANCE.atLeast(100))
+                .save(provider, GTTrueSteam.id("hundred_maintains").toString());
 
         // Purified Infernal Dust - end of infernal processing chain
         Advancement purifiedDust = Advancement.Builder.advancement()
@@ -294,7 +326,7 @@ public class TrueSteamAdvancements {
                                 TrueSteamConcepts.PolarizationConcept.getCatalysts().get(0)))
                 .save(provider, GTTrueSteam.id("polarization_concept").toString());
 
-        Advancement.Builder.advancement()
+        Advancement steamConcept = Advancement.Builder.advancement()
                 .parent(cim)
                 .display(
                         TrueSteamConcepts.SteamConcept.getCatalysts().get(0).asStack(),
@@ -308,6 +340,25 @@ public class TrueSteamAdvancements {
                         InventoryChangeTrigger.TriggerInstance.hasItems(
                                 TrueSteamConcepts.SteamConcept.getCatalysts().get(0)))
                 .save(provider, GTTrueSteam.id("steam_concept").toString());
+
+        // 20 beating husks in inventory - upgrade for infernal boiler
+        Advancement.Builder.advancement()
+                .parent(steamConcept)
+                .display(
+                        TrueSteamBlocks.BeatingBoilerHusk.asStack(),
+                        provider.title(GTTrueSteam.MOD_ID, "beating_husks", "Heart of the Boiler"),
+                        provider.desc(GTTrueSteam.MOD_ID, "beating_husks",
+                                "Collect 20 Beating Husks to fully upgrade the Infernal Boiler"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("has_20_beating_husks",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                ItemPredicate.Builder.item()
+                                        .of(TrueSteamBlocks.BeatingBoilerHusk)
+                                        .withCount(MinMaxBounds.Ints.atLeast(20))
+                                        .build()))
+                .save(provider, GTTrueSteam.id("beating_husks").toString());
 
         // Infernal Circuit - child of purified dust
         Advancement.Builder.advancement()

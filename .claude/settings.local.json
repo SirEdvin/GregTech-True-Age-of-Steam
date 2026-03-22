@@ -34,7 +34,8 @@
       "Read(//tmp/**)",
       "Bash(javap -p net/minecraft/advancements/critereon/EntityPredicate.class)",
       "Bash(grep -r \"PlayerTrigger\\\\|CriteriaTriggers\\\\|TICK\" /c/Users/sired/.gradle/caches/modules-2/files-2.1/com.gregtechceu.gtceu --include=*.java)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(./gradlew runData)"
     ]
   },
   "hooks": {

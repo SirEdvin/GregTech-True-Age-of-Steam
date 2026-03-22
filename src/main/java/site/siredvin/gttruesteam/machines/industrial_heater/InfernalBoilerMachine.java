@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import net.minecraft.server.level.ServerLevel;
 
 import org.jetbrains.annotations.NotNull;
+import site.siredvin.gttruesteam.TrueSteamCriteria;
 import site.siredvin.gttruesteam.TrueSteamPredicates;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 import site.siredvin.gttruesteam.TrueSteamStats;
@@ -57,7 +58,10 @@ public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine
             if (!this.getLevel().isClientSide && this.getPlayerOwner() != null) {
                 var player = ((ServerLevel) this.getLevel()).getServer()
                         .getPlayerList().getPlayer(this.getPlayerOwner().getUUID());
-                if (player != null) player.awardStat(TrueSteamStats.INFERNAL_MAINTAIN_RECIPE_PERFORMED.get());
+                if (player != null) {
+                    player.awardStat(TrueSteamStats.INFERNAL_MAINTAIN_RECIPE_PERFORMED.get());
+                    TrueSteamCriteria.INFERNAL_MAINTENANCE.trigger(player);
+                }
             }
         }
         super.afterWorking();
