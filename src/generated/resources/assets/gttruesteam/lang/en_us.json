@@ -158,6 +158,8 @@
   "message.gttruesteam.infernal_cycles_until_throttle": "Cycles until throttle: %d",
   "message.gttruesteam.infernal_heat_level": "Current heat level: ",
   "message.gttruesteam.optional_upgrade": "§7This is optional upgrade for multiblock, air can be used instead.",
+  "stat.gttruesteam.infernal_maintain_recipe_performed": "Infernal boiler charged",
+  "stat.gttruesteam.perfect_condition_recipe_crafted": "Pressurized perfect condition reached",
   "tooltip.gttruesteam.charging_cycles": "Charging for %d cycles",
   "tooltip.gttruesteam.coating_charges": "Coating charges: ",
   "tooltip.gttruesteam.cooling_coils_capacity": "§bBase Cooling Capacity: §f%d ηK",
