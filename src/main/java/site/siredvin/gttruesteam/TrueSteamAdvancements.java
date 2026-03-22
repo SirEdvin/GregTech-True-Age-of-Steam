@@ -248,7 +248,7 @@ public class TrueSteamAdvancements {
                         TrueSteamConcepts.ExtractionConcept.getCatalysts().get(0).asStack(),
                         provider.title(GTTrueSteam.MOD_ID, "extraction_concept", "Concept of Extraction"),
                         provider.desc(GTTrueSteam.MOD_ID, "extraction_concept",
-                                "Infuse the concept of extraction into a catalyst"),
+                                "Don't hold it in your hands for too long. It suppose to be safe, but you never know..."),
                         null,
                         FrameType.CHALLENGE,
                         true, true, false)
@@ -263,7 +263,7 @@ public class TrueSteamAdvancements {
                         TrueSteamConcepts.CompressionConcept.getCatalysts().get(0).asStack(),
                         provider.title(GTTrueSteam.MOD_ID, "compression_concept", "Concept of Compression"),
                         provider.desc(GTTrueSteam.MOD_ID, "compression_concept",
-                                "Infuse the concept of compression into a catalyst"),
+                                "Perpetual compression in action"),
                         null,
                         FrameType.CHALLENGE,
                         true, true, false)
@@ -325,7 +325,7 @@ public class TrueSteamAdvancements {
                         TrueSteamConcepts.HeatingConcept.getCatalysts().get(0).asStack(),
                         provider.title(GTTrueSteam.MOD_ID, "heating_concept", "Concept of Heating"),
                         provider.desc(GTTrueSteam.MOD_ID, "heating_concept",
-                                "Infuse the concept of heating into a catalyst"),
+                                "In your hand it feel warmer that it should be..."),
                         null,
                         FrameType.CHALLENGE,
                         true, true, false)
@@ -340,7 +340,7 @@ public class TrueSteamAdvancements {
                         TrueSteamConcepts.PolarizationConcept.getCatalysts().get(0).asStack(),
                         provider.title(GTTrueSteam.MOD_ID, "polarization_concept", "Concept of Polarization"),
                         provider.desc(GTTrueSteam.MOD_ID, "polarization_concept",
-                                "Infuse the concept of polarization into a catalyst"),
+                                "You can observe how polar opposite meet in your hand"),
                         null,
                         FrameType.CHALLENGE,
                         true, true, false)
@@ -355,7 +355,7 @@ public class TrueSteamAdvancements {
                         TrueSteamConcepts.SteamConcept.getCatalysts().get(0).asStack(),
                         provider.title(GTTrueSteam.MOD_ID, "steam_concept", "Concept of Steam"),
                         provider.desc(GTTrueSteam.MOD_ID, "steam_concept",
-                                "Infuse the concept of steam into a catalyst"),
+                                "Is it solid? Is it gas? I honestly can't tell"),
                         null,
                         FrameType.CHALLENGE,
                         true, true, false)
