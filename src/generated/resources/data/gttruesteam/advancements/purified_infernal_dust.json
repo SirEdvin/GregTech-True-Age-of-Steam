@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:infernal_boiler",
+  "criteria": {
+    "has_purified_infernal_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:purified_infernal_dust"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.purified_infernal_dust.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:purified_infernal_dust"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.purified_infernal_dust.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_purified_infernal_dust"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:concept_infusion_matrix",
+  "criteria": {
+    "has_heating_catalyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:heating_catalyst"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.heating_concept.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:heating_catalyst"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.heating_concept.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_heating_catalyst"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

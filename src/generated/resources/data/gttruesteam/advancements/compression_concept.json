@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:concept_infusion_matrix",
+  "criteria": {
+    "has_compression_catalyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:compression_catalyst"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.compression_concept.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:compression_catalyst"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.compression_concept.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_compression_catalyst"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

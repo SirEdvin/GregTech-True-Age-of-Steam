@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:purified_infernal_dust",
+  "criteria": {
+    "has_conceptualized_steel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:conceptualized_steel_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.conceptualized_steel.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:conceptualized_steel_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.conceptualized_steel.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_conceptualized_steel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

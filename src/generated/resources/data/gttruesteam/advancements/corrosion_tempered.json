@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:coating_shrine",
+  "criteria": {
+    "has_corrosion_tempered_brass": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:corrosion_tempered_brass_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.corrosion_tempered.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:corrosion_tempered_brass_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.corrosion_tempered.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_corrosion_tempered_brass"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

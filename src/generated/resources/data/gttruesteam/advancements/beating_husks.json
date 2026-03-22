@@ -1,0 +1,41 @@
+{
+  "parent": "gttruesteam:steam_concept",
+  "criteria": {
+    "has_20_beating_husks": {
+      "conditions": {
+        "items": [
+          {
+            "count": {
+              "min": 20
+            },
+            "items": [
+              "gttruesteam:beating_boiler_husk"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.beating_husks.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:beating_boiler_husk"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.beating_husks.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_20_beating_husks"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

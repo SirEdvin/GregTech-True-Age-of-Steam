@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:lava_coated",
+  "criteria": {
+    "has_infernal_alloy": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:infernal_alloy_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.infernal_alloy.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:infernal_alloy_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.infernal_alloy.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_infernal_alloy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

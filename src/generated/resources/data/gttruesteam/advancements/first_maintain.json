@@ -1,0 +1,32 @@
+{
+  "parent": "gttruesteam:infernal_boiler",
+  "criteria": {
+    "first_maintain": {
+      "conditions": {
+        "count": 1
+      },
+      "trigger": "gttruesteam:infernal_maintance_performed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.first_maintain.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:infernal_boiler"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.first_maintain.title"
+    }
+  },
+  "requirements": [
+    [
+      "first_maintain"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

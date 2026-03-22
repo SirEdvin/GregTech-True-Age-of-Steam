@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:infernal_alloy",
+  "criteria": {
+    "has_infernal_boiler": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:infernal_boiler"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.infernal_boiler.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:infernal_boiler"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.infernal_boiler.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_infernal_boiler"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

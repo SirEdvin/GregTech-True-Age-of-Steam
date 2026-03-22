@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:purified_infernal_dust",
+  "criteria": {
+    "has_infernal_circuit": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:infernal_circuit"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.infernal_circuit.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:infernal_circuit"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.infernal_circuit.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_infernal_circuit"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

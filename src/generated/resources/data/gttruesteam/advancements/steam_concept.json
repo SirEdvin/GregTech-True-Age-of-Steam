@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:concept_infusion_matrix",
+  "criteria": {
+    "has_steam_catalyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:steam_catalyst"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.steam_concept.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:steam_catalyst"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.steam_concept.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_steam_catalyst"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

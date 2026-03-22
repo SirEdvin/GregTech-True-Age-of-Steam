@@ -9,6 +9,9 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.server.level.ServerLevel;
+import site.siredvin.gttruesteam.TrueSteamCriteria;
+import site.siredvin.gttruesteam.TrueSteamStats;
 
 import java.time.Instant;
 
@@ -30,6 +33,17 @@ public class IndustrialGasPressurizerRecipeLogic extends RecipeLogic {
 
     @Override
     public void onRecipeFinish() {
+        //noinspection DataFlowIssue
+        if (machine instanceof IndustrialGasPressurizerMachine igp && !igp.getLevel().isClientSide) {
+            if (igp.getState() == PerfectConditionState.REACHED && igp.getPlayerOwner() != null) {
+                var player = ((ServerLevel) igp.getLevel()).getServer()
+                        .getPlayerList().getPlayer(igp.getPlayerOwner().getUUID());
+                if (player != null) {
+                    player.awardStat(TrueSteamStats.PERFECT_CONDITION_RECIPE_CRAFTED.get());
+                    TrueSteamCriteria.PERFECT_CONDITION.trigger(player);
+                }
+            }
+        }
         this.lastCraftingTime = Instant.now().toEpochMilli();
         super.onRecipeFinish();
     }

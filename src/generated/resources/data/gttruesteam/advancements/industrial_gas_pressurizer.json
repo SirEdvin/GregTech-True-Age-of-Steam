@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:compression_concept",
+  "criteria": {
+    "has_igp": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:industrial_gas_pressurizer"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.industrial_gas_pressurizer.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:industrial_gas_pressurizer"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.industrial_gas_pressurizer.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_igp"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
