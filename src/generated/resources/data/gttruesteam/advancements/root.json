@@ -1,7 +1,8 @@
 {
   "criteria": {
-    "impossible": {
-      "trigger": "minecraft:impossible"
+    "tick": {
+      "conditions": {},
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "display": {
@@ -11,7 +12,7 @@
       "translate": "advancements.gttruesteam.root.description"
     },
     "frame": "task",
-    "hidden": true,
+    "hidden": false,
     "icon": {
       "item": "gttruesteam:coating_shrine"
     },
@@ -22,7 +23,7 @@
   },
   "requirements": [
     [
-      "impossible"
+      "tick"
     ]
   ],
   "sends_telemetry_event": true

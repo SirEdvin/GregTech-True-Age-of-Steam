@@ -1,0 +1,38 @@
+{
+  "parent": "gttruesteam:conceptualized_steel",
+  "criteria": {
+    "has_cim": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "gttruesteam:concept_infusion_matrix"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.gttruesteam.concept_infusion_matrix.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "gttruesteam:concept_infusion_matrix"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.gttruesteam.concept_infusion_matrix.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_cim"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

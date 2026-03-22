@@ -8,10 +8,10 @@ import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.resources.ResourceLocation;
 
+import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
@@ -35,8 +35,8 @@ public class TrueSteamAdvancements {
                                 "Delve into the secrets of infernal steam engineering"),
                         BACKGROUND,
                         FrameType.TASK,
-                        false, false, true)
-                .addCriterion("impossible", new ImpossibleTrigger.TriggerInstance())
+                        false, false, false)
+                .addCriterion("tick", InventoryChangeTrigger.TriggerInstance.hasItems(new net.minecraft.world.level.ItemLike[0]))
                 .save(provider, GTTrueSteam.id("root").toString());
 
         // Husk of the Boiler
@@ -155,7 +155,7 @@ public class TrueSteamAdvancements {
                 .save(provider, GTTrueSteam.id("purified_infernal_dust").toString());
 
         // Conceptualized Steel - child of purified dust
-        Advancement.Builder.advancement()
+        Advancement conceptualizedSteel = Advancement.Builder.advancement()
                 .parent(purifiedDust)
                 .display(
                         ChemicalHelper.get(TagPrefix.ingot, TrueSteamMaterials.ConceptualizedSteel),
@@ -169,6 +169,97 @@ public class TrueSteamAdvancements {
                         InventoryChangeTrigger.TriggerInstance.hasItems(
                                 ChemicalHelper.get(TagPrefix.ingot, TrueSteamMaterials.ConceptualizedSteel).getItem()))
                 .save(provider, GTTrueSteam.id("conceptualized_steel").toString());
+
+        // Concept Infusion Matrix - child of conceptualized steel
+        Advancement cim = Advancement.Builder.advancement()
+                .parent(conceptualizedSteel)
+                .display(
+                        ConceptInfusionMatrix.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "concept_infusion_matrix", "Concept Infusion Matrix"),
+                        provider.desc(GTTrueSteam.MOD_ID, "concept_infusion_matrix",
+                                "Assemble the Concept Infusion Matrix to materialize abstract concepts into catalysts"),
+                        null,
+                        FrameType.GOAL,
+                        true, true, false)
+                .addCriterion("has_cim",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(ConceptInfusionMatrix.MACHINE.getItem()))
+                .save(provider, GTTrueSteam.id("concept_infusion_matrix").toString());
+
+        // Concept catalyst challenges - one per RecipeConcept
+        Advancement.Builder.advancement()
+                .parent(cim)
+                .display(
+                        TrueSteamConcepts.ExtractionConcept.getCatalysts().get(0).asStack(),
+                        provider.title(GTTrueSteam.MOD_ID, "extraction_concept", "Concept of Extraction"),
+                        provider.desc(GTTrueSteam.MOD_ID, "extraction_concept",
+                                "Infuse the concept of extraction into a catalyst"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("has_extraction_catalyst",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamConcepts.ExtractionConcept.getCatalysts().get(0)))
+                .save(provider, GTTrueSteam.id("extraction_concept").toString());
+
+        Advancement.Builder.advancement()
+                .parent(cim)
+                .display(
+                        TrueSteamConcepts.CompressionConcept.getCatalysts().get(0).asStack(),
+                        provider.title(GTTrueSteam.MOD_ID, "compression_concept", "Concept of Compression"),
+                        provider.desc(GTTrueSteam.MOD_ID, "compression_concept",
+                                "Infuse the concept of compression into a catalyst"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("has_compression_catalyst",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamConcepts.CompressionConcept.getCatalysts().get(0)))
+                .save(provider, GTTrueSteam.id("compression_concept").toString());
+
+        Advancement.Builder.advancement()
+                .parent(cim)
+                .display(
+                        TrueSteamConcepts.HeatingConcept.getCatalysts().get(0).asStack(),
+                        provider.title(GTTrueSteam.MOD_ID, "heating_concept", "Concept of Heating"),
+                        provider.desc(GTTrueSteam.MOD_ID, "heating_concept",
+                                "Infuse the concept of heating into a catalyst"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("has_heating_catalyst",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamConcepts.HeatingConcept.getCatalysts().get(0)))
+                .save(provider, GTTrueSteam.id("heating_concept").toString());
+
+        Advancement.Builder.advancement()
+                .parent(cim)
+                .display(
+                        TrueSteamConcepts.PolarizationConcept.getCatalysts().get(0).asStack(),
+                        provider.title(GTTrueSteam.MOD_ID, "polarization_concept", "Concept of Polarization"),
+                        provider.desc(GTTrueSteam.MOD_ID, "polarization_concept",
+                                "Infuse the concept of polarization into a catalyst"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("has_polarization_catalyst",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamConcepts.PolarizationConcept.getCatalysts().get(0)))
+                .save(provider, GTTrueSteam.id("polarization_concept").toString());
+
+        Advancement.Builder.advancement()
+                .parent(cim)
+                .display(
+                        TrueSteamConcepts.SteamConcept.getCatalysts().get(0).asStack(),
+                        provider.title(GTTrueSteam.MOD_ID, "steam_concept", "Concept of Steam"),
+                        provider.desc(GTTrueSteam.MOD_ID, "steam_concept",
+                                "Infuse the concept of steam into a catalyst"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("has_steam_catalyst",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(
+                                TrueSteamConcepts.SteamConcept.getCatalysts().get(0)))
+                .save(provider, GTTrueSteam.id("steam_concept").toString());
 
         // Infernal Circuit - child of purified dust
         Advancement.Builder.advancement()
