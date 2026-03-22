@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 
 public class TrueSteamAdvancements {
@@ -201,7 +202,7 @@ public class TrueSteamAdvancements {
                                 TrueSteamConcepts.ExtractionConcept.getCatalysts().get(0)))
                 .save(provider, GTTrueSteam.id("extraction_concept").toString());
 
-        Advancement.Builder.advancement()
+        Advancement compressionConcept = Advancement.Builder.advancement()
                 .parent(cim)
                 .display(
                         TrueSteamConcepts.CompressionConcept.getCatalysts().get(0).asStack(),
@@ -215,6 +216,53 @@ public class TrueSteamAdvancements {
                         InventoryChangeTrigger.TriggerInstance.hasItems(
                                 TrueSteamConcepts.CompressionConcept.getCatalysts().get(0)))
                 .save(provider, GTTrueSteam.id("compression_concept").toString());
+
+        // Industrial Gas Pressurizer - child of compression concept
+        Advancement igp = Advancement.Builder.advancement()
+                .parent(compressionConcept)
+                .display(
+                        IndustrialGasPressurizer.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "industrial_gas_pressurizer",
+                                "Industrial Gas Pressurizer"),
+                        provider.desc(GTTrueSteam.MOD_ID, "industrial_gas_pressurizer",
+                                "Assemble the Industrial Gas Pressurizer to compress gases into their dense variants"),
+                        null,
+                        FrameType.GOAL,
+                        true, true, false)
+                .addCriterion("has_igp",
+                        InventoryChangeTrigger.TriggerInstance.hasItems(IndustrialGasPressurizer.MACHINE.getItem()))
+                .save(provider, GTTrueSteam.id("industrial_gas_pressurizer").toString());
+
+        // First perfect condition recipe
+        Advancement firstPerfectCondition = Advancement.Builder.advancement()
+                .parent(igp)
+                .display(
+                        IndustrialGasPressurizer.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "first_perfect_condition", "Perfectly Balanced"),
+                        provider.desc(GTTrueSteam.MOD_ID, "first_perfect_condition",
+                                "Complete a recipe in perfect condition in the Industrial Gas Pressurizer"),
+                        null,
+                        FrameType.GOAL,
+                        true, true, false)
+                .addCriterion("first_perfect_condition",
+                        TrueSteamCriteria.PERFECT_CONDITION.atLeast(1))
+                .save(provider, GTTrueSteam.id("first_perfect_condition").toString());
+
+        // 100 perfect condition recipes
+        Advancement.Builder.advancement()
+                .parent(firstPerfectCondition)
+                .display(
+                        IndustrialGasPressurizer.MACHINE.getItem().getDefaultInstance(),
+                        provider.title(GTTrueSteam.MOD_ID, "hundred_perfect_conditions",
+                                "Absolute Precision"),
+                        provider.desc(GTTrueSteam.MOD_ID, "hundred_perfect_conditions",
+                                "Complete 100 recipes in perfect condition in the Industrial Gas Pressurizer"),
+                        null,
+                        FrameType.CHALLENGE,
+                        true, true, false)
+                .addCriterion("hundred_perfect_conditions",
+                        TrueSteamCriteria.PERFECT_CONDITION.atLeast(100))
+                .save(provider, GTTrueSteam.id("hundred_perfect_conditions").toString());
 
         Advancement.Builder.advancement()
                 .parent(cim)
