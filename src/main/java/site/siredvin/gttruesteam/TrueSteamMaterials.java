@@ -15,8 +15,11 @@ public class TrueSteamMaterials {
 
     // Coolants
     public static Material ActivatedBlaze;
+    public static Material OverchargedBlaze;
     public static Material OverheatedInfernalSlurry;
     public static Material InfernalSlurry;
+    public static Material OverheatedInfernalEmulsion;
+    public static Material InfernalEmulsion;
     public static Material DilutedBlaze;
     public static Material InfernalSlug;
     public static Material InfernalTar;
@@ -42,6 +45,10 @@ public class TrueSteamMaterials {
                 .liquid(4000)
                 .color(0xfff94d, false).secondaryColor(0xff1f0a).iconSet(FINE)
                 .buildAndRegister();
+        OverchargedBlaze = new Material.Builder(GTTrueSteam.id("overcharged_blaze"))
+                .liquid(5000)
+                .color(0xfff963, false).secondaryColor(0xff1f0a).iconSet(FINE)
+                .buildAndRegister();
         OverheatedInfernalSlurry = new Material.Builder(GTTrueSteam.id("overheated_infernal_slurry"))
                 .liquid(600)
                 .color(0xfff94d, false).secondaryColor(0xe01300).iconSet(FINE)
@@ -49,6 +56,14 @@ public class TrueSteamMaterials {
         InfernalSlurry = new Material.Builder(GTTrueSteam.id("infernal_slurry"))
                 .liquid()
                 .color(0xfff94d, false).secondaryColor(0xa30e00).iconSet(FINE)
+                .buildAndRegister();
+        OverheatedInfernalEmulsion = new Material.Builder(GTTrueSteam.id("overheated_infernal_emulsion"))
+                .liquid(600)
+                .color(0xff884d, false).secondaryColor(0xe01300).iconSet(FINE)
+                .buildAndRegister();
+        InfernalEmulsion = new Material.Builder(GTTrueSteam.id("infernal_emulsion"))
+                .liquid()
+                .color(0xff7f4d, false).secondaryColor(0xa30e00).iconSet(FINE)
                 .buildAndRegister();
         InfernalSlug = new Material.Builder(GTTrueSteam.id("infernal_slug"))
                 .dust()

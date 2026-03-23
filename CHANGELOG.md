@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Supercritical steam variants
 - New infernal boiler textures (Thanks to MindBrain27)
 - Alternative boiler charging fluid based on nether trees.
+- Full loop boiler charging without any material loss
 - New cooling coils from cooling cometal
 - Update for infernal boiler in form of beating husks
 - Better purified infernal dust recipes

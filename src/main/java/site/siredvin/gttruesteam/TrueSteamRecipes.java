@@ -102,6 +102,14 @@ public class TrueSteamRecipes {
                 .addData(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY, 256)
                 .duration(1000)
                 .save(provider);
+        METAPHYSICAL_BOILING.recipeBuilder(TrueSteamMaterials.OverheatedInfernalEmulsion.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.OverchargedBlaze.getFluid(8000))
+                .outputFluids(TrueSteamMaterials.OverheatedInfernalEmulsion.getFluid(8000))
+                .EUt(8)
+                .circuitMeta(2)
+                .addData(TrueSteamRecipeTypes.INFERNAL_CYCLES_DATA_KEY, 1024)
+                .duration(1000)
+                .save(provider);
         FLUID_COOLING.recipeBuilder(TrueSteamMaterials.InfernalSlurry.getResourceLocation())
                 .inputFluids(TrueSteamMaterials.OverheatedInfernalSlurry.getFluid(4000))
                 .outputFluids(TrueSteamMaterials.InfernalSlurry.getFluid(4000))
@@ -112,6 +120,13 @@ public class TrueSteamRecipes {
         FLUID_COOLING.recipeBuilder(TrueSteamMaterials.InfernalSludge.getResourceLocation())
                 .inputFluids(TrueSteamMaterials.OverheatedInfernalSludge.getFluid(4000))
                 .outputFluids(TrueSteamMaterials.InfernalSludge.getFluid(4000))
+                .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 500)
+                .addCondition(new CoolingCapacityCondition(5000))
+                .duration(200)
+                .save(provider);
+        FLUID_COOLING.recipeBuilder(TrueSteamMaterials.InfernalEmulsion.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.OverheatedInfernalEmulsion.getFluid(4000))
+                .outputFluids(TrueSteamMaterials.InfernalEmulsion.getFluid(4000))
                 .addData(TrueSteamRecipeTypes.COOLING_CONSUMED, 500)
                 .addCondition(new CoolingCapacityCondition(5000))
                 .duration(200)
@@ -150,6 +165,19 @@ public class TrueSteamRecipes {
                 .EUt(30)
                 .duration(48)
                 .save(provider);
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.OverchargedBlaze.getResourceLocation())
+                .inputFluids(TrueSteamMaterials.ActivatedBlaze.getFluid(2000))
+                .inputItems(TrueSteamItems.PurifiedInfernalDust)
+                .notConsumable(TrueSteamConcepts.HeatingConcept.getCatalysts().get(0))
+                .outputFluids(TrueSteamMaterials.OverchargedBlaze.getFluid(2000))
+                .duration(200).EUt(VH[HV]).save(provider);
+        MIXER_RECIPES.recipeBuilder(TrueSteamMaterials.OverchargedBlaze.getResourceLocation().withSuffix("_recycle"))
+                .inputFluids(TrueSteamMaterials.InfernalEmulsion.getFluid(2000))
+                .chancedInput(TrueSteamItems.PurifiedInfernalDust.asStack(), 500, 0)
+                .notConsumable(TrueSteamConcepts.ExtractionConcept.getCatalysts().get(0))
+                .outputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 2)
+                .outputFluids(TrueSteamMaterials.OverchargedBlaze.getFluid(2000))
+                .duration(200).EUt(VH[HV]).save(provider);
     }
 
     private static void generateBoilerRecipe(MachineDefinition boiler, Pair<MachineDefinition, MachineDefinition> next,
