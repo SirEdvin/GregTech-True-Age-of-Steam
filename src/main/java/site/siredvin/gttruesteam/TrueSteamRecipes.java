@@ -16,7 +16,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import com.mojang.datafixers.util.Pair;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
@@ -416,7 +415,8 @@ public class TrueSteamRecipes {
 
         CHEMICAL_RECIPES.recipeBuilder(TrueSteamItems.PurifiedInfernalDust.getId().withSuffix("_even_better"))
                 .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 3)
-                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(500), TrueSteamConcepts.HeatingConcept.getInfusedAir().getFluid(500))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(500),
+                        TrueSteamConcepts.HeatingConcept.getInfusedAir().getFluid(500))
                 .outputItems(TrueSteamItems.PurifiedInfernalDust)
                 .duration(400).EUt(VH[HV]).save(provider);
 

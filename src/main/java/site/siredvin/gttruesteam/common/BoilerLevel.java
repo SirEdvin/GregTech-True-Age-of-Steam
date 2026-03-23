@@ -1,15 +1,14 @@
 package site.siredvin.gttruesteam.common;
 
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import lombok.Getter;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 
-import java.util.Locale;
+import lombok.Getter;
+
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public enum BoilerLevel {
+
     LAVA_COATED(2.0, "lc_%s"),
     INFERNAL(4.0, "ia_%s"),
     HEATING_CHARGED(8.0, "hc_%s");

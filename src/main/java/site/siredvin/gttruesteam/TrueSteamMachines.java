@@ -14,7 +14,6 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.model.builder.MachineModelBuilder;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -24,7 +23,6 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.fluids.FluidType;
 
-import com.mojang.datafixers.util.Pair;
 import site.siredvin.gttruesteam.common.BoilerLevel;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamLiquidBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolarBoilerMachine;
@@ -108,11 +106,13 @@ public class TrueSteamMachines {
     }
 
     private static List<MachineDefinition> registerSteamMachine(String name,
-                                                                                   BiFunction<IMachineBlockEntity, Double, MetaMachine> factory,
-                                                                                   BiFunction<BoilerLevel, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
-
-        return Arrays.stream(BoilerLevel.values()).map(bl -> builder.apply(bl, GTTrueSteam.REGISTRATE.machine(bl.getTemplate().formatted(name), holder -> factory.apply(holder, bl.getScaling()))
-                .langValue(bl.boilerName(name)))).toList();
+                                                                BiFunction<IMachineBlockEntity, Double, MetaMachine> factory,
+                                                                BiFunction<BoilerLevel, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
+        return Arrays.stream(BoilerLevel.values()).map(bl -> builder.apply(bl,
+                GTTrueSteam.REGISTRATE
+                        .machine(bl.getTemplate().formatted(name), holder -> factory.apply(holder, bl.getScaling()))
+                        .langValue(bl.boilerName(name))))
+                .toList();
     }
 
     private static void makeWorkableOverlayPart(BlockModelProvider models,
