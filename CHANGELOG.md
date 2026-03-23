@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Alternative boiler charging fluid based on nether trees.
 - New cooling coils from cooling cometal
 - Update for infernal boiler in form of beating husks
+- Better purified infernal dust recipes
 
 ### Changed
 

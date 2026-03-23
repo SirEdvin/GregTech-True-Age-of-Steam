@@ -29,8 +29,7 @@ import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
 import java.util.function.Consumer;
 
-import static com.gregtechceu.gtceu.api.GTValues.MV;
-import static com.gregtechceu.gtceu.api.GTValues.VA;
+import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.FLUID_COOLING;
 import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
@@ -358,6 +357,18 @@ public class TrueSteamRecipes {
                 .duration(200)
                 .EUt(30)
                 .save(provider);
+
+        LASER_ENGRAVER_RECIPES.recipeBuilder(TrueSteamItems.PurifiedInfernalDust.getId().withSuffix("_better"))
+                .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 9)
+                .notConsumable(TagPrefix.lens, TrueSteamMaterials.InfernalCompound)
+                .outputItems(TrueSteamItems.PurifiedInfernalDust)
+                .duration(200).EUt(VH[HV]).save(provider);
+
+        CHEMICAL_RECIPES.recipeBuilder(TrueSteamItems.PurifiedInfernalDust.getId().withSuffix("_even_better"))
+                .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug, 3)
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(500), TrueSteamConcepts.HeatingConcept.getInfusedAir().getFluid(500))
+                .outputItems(TrueSteamItems.PurifiedInfernalDust)
+                .duration(400).EUt(VH[HV]).save(provider);
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, "infernal_drum", TrueSteamMachines.InfernalDrum.asStack(),
                 " h ",
