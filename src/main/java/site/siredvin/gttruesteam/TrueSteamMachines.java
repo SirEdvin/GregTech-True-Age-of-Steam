@@ -25,10 +25,13 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.fluids.FluidType;
 
 import com.mojang.datafixers.util.Pair;
+import site.siredvin.gttruesteam.common.BoilerLevel;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamLiquidBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolarBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolidBoilerMachine;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.RECIPE_LOGIC_STATUS;
@@ -40,46 +43,47 @@ public class TrueSteamMachines {
 
     public static final ResourceLocation LC_STEAM_HULL_MODEL = GTTrueSteam.id("block/lava_coated_boiler");
     public static final ResourceLocation IA_STEAM_HULL_MODEL = GTTrueSteam.id("block/infernal_alloy_boiler");
+    public static final ResourceLocation HC_STEAM_HULL_MODEL = GTTrueSteam.id("block/heating_charged_boiler");
 
-    public static final Pair<MachineDefinition, MachineDefinition> SOLID = registerSteamMachine("solid",
-            ExpandedSteamSolidBoilerMachine::new, (isHigherPressure, builder) -> builder
+    public static final List<MachineDefinition> SOLID = registerSteamMachine("solid",
+            ExpandedSteamSolidBoilerMachine::new, (boilerLevel, builder) -> builder
                     .recipeType(GTRecipeTypes.STEAM_BOILER_RECIPES)
                     .rotationState(RotationState.ALL)
                     .recipeModifier(ExpandedSteamSolidBoilerMachine::recipeModifier)
                     .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
-                    .model(createWorkableSteamHullMachineModel(isHigherPressure,
+                    .model(createWorkableSteamHullMachineModel(boilerLevel,
                             GTCEu.id("block/generators/boiler/coal")))
                     .tooltips(Component.translatable("gtceu.universal.tooltip.produces_fluid",
                             (ConfigHolder.INSTANCE.machines.smallBoilers.hpSolidBoilerBaseOutput *
-                                    (isHigherPressure ? 2.0 : 1.5) *
+                                    boilerLevel.getScaling() *
                                     FluidType.BUCKET_VOLUME / 20000)))
                     .register());
 
-    public static final Pair<MachineDefinition, MachineDefinition> LIQUID = registerSteamMachine("liquid",
-            ExpandedSteamLiquidBoilerMachine::new, (isHigherPressure, builder) -> builder
+    public static final List<MachineDefinition> LIQUID = registerSteamMachine("liquid",
+            ExpandedSteamLiquidBoilerMachine::new, (boilerLevel, builder) -> builder
                     .recipeType(GTRecipeTypes.STEAM_BOILER_RECIPES)
                     .rotationState(RotationState.ALL)
                     .recipeModifier(ExpandedSteamLiquidBoilerMachine::recipeModifier)
                     .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
-                    .model(createWorkableSteamHullMachineModel(isHigherPressure,
+                    .model(createWorkableSteamHullMachineModel(boilerLevel,
                             GTCEu.id("block/generators/boiler/lava")))
                     .tooltips(Component.translatable("gtceu.universal.tooltip.produces_fluid",
                             (ConfigHolder.INSTANCE.machines.smallBoilers.hpLiquidBoilerBaseOutput *
-                                    (isHigherPressure ? 2.0 : 1.5) *
+                                    boilerLevel.getScaling() *
                                     FluidType.BUCKET_VOLUME / 20000)))
                     .register());
 
-    public static final Pair<MachineDefinition, MachineDefinition> SOLAR = registerSteamMachine("solar",
-            ExpandedSteamSolarBoilerMachine::new, (isHigherPressure, builder) -> builder
+    public static final List<MachineDefinition> SOLAR = registerSteamMachine("solar",
+            ExpandedSteamSolarBoilerMachine::new, (boilerLevel, builder) -> builder
                     .recipeType(GTRecipeTypes.STEAM_BOILER_RECIPES)
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeModifier(ExpandedSteamSolarBoilerMachine::recipeModifier)
                     .modelProperty(GTMachineModelProperties.RECIPE_LOGIC_STATUS, RecipeLogic.Status.IDLE)
-                    .model(createWorkableSteamHullMachineModel(isHigherPressure,
+                    .model(createWorkableSteamHullMachineModel(boilerLevel,
                             GTCEu.id("block/generators/boiler/solar")))
                     .tooltips(Component.translatable("gtceu.universal.tooltip.produces_fluid",
                             (ConfigHolder.INSTANCE.machines.smallBoilers.hpSolarBoilerBaseOutput *
-                                    (isHigherPressure ? 2.0 : 1.5) *
+                                    boilerLevel.getScaling() *
                                     FluidType.BUCKET_VOLUME / 20000)))
                     .register());
 
@@ -88,20 +92,27 @@ public class TrueSteamMachines {
 
     public static void sayHi() {}
 
-    public static ModelFile steamHullModel(BlockModelProvider models, boolean higherPressure) {
-        return models.getExistingFile(higherPressure ? IA_STEAM_HULL_MODEL : LC_STEAM_HULL_MODEL);
+    public static ModelFile steamHullModel(BlockModelProvider models, BoilerLevel boilerLevel) {
+        switch (boilerLevel) {
+            case INFERNAL -> {
+                return models.getExistingFile(IA_STEAM_HULL_MODEL);
+            }
+            case LAVA_COATED -> {
+                return models.getExistingFile(LC_STEAM_HULL_MODEL);
+            }
+            case HEATING_CHARGED -> {
+                return models.getExistingFile(HC_STEAM_HULL_MODEL);
+            }
+        }
+        return models.getExistingFile(LC_STEAM_HULL_MODEL);
     }
 
-    private static Pair<MachineDefinition, MachineDefinition> registerSteamMachine(String name,
-                                                                                   BiFunction<IMachineBlockEntity, Boolean, MetaMachine> factory,
-                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
-        MachineDefinition lowTier = builder.apply(false,
-                GTTrueSteam.REGISTRATE.machine("lc_%s".formatted(name), holder -> factory.apply(holder, false))
-                        .langValue("Lava Coated " + FormattingUtil.toEnglishName(name) + " Boiler"));
-        MachineDefinition highTier = builder.apply(true,
-                GTTrueSteam.REGISTRATE.machine("ia_%s".formatted(name), holder -> factory.apply(holder, true))
-                        .langValue("Infernal " + FormattingUtil.toEnglishName(name) + " Boiler"));
-        return Pair.of(lowTier, highTier);
+    private static List<MachineDefinition> registerSteamMachine(String name,
+                                                                                   BiFunction<IMachineBlockEntity, Double, MetaMachine> factory,
+                                                                                   BiFunction<BoilerLevel, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
+
+        return Arrays.stream(BoilerLevel.values()).map(bl -> builder.apply(bl, GTTrueSteam.REGISTRATE.machine(bl.getTemplate().formatted(name), holder -> factory.apply(holder, bl.getScaling()))
+                .langValue(bl.boilerName(name)))).toList();
     }
 
     private static void makeWorkableOverlayPart(BlockModelProvider models,
@@ -112,11 +123,11 @@ public class TrueSteamMachines {
         builder.part(model).condition(RECIPE_LOGIC_STATUS, status);
     }
 
-    public static MachineBuilder.ModelInitializer createWorkableSteamHullMachineModel(boolean higherPressure,
+    public static MachineBuilder.ModelInitializer createWorkableSteamHullMachineModel(BoilerLevel boilerLevel,
                                                                                       ResourceLocation overlayDir) {
         return (ctx, prov, builder) -> {
             WorkableOverlays overlays = WorkableOverlays.get(overlayDir, prov.getExistingFileHelper());
-            ModelFile parent = steamHullModel(prov.models(), higherPressure);
+            ModelFile parent = steamHullModel(prov.models(), boilerLevel);
 
             makeWorkableOverlayPart(prov.models(), builder, parent, overlays, RecipeLogic.Status.IDLE);
             makeWorkableOverlayPart(prov.models(), builder, parent, overlays, RecipeLogic.Status.WORKING);

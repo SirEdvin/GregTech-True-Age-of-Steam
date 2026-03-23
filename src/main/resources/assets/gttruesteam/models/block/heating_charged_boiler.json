@@ -1,0 +1,8 @@
+{
+  "parent": "gtceu:block/machine/template/sided/sided",
+  "textures": {
+    "bottom": "gttruesteam:block/boilers/heating_charged/bottom",
+    "side": "gttruesteam:block/boilers/heating_charged/side",
+    "top": "gttruesteam:block/boilers/heating_charged/top"
+  }
+}

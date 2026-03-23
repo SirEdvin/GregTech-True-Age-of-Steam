@@ -27,6 +27,7 @@ import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoCh
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
@@ -180,20 +181,41 @@ public class TrueSteamRecipes {
                 .duration(200).EUt(VH[HV]).save(provider);
     }
 
-    private static void generateBoilerRecipe(MachineDefinition boiler, Pair<MachineDefinition, MachineDefinition> next,
+    private static void generateBoilerRecipe(MachineDefinition boiler, List<MachineDefinition> next,
                                              Consumer<FinishedRecipe> provider) {
-        VanillaRecipeHelper.addShapedRecipe(provider, true, next.getFirst().getId(), next.getFirst().asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, next.get(0).getId(), next.get(0).asStack(),
                 "PPP",
                 "PwP",
                 " B ",
                 'B', boiler.asStack(),
                 'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel));
-        VanillaRecipeHelper.addShapedRecipe(provider, true, next.getSecond().getId(), next.getSecond().asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, next.get(1).getId(), next.get(1).asStack(),
                 "PPP",
                 "PwP",
                 " B ",
-                'B', next.getFirst().asStack(),
+                'B', next.get(0).asStack(),
                 'P', new MaterialEntry(TagPrefix.plate, TrueSteamMaterials.InfernalAlloy));
+        VanillaRecipeHelper.addShapedRecipe(provider, true, next.get(2).getId(), next.get(2).asStack(),
+                "PPP",
+                "PwP",
+                " B ",
+                'B', next.get(1).asStack(),
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial()));
+        ASSEMBLER_RECIPES.recipeBuilder(next.get(0).getId())
+                .inputItems(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel, 5)
+                .inputItems(boiler.asStack()).circuitMeta(4)
+                .outputItems(next.get(0).asStack())
+                .duration(100).EUt(VH[MV]).save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(next.get(1).getId())
+                .inputItems(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel, 5)
+                .inputItems(next.get(0).asStack()).circuitMeta(4)
+                .outputItems(next.get(1).asStack())
+                .duration(100).EUt(VH[MV]).save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(next.get(2).getId())
+                .inputItems(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel, 5)
+                .inputItems(next.get(1).asStack()).circuitMeta(4)
+                .outputItems(next.get(2).asStack())
+                .duration(100).EUt(VH[MV]).save(provider);
     }
 
     private static void registerBoilerRecipes(Consumer<FinishedRecipe> provider) {
@@ -299,7 +321,7 @@ public class TrueSteamRecipes {
 
         EXTRACTOR_RECIPES.recipeBuilder(TrueSteamBlocks.BoilerHusk.getId().withSuffix("_extraction"))
                 .inputItems(GTMachines.STEAM_SOLAR_BOILER.second().asStack())
-                .EUt(256).duration(200).save(provider);
+                .EUt(VH[HV]).duration(200).save(provider);
 
         ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.BeatingBoilerHusk.getId())
                 .inputItems(TrueSteamBlocks.BoilerHusk)

@@ -93,7 +93,7 @@ public class TrueSteamAdvancements {
         Advancement lcBoiler = Advancement.Builder.advancement()
                 .parent(lavaCoated)
                 .display(
-                        TrueSteamMachines.SOLID.getFirst().getItem().getDefaultInstance(),
+                        TrueSteamMachines.SOLID.get(0).getItem().getDefaultInstance(),
                         provider.title(GTTrueSteam.MOD_ID, "lc_boiler", "Lava Coated Boiler"),
                         provider.desc(GTTrueSteam.MOD_ID, "lc_boiler",
                                 "Upgrade a steam boiler with Lava Coated Steel"),
@@ -102,13 +102,13 @@ public class TrueSteamAdvancements {
                         true, true, false)
                 .addCriterion("has_lc_solid",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                                TrueSteamMachines.SOLID.getFirst().getItem()))
+                                TrueSteamMachines.SOLID.get(0).getItem()))
                 .addCriterion("has_lc_liquid",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                                TrueSteamMachines.LIQUID.getFirst().getItem()))
+                                TrueSteamMachines.LIQUID.get(0).getItem()))
                 .addCriterion("has_lc_solar",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                                TrueSteamMachines.SOLAR.getFirst().getItem()))
+                                TrueSteamMachines.SOLAR.get(0).getItem()))
                 .requirements(RequirementsStrategy.OR)
                 .save(provider, GTTrueSteam.id("lc_boiler").toString());
 
@@ -116,7 +116,7 @@ public class TrueSteamAdvancements {
         Advancement.Builder.advancement()
                 .parent(lcBoiler)
                 .display(
-                        TrueSteamMachines.SOLID.getSecond().getItem().getDefaultInstance(),
+                        TrueSteamMachines.SOLID.get(1).getItem().getDefaultInstance(),
                         provider.title(GTTrueSteam.MOD_ID, "ia_boiler", "Infernal Alloy Boiler"),
                         provider.desc(GTTrueSteam.MOD_ID, "ia_boiler",
                                 "Upgrade a Lava Coated boiler further with Infernal Alloy"),
@@ -125,13 +125,13 @@ public class TrueSteamAdvancements {
                         true, true, false)
                 .addCriterion("has_ia_solid",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                                TrueSteamMachines.SOLID.getSecond().getItem()))
+                                TrueSteamMachines.SOLID.get(1).getItem()))
                 .addCriterion("has_ia_liquid",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                                TrueSteamMachines.LIQUID.getSecond().getItem()))
+                                TrueSteamMachines.LIQUID.get(1).getItem()))
                 .addCriterion("has_ia_solar",
                         InventoryChangeTrigger.TriggerInstance.hasItems(
-                                TrueSteamMachines.SOLAR.getSecond().getItem()))
+                                TrueSteamMachines.SOLAR.get(1).getItem()))
                 .requirements(RequirementsStrategy.OR)
                 .save(provider, GTTrueSteam.id("ia_boiler").toString());
 

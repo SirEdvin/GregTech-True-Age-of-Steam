@@ -17,43 +17,49 @@ import org.jetbrains.annotations.NotNull;
 
 public class ExpandedSteamLiquidBoilerMachine extends SteamLiquidBoilerMachine {
 
-    private final boolean isHigherPressure;
+    private final double scaling;
 
-    public ExpandedSteamLiquidBoilerMachine(IMachineBlockEntity holder, boolean isHigherPressure, Object... args) {
+    public ExpandedSteamLiquidBoilerMachine(IMachineBlockEntity holder, double scaling, Object... args) {
         super(holder, true, args);
-        this.isHigherPressure = isHigherPressure;
+        this.scaling = scaling;
     }
 
     @Override
     protected @NotNull NotifiableFluidTank createFuelTank(Object @NotNull... args) {
-        return new NotifiableFluidTank(this, 1, 32 * FluidType.BUCKET_VOLUME, IO.IN);
+        return new NotifiableFluidTank(this, 1, (int) (8 * this.scaling * FluidType.BUCKET_VOLUME), IO.IN);
+    }
+
+    @Override
+    protected @NotNull NotifiableFluidTank createSteamTank(Object... args) {
+        return new NotifiableFluidTank(this, 1, (int) (8 * this.scaling * FluidType.BUCKET_VOLUME), IO.OUT);
+    }
+
+    @Override
+    protected @NotNull NotifiableFluidTank createWaterTank(@SuppressWarnings("unused") Object... args) {
+        return new NotifiableFluidTank(this, 1, (int) (8 * this.scaling * FluidType.BUCKET_VOLUME), IO.IN);
     }
 
     @Override
     protected long getBaseSteamOutput() {
-        return isHighPressure ? ConfigHolder.INSTANCE.machines.smallBoilers.hpLiquidBoilerBaseOutput * 2L :
-                (long) (ConfigHolder.INSTANCE.machines.smallBoilers.hpLiquidBoilerBaseOutput * 1.5);
+        return (long) (ConfigHolder.INSTANCE.machines.smallBoilers.hpLiquidBoilerBaseOutput * this.scaling);
     }
 
     // Boiler fixes
     protected int getCooldownInterval() {
-        return isHigherPressure ? 30 : 35;
+        return (int) (45 - 5 * this.scaling);
     }
 
     public int getMaxTemperature() {
-        return isHigherPressure ? 2000 : 1500;
+        return (int) (1000 * this.scaling);
     }
 
     public static @NotNull ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof ExpandedSteamLiquidBoilerMachine boilerMachine)) {
             return RecipeModifier.nullWrongType(SteamBoilerMachine.class, machine);
         }
-        if (!boilerMachine.isHigherPressure) return ModifierFunction.builder()
-                .durationMultiplier(0.125)
-                .build();
 
         return ModifierFunction.builder()
-                .durationMultiplier(0.25)
+                .durationMultiplier(0.5 / boilerMachine.scaling)
                 .build();
     }
 }
