@@ -15,7 +15,10 @@ public class TrueSteamConcepts {
 
     public static List<Concept> CONCEPTS = new ArrayList<>();
     public static Concept ExtractionConcept = register(
-            RecipeConcept.create("extraction", 0x113c44, GTRecipeTypes.EXTRACTOR_RECIPES, 0));
+            RecipeConcept.create(
+                    "extraction", 0x113c44, GTRecipeTypes.EXTRACTOR_RECIPES, 0,
+                    List.of(MaterialFlags.GENERATE_PLATE, MaterialFlags.GENERATE_FRAME),
+                    builder -> builder.fluidPipeProperties(500, 100, true)));
     public static Concept CompressionConcept = register(
             RecipeConcept.create(
                     "compression", 0x434d14, GTRecipeTypes.COMPRESSOR_RECIPES, 1,

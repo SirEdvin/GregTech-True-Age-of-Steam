@@ -333,6 +333,10 @@ public class TrueSteamRecipes {
 
         casingRecipe(TrueSteamMaterials.CorrosionTemperedBrass, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
         casingRecipe(TrueSteamMaterials.InfernalAlloy, TrueSteamBlocks.InfernalAlloyCasing, provider);
+        casingRecipe(TrueSteamConcepts.ExtractionConcept.getMaterial(), TrueSteamBlocks.ExtractionInfusedCasing,
+                provider);
+        pipeCasingRecipe(TrueSteamConcepts.ExtractionConcept.getMaterial(), TrueSteamBlocks.ExtractionInfusedPipeCasing,
+                provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())
                 .inputItems(TagPrefix.ingot, GTMaterials.Steel)
