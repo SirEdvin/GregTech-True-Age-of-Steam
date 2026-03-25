@@ -141,6 +141,10 @@ public class TrueSteamLang {
             "item_tooltip", GTTrueSteam.id("beating_husk_2"),
             "§7Optional upgrade for §cInfernal boiler §7that allows better heating recipes");
 
+    public static MutableComponent SEM_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("sem_1"),
+            "§7A machine capable of extracting resources from spawners");
+
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");
     public static MutableComponent COATING_CHARGES_MESSAGE = GTTrueSteam.REGISTRATE

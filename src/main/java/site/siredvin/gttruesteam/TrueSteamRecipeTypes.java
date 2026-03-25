@@ -26,6 +26,7 @@ import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
+import site.siredvin.gttruesteam.machines.spawner_extraction.SpawnerExtractionMachine;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 
 import java.util.ArrayList;
@@ -136,6 +137,13 @@ public class TrueSteamRecipeTypes {
                     yOffset = 20 * (i / 3);
                 }
             });
+
+    public static GTRecipeType SPAWNER_EXTRACTION = register("spawner_extraction", GTRecipeTypes.MULTIBLOCK,
+            "Spawner extraction")
+            .setMaxIOSize(3, 2, 2, 2)
+            .setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+            .setIconSupplier(() -> SpawnerExtractionMachine.MACHINE.getItem().getDefaultInstance());
 
     @SuppressWarnings("deprecation")
     public static GTRecipeType register(String name, String group, String displayName, RecipeType<?>... proxyRecipes) {
