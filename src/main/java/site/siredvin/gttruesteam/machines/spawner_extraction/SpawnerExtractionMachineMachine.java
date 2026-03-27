@@ -2,20 +2,17 @@ package site.siredvin.gttruesteam.machines.spawner_extraction;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
+import site.siredvin.gttruesteam.api.ISpawnerExtractionCondition;
 
-import java.util.Objects;
-
-public class SpawnerExtractionMachineMachine extends WorkableElectricMultiblockMachine {
+public class SpawnerExtractionMachineMachine extends WorkableElectricMultiblockMachine
+        implements ISpawnerExtractionCondition {
 
     private @Nullable Holder<EntityType<?>> mobInside = null;
 
@@ -53,5 +50,17 @@ public class SpawnerExtractionMachineMachine extends WorkableElectricMultiblockM
             refreshMobInside();
         }
         return mobInside;
+    }
+
+    @Override
+    public boolean supportMob(Holder<EntityType<?>> entityType) {
+        var mob = getMobInside();
+        return mob != null && mob.equals(entityType);
+    }
+
+    @Override
+    public boolean supportMobType(MobType mobType) {
+        var mob = getMobInside();
+        return mob != null && mob.is(mobType.getTag());
     }
 }

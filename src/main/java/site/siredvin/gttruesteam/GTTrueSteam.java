@@ -98,6 +98,7 @@ public class GTTrueSteam {
         TrueSteamItems.sayHi();
         TrueSteamConcepts.sayHi();
         TrueSteamSteams.sayHi();
+        TrueSteamEntityTypeTags.sayHi();
     }
 
     /**

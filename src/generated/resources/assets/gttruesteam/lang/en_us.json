@@ -90,6 +90,8 @@
   "condition.gttruesteam.coating_fluid": "Coating fluid:",
   "condition.gttruesteam.cooling_capacity": "Cooling required: %d",
   "condition.gttruesteam.inner_recipe_type": "Recipe inside: ",
+  "condition.gttruesteam.spawner_entity_type": "Required mob: %s",
+  "condition.gttruesteam.spawner_mob_type": "Required mob type: %s",
   "error.gttruesteam.beating_husk": "All slots should be occupied by beating husk if at least one present",
   "error.gttruesteam.cooling_coils": "All cooling coils should be the same",
   "error.gttruesteam.machine": "All machines should be the same",

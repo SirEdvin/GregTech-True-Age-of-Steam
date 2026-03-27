@@ -31,6 +31,10 @@ public class TrueSteamLang {
     public static String COOLING_REQUIRED_KEY = Util.makeDescriptionId("condition", GTTrueSteam.id("cooling_capacity"));
     public static String INNER_RECIPE_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
             GTTrueSteam.id("inner_recipe_type"));
+    public static String SPAWNER_ENTITY_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
+            GTTrueSteam.id("spawner_entity_type"));
+    public static String SPAWNER_MOB_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
+            GTTrueSteam.id("spawner_mob_type"));
 
     public static MutableComponent COATING_FLUID_CONDITION = GTTrueSteam.REGISTRATE.addLang("condition",
             GTTrueSteam.id("coating_fluid"), "Coating fluid:");
@@ -42,6 +46,10 @@ public class TrueSteamLang {
     public static MutableComponent BEATING_HUSK_CONDITION = GTTrueSteam.REGISTRATE.addLang(
             "condition", GTTrueSteam.id("beating_husk"),
             "Beating husks required");
+    public static MutableComponent SPAWNER_ENTITY_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
+            SPAWNER_ENTITY_TYPE_CONDITION_KEY, "Required mob: %s");
+    public static MutableComponent SPAWNER_MOB_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
+            SPAWNER_MOB_TYPE_CONDITION_KEY, "Required mob type: %s");
 
     public static MutableComponent COATING_CHARGES = GTTrueSteam.REGISTRATE.addLang("tooltip",
             GTTrueSteam.id("coating_charges"), "Coating charges: ");
