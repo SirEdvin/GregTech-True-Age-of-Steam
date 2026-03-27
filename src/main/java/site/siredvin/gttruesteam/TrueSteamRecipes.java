@@ -14,6 +14,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -550,6 +551,14 @@ public class TrueSteamRecipes {
                 "III", "HCH", "WHW", 'I', TrueSteamItems.InfernalCircuit, 'H', CustomTags.HV_CIRCUITS, 'W',
                 new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.CompressionConcept.getMaterial()), 'C',
                 new MaterialEntry(TagPrefix.frameGt, TrueSteamConcepts.CompressionConcept.getMaterial()));
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder("spawner_loot_extraction")
+                .notConsumable(Ingredient.of(ItemTags.SWORDS))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .duration(200)
+                .EUt(30)
+                .addData(TrueSteamRecipeTypes.LOOT_TABLE_DROPS, true)
+                .save(provider);
 
         registerSpringRecipes(provider);
         registerCoolingCoilsRecipes(provider);

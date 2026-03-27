@@ -41,6 +41,7 @@ public class TrueSteamRecipeTypes {
     public static String OVERHEATED_KEY = "overheated";
     public static String COOLING_CONSUMED = "cooling_consumed";
     public static String ASSUMED_PERCENTAGE = "assumed_percentage";
+    public static String LOOT_TABLE_DROPS = "loot_table_drops";
 
     public static String OVERHEATED_WIDGET_ID = "overheatedWidget";
     public static String INTERNAL_CYCLED_WIDGET_ID = "infernalCyclesWidget";

@@ -19,6 +19,7 @@ public class SpawnerExtractionMachine {
             .multiblock("spawner_extraction_machine", SpawnerExtractionMachineMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TrueSteamRecipeTypes.SPAWNER_EXTRACTION)
+            .recipeModifier(new SpawnerExtractionRecipeModifier())
             .appearanceBlock(() -> TrueSteamBlocks.ExtractionInfusedCasing.get())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("EXMXE", "EGGGE", "EGGGE", "EGGGE", "EGGGE", "EGGGE", "EXXXE")
