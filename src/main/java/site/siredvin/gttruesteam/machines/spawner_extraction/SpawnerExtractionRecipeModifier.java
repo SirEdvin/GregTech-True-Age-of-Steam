@@ -13,9 +13,9 @@ import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -56,15 +56,16 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
             // Sharpness formula (Java 1.9+): +1.0 at level 1, +0.5 per additional level.
             double baseDamage = sword.getAttributeModifiers(EquipmentSlot.MAINHAND)
                     .get(Attributes.ATTACK_DAMAGE).stream()
-                    .mapToDouble(am -> am.getAmount())
+                    .mapToDouble(AttributeModifier::getAmount)
                     .sum();
-            int sharpnessLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SHARPNESS, sword);
+            int sharpnessLevel = sword.getEnchantmentLevel(Enchantments.SHARPNESS);
             double sharpnessBonus = sharpnessLevel > 0 ? sharpnessLevel * 0.5 + 0.5 : 0.0;
             double totalDamage = baseDamage + sharpnessBonus;
             double durationMultiplier = totalDamage > 0 ? Math.max(0.25, REFERENCE_DAMAGE / totalDamage) : 1.0;
 
-            // Looting level improves quantity of mob drops via LOOTING_MOD param.
-            int lootingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MOB_LOOTING, sword);
+            // Looting level is passed as luck — the ENTITY param set has no dedicated looting
+            // parameter in 1.20.1 (LootingEnchantBonus requires a KILLER_ENTITY living entity).
+            int lootingLevel = sword.getEnchantmentLevel(Enchantments.MOB_LOOTING);
 
             // Roll the mob's default loot table using a temporary fake entity for context.
             var entityType = mob.value();
@@ -79,7 +80,7 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
                     .withParameter(LootContextParams.THIS_ENTITY, fakeEntity)
                     .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(machine.getPos()))
                     .withParameter(LootContextParams.DAMAGE_SOURCE, serverLevel.damageSources().magic())
-                    .withOptionalParameter(LootContextParams.LOOTING_MOD, lootingLevel)
+                    .withLuck((float) lootingLevel)
                     .create(LootContextParamSets.ENTITY);
 
             var drops = lootTable.getRandomItems(lootParams);
