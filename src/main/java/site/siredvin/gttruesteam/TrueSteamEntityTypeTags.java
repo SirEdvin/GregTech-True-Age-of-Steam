@@ -13,6 +13,6 @@ public class TrueSteamEntityTypeTags {
 
     public static void sayHi() {
         GTTrueSteam.REGISTRATE.addDataGenerator(ProviderType.ENTITY_TAGS, prov -> prov.addTag(NETHER)
-                .add(EntityType.BLAZE, EntityType.MAGMA_CUBE));
+                .add(EntityType.BLAZE, EntityType.MAGMA_CUBE, EntityType.WITHER_SKELETON, EntityType.HOGLIN, EntityType.ZOGLIN, EntityType.PIGLIN, EntityType.PIGLIN_BRUTE));
     }
 }

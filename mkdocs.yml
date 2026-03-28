@@ -59,5 +59,6 @@ nav:
       - Regulated Cryo Chamber: multiblocks/rcc.md
       - Concept Infusion Matrix: multiblocks/concept-infusion-matrix.md
       - Industrial gas pressurizer: multiblocks/industrial-gas-pressurizer.md
+      - Spawner extraction machine: multiblocks/spawner-extraction-machine.md
   - Machines:
       - Single-Block Boilers: machines/single-block-boilers.md
