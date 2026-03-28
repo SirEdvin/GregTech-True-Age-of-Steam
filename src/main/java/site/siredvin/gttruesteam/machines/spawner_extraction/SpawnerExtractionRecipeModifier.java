@@ -10,18 +10,25 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 
@@ -33,7 +40,7 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
 
     // Wood sword base damage (3.0) as the no-reduction reference point.
     // Duration multiplier = REFERENCE_DAMAGE / totalDamage, capped at 0.25 minimum.
-    private static final double REFERENCE_DAMAGE = 3.0;
+    private static final double REFERENCE_DAMAGE = 6.0;
 
     @Override
     public @NotNull ModifierFunction getModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
@@ -52,6 +59,7 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
             var sword = findSword(spawnerMachine);
             if (sword.isEmpty()) return baseRecipe;
 
+
             // Duration reduction based on total attack damage (base item + Sharpness).
             // Sharpness formula (Java 1.9+): +1.0 at level 1, +0.5 per additional level.
             double baseDamage = sword.getAttributeModifiers(EquipmentSlot.MAINHAND)
@@ -63,10 +71,6 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
             double totalDamage = baseDamage + sharpnessBonus;
             double durationMultiplier = totalDamage > 0 ? Math.max(0.25, REFERENCE_DAMAGE / totalDamage) : 1.0;
 
-            // Looting level is passed as luck — the ENTITY param set has no dedicated looting
-            // parameter in 1.20.1 (LootingEnchantBonus requires a KILLER_ENTITY living entity).
-            int lootingLevel = sword.getEnchantmentLevel(Enchantments.MOB_LOOTING);
-
             // Roll the mob's default loot table using a temporary fake entity for context.
             var entityType = mob.value();
             var lootTable = serverLevel.getServer().getLootData()
@@ -76,11 +80,17 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
             if (fakeEntity == null) return baseRecipe;
             fakeEntity.setPos(Vec3.atCenterOf(machine.getPos()));
 
+            var minecraftFakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
+            minecraftFakePlayer.setPos(Vec3.atCenterOf(machine.getPos()));
+            minecraftFakePlayer.setItemInHand(InteractionHand.MAIN_HAND, sword.copy());
+
             var lootParams = new LootParams.Builder(serverLevel)
                     .withParameter(LootContextParams.THIS_ENTITY, fakeEntity)
                     .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(machine.getPos()))
                     .withParameter(LootContextParams.DAMAGE_SOURCE, serverLevel.damageSources().magic())
-                    .withLuck((float) lootingLevel)
+                    .withParameter(LootContextParams.KILLER_ENTITY, minecraftFakePlayer)
+                    .withParameter(LootContextParams.DIRECT_KILLER_ENTITY, minecraftFakePlayer)
+                    .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, minecraftFakePlayer)
                     .create(LootContextParamSets.ENTITY);
 
             var drops = lootTable.getRandomItems(lootParams);
