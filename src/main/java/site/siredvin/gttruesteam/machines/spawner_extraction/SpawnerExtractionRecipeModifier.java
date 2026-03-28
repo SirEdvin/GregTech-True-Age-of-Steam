@@ -40,7 +40,7 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
 
     // Wood sword base damage (3.0) as the no-reduction reference point.
     // Duration multiplier = REFERENCE_DAMAGE / totalDamage, capped at 0.25 minimum.
-    private static final double REFERENCE_DAMAGE = 6.0;
+    private static final double REFERENCE_DAMAGE = 5.0;
 
     @Override
     public @NotNull ModifierFunction getModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {

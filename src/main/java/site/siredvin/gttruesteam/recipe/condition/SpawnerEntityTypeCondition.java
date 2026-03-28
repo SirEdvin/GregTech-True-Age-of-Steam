@@ -5,8 +5,10 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import com.mojang.serialization.Codec;
@@ -17,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
 import site.siredvin.gttruesteam.api.ISpawnerExtractionCondition;
+
+import java.util.Objects;
 
 @NoArgsConstructor
 public class SpawnerEntityTypeCondition extends RecipeCondition<SpawnerEntityTypeCondition> {
@@ -33,6 +37,10 @@ public class SpawnerEntityTypeCondition extends RecipeCondition<SpawnerEntityTyp
         this.entityType = entityType;
     }
 
+    public SpawnerEntityTypeCondition(@NotNull EntityType<?> type) {
+        this(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(type)).toString());
+    }
+
     @Getter
     private @NotNull String entityType = "";
 
@@ -43,15 +51,18 @@ public class SpawnerEntityTypeCondition extends RecipeCondition<SpawnerEntityTyp
 
     @Override
     public Component getTooltips() {
-        return Component.translatable(TrueSteamLang.SPAWNER_ENTITY_TYPE_CONDITION_KEY, this.entityType);
+        return Component.translatable(TrueSteamLang.SPAWNER_ENTITY_TYPE_CONDITION_KEY, this.getHolder().get().getDescription().getString());
+    }
+
+    public Holder<EntityType<?>> getHolder() {
+        return ForgeRegistries.ENTITY_TYPES.getHolder(ResourceLocation.parse(this.entityType)).get();
     }
 
     @Override
     protected boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine;
         if (machine instanceof ISpawnerExtractionCondition spawnerMachine) {
-            var holderOpt = ForgeRegistries.ENTITY_TYPES.getHolder(ResourceLocation.parse(this.entityType));
-            return holderOpt.map(spawnerMachine::supportMob).orElse(false);
+            return spawnerMachine.supportMob(getHolder());
         }
         return false;
     }

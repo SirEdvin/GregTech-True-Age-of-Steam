@@ -13,19 +13,25 @@ import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
+import net.minecraftforge.common.Tags;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
+import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
+import site.siredvin.gttruesteam.machines.spawner_extraction.SpawnerExtractionMachine;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
+import site.siredvin.gttruesteam.recipe.condition.SpawnerEntityTypeCondition;
+import site.siredvin.gttruesteam.recipe.condition.SpawnerMobTypeCondition;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -552,13 +558,50 @@ public class TrueSteamRecipes {
                 new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.CompressionConcept.getMaterial()), 'C',
                 new MaterialEntry(TagPrefix.frameGt, TrueSteamConcepts.CompressionConcept.getMaterial()));
 
+        VanillaRecipeHelper.addShapedRecipe(provider, true, SpawnerExtractionMachine.MACHINE.getId(),
+                SpawnerExtractionMachine.MACHINE.asStack(),
+                "III", "HCH", "WHW", 'I', TrueSteamItems.InfernalCircuit, 'H', CustomTags.HV_CIRCUITS, 'W',
+                new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.ExtractionConcept.getMaterial()), 'C',
+                TrueSteamBlocks.ExtractionInfusedCasing.asItem().getDefaultInstance());
+
         TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder("spawner_loot_extraction")
                 .notConsumable(Ingredient.of(ItemTags.SWORDS))
                 .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
                 .duration(200)
-                .EUt(30)
+                .EUt(VH[HV])
                 .addData(TrueSteamRecipeTypes.LOOT_TABLE_DROPS, true)
                 .save(provider);
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder(GTTrueSteam.id("blaze_dupicate"))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .inputFluids(GTMaterials.Blaze.getFluid(250))
+                .outputFluids(GTMaterials.Blaze.getFluid(1000))
+                .circuitMeta(1)
+                .duration(200)
+                .addCondition(new SpawnerEntityTypeCondition(EntityType.BLAZE))
+                .EUt(VH[HV])
+                .save(provider);
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder(GTTrueSteam.id("lava_dupicate"))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .inputFluids(GTMaterials.Lava.getFluid(250))
+                .outputFluids(GTMaterials.Lava.getFluid(1000))
+                .circuitMeta(1)
+                .addCondition(new SpawnerEntityTypeCondition(EntityType.MAGMA_CUBE))
+                .duration(200)
+                .EUt(VH[LV])
+                .save(provider);
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder(TrueSteamMaterials.HellishWater.getResourceLocation())
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .inputFluids(GTMaterials.DistilledWater.getFluid(250))
+                .outputFluids(TrueSteamMaterials.HellishWater.getFluid(250))
+                .circuitMeta(2)
+                .addCondition(new SpawnerMobTypeCondition(MobType.NETHER))
+                .duration(200)
+                .EUt(VH[MV])
+                .save(provider);
+
 
         registerSpringRecipes(provider);
         registerCoolingCoilsRecipes(provider);

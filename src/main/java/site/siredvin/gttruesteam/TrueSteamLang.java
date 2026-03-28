@@ -2,6 +2,7 @@ package site.siredvin.gttruesteam;
 
 import net.minecraft.Util;
 import net.minecraft.network.chat.MutableComponent;
+import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
 
 public class TrueSteamLang {
 
@@ -35,6 +36,8 @@ public class TrueSteamLang {
             GTTrueSteam.id("spawner_entity_type"));
     public static String SPAWNER_MOB_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
             GTTrueSteam.id("spawner_mob_type"));
+    public static String SPAWNER_ENTITY_DISPLAY_KEY = Util.makeDescriptionId("display",
+            GTTrueSteam.id("spawner_entity"));
 
     public static MutableComponent COATING_FLUID_CONDITION = GTTrueSteam.REGISTRATE.addLang("condition",
             GTTrueSteam.id("coating_fluid"), "Coating fluid:");
@@ -49,7 +52,7 @@ public class TrueSteamLang {
     public static MutableComponent SPAWNER_ENTITY_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
             SPAWNER_ENTITY_TYPE_CONDITION_KEY, "Required mob: %s");
     public static MutableComponent SPAWNER_MOB_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
-            SPAWNER_MOB_TYPE_CONDITION_KEY, "Required mob type: %s");
+            SPAWNER_MOB_TYPE_CONDITION_KEY, "Required type: %s");
 
     public static MutableComponent COATING_CHARGES = GTTrueSteam.REGISTRATE.addLang("tooltip",
             GTTrueSteam.id("coating_charges"), "Coating charges: ");
@@ -151,7 +154,16 @@ public class TrueSteamLang {
 
     public static MutableComponent SEM_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("sem_1"),
-            "§7A machine capable of extracting resources from spawners");
+            "A machine capable of extracting resources from spawners");
+    public static MutableComponent SEM_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("sem_3"),
+            "§7Machine has two recipe logic. For the first one, you just put sword inside and pump extraction air. Machine will produce mob loot from this spawner. Each craft takes 1 durability from the sword. Sword damage and enchantments like looting, unbreakable, sharpness affects this logic.");
+    public static MutableComponent SEM_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("sem_2"),
+            "§7Second logic is just common fluid transformation that require specific mob or mob type inside spawner. For example, if mob inside spawner belong to nether, you can transform distilled water into hellish one.");
+
+    public static MutableComponent SPAWNER_ENTITY_DISPLAY = GTTrueSteam.REGISTRATE
+            .addRawLang(SPAWNER_ENTITY_DISPLAY_KEY, "Mob inside: %s");
 
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");
@@ -163,5 +175,9 @@ public class TrueSteamLang {
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.liquid_ender_air", "Liquid ender air");
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.blaze", "Liquid blaze");
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.ice", "Liquid ice");
+
+        for (MobType mobType : MobType.values()) {
+            GTTrueSteam.REGISTRATE.addRawLang(mobType.getTranslationKey(), mobType.readableName());
+        }
     }
 }

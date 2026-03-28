@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 
@@ -19,7 +20,7 @@ public class SpawnerExtractionMachine {
             .multiblock("spawner_extraction_machine", SpawnerExtractionMachineMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TrueSteamRecipeTypes.SPAWNER_EXTRACTION)
-            .recipeModifier(new SpawnerExtractionRecipeModifier())
+            .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT_SUBTICK, new SpawnerExtractionRecipeModifier())
             .appearanceBlock(() -> TrueSteamBlocks.ExtractionInfusedCasing.get())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("EXMXE", "EGGGE", "EGGGE", "EGGGE", "EGGGE", "EGGGE", "EXXXE")
@@ -41,12 +42,12 @@ public class SpawnerExtractionMachine {
                             .or(Predicates.ability(PartAbility.EXPORT_FLUIDS).setPreviewCount(1))
                             .or(Predicates.ability(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)).or(Predicates.blocks(TrueSteamBlocks.ExtractionInfusedCasing.get())))
                     .build())
-            .tooltips(TrueSteamLang.SEM_TOOLTIP_1)
+            .tooltips(TrueSteamLang.SEM_TOOLTIP_1, TrueSteamLang.SEM_TOOLTIP_2, TrueSteamLang.SEM_TOOLTIP_3)
             .additionalDisplay(((iMultiController, components) -> {
                 if (iMultiController instanceof SpawnerExtractionMachineMachine spawnerExtractionMachineMachine) {
                     var mobInside = spawnerExtractionMachineMachine.getMobInside();
                     if (mobInside != null)
-                        components.add(Component.literal("Entity: " + mobInside.get().getDescription().getString()));
+                        components.add(Component.translatable(TrueSteamLang.SPAWNER_ENTITY_DISPLAY_KEY, mobInside.get().getDescription()));
                 }
             }))
             .workableCasingModel(

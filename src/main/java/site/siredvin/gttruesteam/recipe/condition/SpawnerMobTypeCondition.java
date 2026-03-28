@@ -43,7 +43,8 @@ public class SpawnerMobTypeCondition extends RecipeCondition<SpawnerMobTypeCondi
 
     @Override
     public Component getTooltips() {
-        return Component.translatable(TrueSteamLang.SPAWNER_MOB_TYPE_CONDITION_KEY, this.mobType.name());
+        return Component.translatable(TrueSteamLang.SPAWNER_MOB_TYPE_CONDITION_KEY,
+                Component.translatable(this.mobType.getTranslationKey()));
     }
 
     @Override
