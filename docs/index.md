@@ -58,4 +58,14 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     [:octicons-arrow-right-24: Read more](multiblocks/industrial-gas-pressurizer.md)
 
+-   ![Spawner extraction machine](images/spawner-extraction-machine.png)
+
+    ---
+
+    **Spawner extraction machine** &nbsp;·&nbsp; :material-lightning-bolt: HV
+
+    Multiblock for extracting loot from spawners and crafting hellish water.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/spawner-extraction-machine.md)
+
 </div>

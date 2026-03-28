@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update for infernal boiler in form of beating husks
 - Better purified infernal dust recipes
 - Buff boilers a little and introduce tier 3 for boilers
+- Spawner extraction machine
 
 ### Changed
 

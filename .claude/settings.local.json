@@ -35,7 +35,21 @@
       "Bash(javap -p net/minecraft/advancements/critereon/EntityPredicate.class)",
       "Bash(grep -r \"PlayerTrigger\\\\|CriteriaTriggers\\\\|TICK\" /c/Users/sired/.gradle/caches/modules-2/files-2.1/com.gregtechceu.gtceu --include=*.java)",
       "Bash(ls:*)",
-      "Bash(./gradlew runData)"
+      "Bash(./gradlew runData)",
+      "Bash(./gradlew compileJava)",
+      "Bash(grep -r \"Registrate\\\\|registrate\" /opt/Projects/GregTech-True-Age-of-Steam/src/main/java/site/siredvin/gttruesteam/*.java --include=\"*.java\")",
+      "Bash(grep -r \"addEntityTag\\\\|EntityType.*tag\\\\|RegistrateTagsProvider\" /opt/Projects/GregTech-True-Age-of-Steam/build.gradle*)",
+      "Bash(./gradlew compileJava -Xlint:deprecation)",
+      "mcp__intellij-index__ide_index_status",
+      "mcp__intellij-index__ide_find_class",
+      "mcp__intellij-index__ide_find_definition",
+      "mcp__intellij-index__ide_read_file",
+      "mcp__intellij-index__ide_sync_files",
+      "mcp__intellij-index__ide_diagnostics",
+      "WebFetch(domain:minecraft.fandom.com)",
+      "Bash(defuddle parse:*)",
+      "Bash(xargs -I{} bash -c \"jar tf {} 2>/dev/null | grep -l \"\"LootContextParam\"\" {}\")",
+      "mcp__intellij-index__ide_search_text"
     ]
   },
   "hooks": {
