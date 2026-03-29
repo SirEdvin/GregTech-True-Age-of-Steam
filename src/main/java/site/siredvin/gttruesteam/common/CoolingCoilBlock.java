@@ -1,5 +1,6 @@
 package site.siredvin.gttruesteam.common;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class CoolingCoilBlock extends ActiveBlock {
 
-    private ICoolingCoilType coilType;
+    private final ICoolingCoilType coilType;
 
     public CoolingCoilBlock(Properties properties, ICoolingCoilType coilType) {
         super(properties);
@@ -30,8 +31,10 @@ public class CoolingCoilBlock extends ActiveBlock {
         super.appendHoverText(stack, level, tooltip, flag);
         if (GTUtil.isShiftDown()) {
             tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_CAPACITY_KEY, coilType.getCoolingCapacity()));
+            tooltip.add(TrueSteamLang.COOLING_COIL_RCC);
             tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_REDUCTION_KEY,
                     coilType.getActiveCoolingReduction() * 100));
+            tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_PERFECT_OC_KEY, GTValues.VN[coilType.getLevel() - 1]));
         } else {
             tooltip.add(Component.translatable("block.gtceu.wire_coil.tooltip_extended_info"));
         }

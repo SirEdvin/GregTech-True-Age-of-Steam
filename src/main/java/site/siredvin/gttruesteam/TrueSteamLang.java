@@ -14,6 +14,8 @@ public class TrueSteamLang {
             GTTrueSteam.id("cooling_coils_capacity"));
     public static String COIL_COOLING_REDUCTION_KEY = Util.makeDescriptionId("tooltip",
             GTTrueSteam.id("cooling_coils_reduction"));
+    public static String COIL_COOLING_PERFECT_OC_KEY = Util.makeDescriptionId("tooltip",
+            GTTrueSteam.id("cooling_coils_perfect_oc"));
     public static String COOLING_CAPACITY_MESSAGE_KEY = Util.makeDescriptionId("message",
             GTTrueSteam.id("cooling_capacity"));
     public static String COATING_CHARGES_MESSAGE_KEY = Util.makeDescriptionId("message",
@@ -65,9 +67,12 @@ public class TrueSteamLang {
 
     public static MutableComponent COIL_COOLING_CAPACITY = GTTrueSteam.REGISTRATE.addRawLang(COIL_COOLING_CAPACITY_KEY,
             "§bBase Cooling Capacity: §f%d ηK");
+    public static MutableComponent COOLING_COIL_RCC = GTTrueSteam.REGISTRATE.addLang("tooltip", GTTrueSteam.id("cooling_coil_rcc"),
+            "§6Regulared cryo chamber:");
     public static MutableComponent COIL_COOLING_REDUCTION = GTTrueSteam.REGISTRATE.addRawLang(
             COIL_COOLING_REDUCTION_KEY,
-            "§bMax duration reduction: §f%d%%");
+            "    §bMax duration reduction: §f%d%%");
+    public static MutableComponent COOLING_PERFECT_OC = GTTrueSteam.REGISTRATE.addRawLang(COIL_COOLING_PERFECT_OC_KEY, "    §bPerfect OC: §fRecipe with %s or less base voltage");
     public static MutableComponent CHARGING_CYCLES = GTTrueSteam.REGISTRATE.addRawLang(CHARGING_CYCLES_KEY,
             "Charging for %d cycles");
     public static MutableComponent INFERNAL_CYCLES_UNTIL_THROTTLE = GTTrueSteam.REGISTRATE.addRawLang(

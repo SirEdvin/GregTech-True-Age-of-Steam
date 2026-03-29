@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - RCC now use EU-free parallels per coil level
 - Infernal boiler now correctly uses parallels in supreme heat state.
 - Estranged metal now produces tier 3 coils and requires cooling cometal
+- Cooling coil tooltip is not more informative
 
 ### Fixed
 
