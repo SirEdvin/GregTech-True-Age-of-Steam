@@ -48,8 +48,9 @@ public class CoatingShrineRenderer extends DynamicRender<IRecipeLogicMachine, Co
                        @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (machine.isActive() && machine instanceof CoatingShrineMachine coatingMachine) {
             var recipeLogic = machine.getRecipeLogic();
+            var rawProcess = recipeLogic.getProgressPercent();
             var lastRecipe = recipeLogic.getLastRecipe();
-            if (lastRecipe != null) {
+            if (lastRecipe != null && rawProcess > 0) {
                 var itemOutputs = lastRecipe.inputs.get(GTRecipeCapabilities.ITEM);
                 var firstItem = itemOutputs.get(0).content;
                 if (firstItem instanceof SizedIngredient firstItemStack) {
