@@ -19,7 +19,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
-import net.minecraftforge.common.Tags;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
@@ -601,7 +600,6 @@ public class TrueSteamRecipes {
                 .duration(200)
                 .EUt(VH[MV])
                 .save(provider);
-
 
         registerSpringRecipes(provider);
         registerCoolingCoilsRecipes(provider);

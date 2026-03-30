@@ -34,7 +34,8 @@ public class CoolingCoilBlock extends ActiveBlock {
             tooltip.add(TrueSteamLang.COOLING_COIL_RCC);
             tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_REDUCTION_KEY,
                     coilType.getActiveCoolingReduction() * 100));
-            tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_PERFECT_OC_KEY, GTValues.VN[coilType.getLevel() - 1]));
+            tooltip.add(Component.translatable(TrueSteamLang.COIL_COOLING_PERFECT_OC_KEY,
+                    GTValues.VN[coilType.getLevel() - 1]));
         } else {
             tooltip.add(Component.translatable("block.gtceu.wire_coil.tooltip_extended_info"));
         }

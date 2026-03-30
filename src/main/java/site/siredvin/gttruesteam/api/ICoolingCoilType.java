@@ -22,8 +22,6 @@ public interface ICoolingCoilType extends ICoilType {
 
     int getLevel();
 
-    int getTier();
-
     Supplier<Material> getMaterialSupplier();
 
     ResourceLocation getTexture();
@@ -40,5 +38,10 @@ public interface ICoolingCoilType extends ICoilType {
 
     default Material getMaterial() {
         return getMaterialSupplier().get();
+    }
+
+    @Override
+    default int getTier() {
+        return getLevel();
     }
 }

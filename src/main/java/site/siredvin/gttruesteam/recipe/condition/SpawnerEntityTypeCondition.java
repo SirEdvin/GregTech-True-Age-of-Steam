@@ -51,7 +51,8 @@ public class SpawnerEntityTypeCondition extends RecipeCondition<SpawnerEntityTyp
 
     @Override
     public Component getTooltips() {
-        return Component.translatable(TrueSteamLang.SPAWNER_ENTITY_TYPE_CONDITION_KEY, this.getHolder().get().getDescription().getString());
+        return Component.translatable(TrueSteamLang.SPAWNER_ENTITY_TYPE_CONDITION_KEY,
+                this.getHolder().get().getDescription().getString());
     }
 
     public Holder<EntityType<?>> getHolder() {

@@ -45,7 +45,7 @@ public class TrueSteamPredicates {
             }
             return false;
         }, () -> GTTrueSteamAPI.COOLING_COILS.entrySet().stream()
-                .sorted(Comparator.comparingInt(value -> value.getKey().getTier()))
+                .sorted(Comparator.comparingInt(value -> value.getKey().getLevel()))
                 .map(coil -> BlockInfo.fromBlockState(coil.getValue().get().defaultBlockState()))
                 .toArray(BlockInfo[]::new))
                 .addTooltips(TrueSteamLang.COIL_ERROR);

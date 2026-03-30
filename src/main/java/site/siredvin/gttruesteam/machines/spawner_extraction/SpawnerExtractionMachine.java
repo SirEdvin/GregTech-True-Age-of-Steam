@@ -6,9 +6,9 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
-
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 
@@ -40,14 +40,16 @@ public class SpawnerExtractionMachine {
                             .or(Predicates.ability(PartAbility.IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.ability(PartAbility.EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.ability(PartAbility.EXPORT_FLUIDS).setPreviewCount(1))
-                            .or(Predicates.ability(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)).or(Predicates.blocks(TrueSteamBlocks.ExtractionInfusedCasing.get())))
+                            .or(Predicates.ability(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
+                            .or(Predicates.blocks(TrueSteamBlocks.ExtractionInfusedCasing.get())))
                     .build())
             .tooltips(TrueSteamLang.SEM_TOOLTIP_1, TrueSteamLang.SEM_TOOLTIP_2, TrueSteamLang.SEM_TOOLTIP_3)
             .additionalDisplay(((iMultiController, components) -> {
                 if (iMultiController instanceof SpawnerExtractionMachineMachine spawnerExtractionMachineMachine) {
                     var mobInside = spawnerExtractionMachineMachine.getMobInside();
                     if (mobInside != null)
-                        components.add(Component.translatable(TrueSteamLang.SPAWNER_ENTITY_DISPLAY_KEY, mobInside.get().getDescription()));
+                        components.add(Component.translatable(TrueSteamLang.SPAWNER_ENTITY_DISPLAY_KEY,
+                                mobInside.get().getDescription()));
                 }
             }))
             .workableCasingModel(

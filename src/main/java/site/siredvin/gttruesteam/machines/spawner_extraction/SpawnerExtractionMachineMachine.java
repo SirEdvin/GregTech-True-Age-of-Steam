@@ -2,18 +2,20 @@ package site.siredvin.gttruesteam.machines.spawner_extraction;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import org.jetbrains.annotations.Nullable;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 import site.siredvin.gttruesteam.api.ISpawnerExtractionCondition;
 
 public class SpawnerExtractionMachineMachine extends WorkableElectricMultiblockMachine
-        implements ISpawnerExtractionCondition {
+                                             implements ISpawnerExtractionCondition {
 
     private @Nullable Holder<EntityType<?>> mobInside = null;
 

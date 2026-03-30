@@ -74,6 +74,23 @@ repositories {
         }
     }
 
+    maven {
+        name = "Lat's Maven (Rhino, KubeJS)"
+        url = "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+
+    maven {
+        name = "Shedaniel maven"
+        url = "https://maven.shedaniel.me/"
+        content {
+            includeGroupAndSubgroups("me.shedaniel")
+            includeGroup("dev.architectury")
+        }
+    }
+
 }
 
 version = mod_version
@@ -134,11 +151,11 @@ legacyForge {
         }
     }
 }
-jar {
-    manifest.attributes([
-            "MixinConfigs": "gttruesteam.mixins.json"
-    ])
-}
+//jar {
+//    manifest.attributes([
+//            "MixinConfigs": "gttruesteam.mixins.json"
+//    ])
+//}
 
 apply from: "$rootDir/gradle/scripts/spotless.gradle"
 
@@ -146,7 +163,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:26.0.1")
 
     // Mixin
-    annotationProcessor('org.spongepowered:mixin:0.8.5:processor')
+//    annotationProcessor('org.spongepowered:mixin:0.8.5:processor')
 
     // JEI, EMI, Jade
     modCompileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -160,6 +177,9 @@ dependencies {
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
     modImplementation("dev.toma.configuration:configuration-forge-${minecraft_version}:${configuration_version}")
+    modImplementation("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    modImplementation("dev.latvian.mods:rhino-forge:${rhino_version}")
+    modImplementation("dev.architectury:architectury-forge:${architectury_version}")
 
     modRuntimeOnly("maven.modrinth:ae2:15.2.13")
 
@@ -169,10 +189,10 @@ dependencies {
 }
 
 // See com.example.examplemod.mixin.DummyMixin for information about mixins
-mixin {
-    add sourceSets.main, "mixins.${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
-}
+//mixin {
+//    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+//    config "${mod_id}.mixins.json"
+//}
 
 tasks.named('processResources', ProcessResources).configure {
     var properties = [
