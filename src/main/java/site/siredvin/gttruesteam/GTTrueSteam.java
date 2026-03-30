@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
@@ -110,6 +111,7 @@ public class GTTrueSteam {
         GTMaterials.Blaze.getFluidBuilder().block();
         GTMaterials.Ice.getFluidBuilder().block();
         GTMaterials.LiquidEnderAir.getFluidBuilder().block();
+        GTMaterials.TitaniumCarbide.addFlags(MaterialFlags.GENERATE_FRAME);
     }
 
     /**

@@ -1,7 +1,6 @@
-package site.siredvin.gttruesteam.machines.cooling_box;
+package site.siredvin.gttruesteam.machines.shared.cooling;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
 import net.minecraft.core.BlockPos;
@@ -13,22 +12,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamLang;
-import site.siredvin.gttruesteam.TrueSteamPredicates;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
-import site.siredvin.gttruesteam.api.ICoolingCoilType;
-import site.siredvin.gttruesteam.api.ICoolingMachine;
-import site.siredvin.gttruesteam.common.TSCoilType;
+import site.siredvin.gttruesteam.api.IPassiveCoolingMachine;
 
-public class CoolingBoxMachine extends WorkableMultiblockMachine implements ICoolingMachine {
+public class PassiveCoolingMachine extends CoolingCoilMachine implements IPassiveCoolingMachine {
 
-    @Getter
-    private ICoolingCoilType coilType = TSCoilType.FROSTBITE_MAGNALIUM;
+    public PassiveCoolingMachine(IMachineBlockEntity holder) {
+        this(holder, 1, 1);
+    }
 
-    public CoolingBoxMachine(IMachineBlockEntity holder) {
-        super(holder);
+    public PassiveCoolingMachine(IMachineBlockEntity holder, int capacityFactor, int rateFactor) {
+        super(holder, capacityFactor, rateFactor);
         this.subscribeServerTick(() -> {
             if (!this.isActive()) {
                 var recipeLogic = this.getRecipeLogic();
@@ -36,15 +32,6 @@ public class CoolingBoxMachine extends WorkableMultiblockMachine implements ICoo
                 recipeLogic.tickAggregatedCoolingCapacity(coilType);
             }
         });
-    }
-
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        var type = getMultiblockState().getMatchContext().get(TrueSteamPredicates.COOLING_COIL_TYPE_MARK);
-        if (type instanceof ICoolingCoilType coil) {
-            this.coilType = coil;
-        }
     }
 
     @Override
@@ -70,13 +57,13 @@ public class CoolingBoxMachine extends WorkableMultiblockMachine implements ICoo
     }
 
     @Override
-    public @NotNull CoolingBoxRecipeLogic getRecipeLogic() {
-        return (CoolingBoxRecipeLogic) super.getRecipeLogic();
+    public @NotNull PassiveCoolingRecipeLogic getRecipeLogic() {
+        return (PassiveCoolingRecipeLogic) super.getRecipeLogic();
     }
 
     @Override
     protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new CoolingBoxRecipeLogic(this);
+        return new PassiveCoolingRecipeLogic(this, (Integer) args[0], (Integer) args[1]);
     }
 
     @Override

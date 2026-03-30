@@ -67,6 +67,16 @@ public class TrueSteamRecipes {
                 "P|P", "|F|", "P|P", 'P', new MaterialEntry(TagPrefix.plate, casingMaterial),
                 'F', new MaterialEntry(TagPrefix.frameGt, casingMaterial), '|',
                 new MaterialEntry(TagPrefix.pipeNormalFluid, casingMaterial));
+
+        ASSEMBLER_RECIPES.recipeBuilder(casingOutput.getId())
+                .inputItems(TagPrefix.pipeNormalFluid, casingMaterial, 4)
+                .inputItems(TagPrefix.plate, casingMaterial, 4)
+                .inputItems(TagPrefix.frameGt, casingMaterial, 1)
+                .outputItems(casingOutput)
+                .duration(200)
+                .EUt(16)
+                .circuitMeta(1)
+                .save(provider);
     }
 
     private static void registerInfernalActivationRecipes(Consumer<FinishedRecipe> provider, Material material,
@@ -342,6 +352,8 @@ public class TrueSteamRecipes {
         casingRecipe(TrueSteamConcepts.ExtractionConcept.getMaterial(), TrueSteamBlocks.ExtractionInfusedCasing,
                 provider);
         pipeCasingRecipe(TrueSteamConcepts.ExtractionConcept.getMaterial(), TrueSteamBlocks.ExtractionInfusedPipeCasing,
+                provider);
+        pipeCasingRecipe(TrueSteamConcepts.CoolingConcept.getMaterial(), TrueSteamBlocks.CoolingInfusedPipeCasing,
                 provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())

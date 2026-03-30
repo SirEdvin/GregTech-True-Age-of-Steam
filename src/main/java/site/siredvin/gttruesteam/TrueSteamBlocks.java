@@ -90,6 +90,9 @@ public class TrueSteamBlocks {
             "extraction_infused_pipe_casing",
             GTTrueSteam.id("block/extraction_infused_pipe_casing"));
 
+    public static BlockEntry<Block> CoolingInfusedPipeCasing = createCasingBlock("cooling_infused_pipe_casing",
+            GTTrueSteam.id("block/cooling_infused_pipe_casing"));
+
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
     public static BlockEntry<CoolingCoilBlock> COIL_COOLING_COMETAL = createCoolingCoil(

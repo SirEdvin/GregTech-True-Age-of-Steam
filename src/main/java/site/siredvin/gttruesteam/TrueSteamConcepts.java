@@ -41,7 +41,8 @@ public class TrueSteamConcepts {
 
     public static Concept CoolingConcept = register(
             CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept), List.of(
-                    MaterialFlags.GENERATE_FOIL)));
+                    MaterialFlags.GENERATE_FOIL, MaterialFlags.GENERATE_FRAME),
+                    builder -> builder.fluidPipeProperties(200, 100, true, false, true, false)));
 
     public static Concept register(Concept concept) {
         CONCEPTS.add(concept);
