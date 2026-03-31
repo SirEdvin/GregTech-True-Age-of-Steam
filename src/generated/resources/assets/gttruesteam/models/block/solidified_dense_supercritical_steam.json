@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "gttruesteam:block/fluids/fluid.dense_supercritical_steam"
+  }
+}

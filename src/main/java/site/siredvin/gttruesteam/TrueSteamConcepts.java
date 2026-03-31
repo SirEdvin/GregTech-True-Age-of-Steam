@@ -44,6 +44,9 @@ public class TrueSteamConcepts {
                     MaterialFlags.GENERATE_FOIL, MaterialFlags.GENERATE_FRAME),
                     builder -> builder.fluidPipeProperties(200, 100, true, false, true, false)));
 
+    public static Concept DecompressionConcept = register(
+            CombinedConcept.create("decompression", 0xbcb2eb, List.of(CompressionConcept, PolarizationConcept)));
+
     public static Concept register(Concept concept) {
         CONCEPTS.add(concept);
         return concept;
