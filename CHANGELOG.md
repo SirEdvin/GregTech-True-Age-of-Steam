@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Buff boilers a little and introduce tier 3 for boilers
 - Spawner extraction machine
 - KubeJS plugin for generating new cooling coils
+- Fluid cooling recipes
 
 ### Changed
 

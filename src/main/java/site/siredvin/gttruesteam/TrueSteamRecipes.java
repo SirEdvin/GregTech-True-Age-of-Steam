@@ -1,6 +1,8 @@
 package site.siredvin.gttruesteam;
 
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -9,6 +11,8 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
@@ -17,8 +21,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
+import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
@@ -37,8 +43,7 @@ import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
-import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.FLUID_COOLING;
-import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
+import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.*;
 
 public class TrueSteamRecipes {
 
@@ -314,6 +319,38 @@ public class TrueSteamRecipes {
                 .inputFluids(TrueSteamConcepts.CompressionConcept.getInfusedAir().getFluid(100))
                 .outputItems(TrueSteamItems.InfusedCompressedCompressionSpringPack)
                 .duration(100).EUt(64).save(provider);
+    }
+
+    private static void registerCoolingRecipes(Consumer<FinishedRecipe> provider) {
+        for (MaterialRegistry registry : GTCEuAPI.materialManager.getRegistries()) {
+            for (Material material : registry.getAllMaterials()) {
+                if (TagPrefix.ingotHot.doGenerateItem(material)) {
+                    var molten = GTUtil.getMoltenFluid(material);
+                    if (molten != null) {
+                        GTRecipeBuilder coolingBuilder = FLUID_COOLING.recipeBuilder(material.getName())
+                                .inputFluids(new FluidStack(molten, L))
+                                .duration(200)
+                                .outputFluids(material.getFluid(L));
+
+                        if (material.getBlastTemperature() >= 5000) {
+                            coolingBuilder
+                                    .addData(COOLING_CONSUMED,
+                                            material.getMass() * Constants.FLUID_COOLING_OVER_5K_COST_COEF)
+                                    .addCondition(new CoolingCapacityCondition(Math.toIntExact(
+                                            material.getMass() * Constants.FLUID_COOLING_OVER_5K_REQUIRED_COEF +
+                                                    Constants.BASE_FLUID_COOLING_REQUIREMENT)));
+                        } else {
+                            coolingBuilder
+                                    .addData(COOLING_CONSUMED, material.getMass() * Constants.FLUID_COOLING_COST_COEF)
+                                    .addCondition(new CoolingCapacityCondition(
+                                            Math.toIntExact(material.getMass() * Constants.FLUID_COOLING_REQUIRED_COEF +
+                                                    Constants.BASE_FLUID_COOLING_REQUIREMENT)));
+                        }
+                        coolingBuilder.save(provider);
+                    }
+                }
+            }
+        }
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
@@ -615,5 +652,6 @@ public class TrueSteamRecipes {
 
         registerSpringRecipes(provider);
         registerCoolingCoilsRecipes(provider);
+        registerCoolingRecipes(provider);
     }
 }
