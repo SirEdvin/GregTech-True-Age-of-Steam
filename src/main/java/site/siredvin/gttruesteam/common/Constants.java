@@ -19,4 +19,6 @@ public class Constants {
     public static int FLUID_COOLING_OVER_5K_REQUIRED_COEF = FLUID_COOLING_REQUIRED_COEF +
             FLUID_COOLING_OVER_5K_COST_BONUS;
     public static int FLUID_COOLING_OVER_5K_COST_COEF = FLUID_COOLING_COST_COEF + FLUID_COOLING_OVER_5K_REQUIRED_BONUS;
+    public static int CT_CAPACITY_BOOST = 30;
+    public static int CT_RATE_BOOST = 10;
 }

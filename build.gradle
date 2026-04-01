@@ -151,11 +151,11 @@ legacyForge {
         }
     }
 }
-//jar {
-//    manifest.attributes([
-//            "MixinConfigs": "gttruesteam.mixins.json"
-//    ])
-//}
+jar {
+    manifest.attributes([
+            "MixinConfigs": "gttruesteam.mixins.json"
+    ])
+}
 
 apply from: "$rootDir/gradle/scripts/spotless.gradle"
 
@@ -163,7 +163,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:26.0.1")
 
     // Mixin
-//    annotationProcessor('org.spongepowered:mixin:0.8.5:processor')
+    annotationProcessor('org.spongepowered:mixin:0.8.5:processor')
 
     // JEI, EMI, Jade
     modCompileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -189,11 +189,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
-// See com.example.examplemod.mixin.DummyMixin for information about mixins
-//mixin {
-//    add sourceSets.main, "mixins.${mod_id}.refmap.json"
-//    config "${mod_id}.mixins.json"
-//}
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
 
 tasks.named('processResources', ProcessResources).configure {
     var properties = [

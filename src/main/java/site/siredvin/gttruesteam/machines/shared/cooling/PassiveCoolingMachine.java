@@ -40,9 +40,9 @@ public class PassiveCoolingMachine extends CoolingCoilMachine implements IPassiv
         var recipeLogic = getRecipeLogic();
         var lastRecipe = recipeLogic.getLastRecipe();
         if (lastRecipe != null && lastRecipe.data.contains(TrueSteamRecipeTypes.COOLING_CONSUMED)) {
+            var consumedCooling = lastRecipe.data.getInt(TrueSteamRecipeTypes.COOLING_CONSUMED) * lastRecipe.parallels;
             recipeLogic.setAggregatedCoolingCapacity(
-                    recipeLogic.getAggregatedCoolingCapacity() -
-                            lastRecipe.data.getInt(TrueSteamRecipeTypes.COOLING_CONSUMED));
+                    Math.max(0, recipeLogic.getAggregatedCoolingCapacity() - consumedCooling));
         }
     }
 

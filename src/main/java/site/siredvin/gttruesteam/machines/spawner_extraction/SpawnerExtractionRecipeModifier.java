@@ -14,18 +14,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
+import site.siredvin.gttruesteam.mixins.LivingEntityAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,22 +73,23 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
 
             var fakeEntity = entityType.create(serverLevel);
             if (fakeEntity == null) return baseRecipe;
+            if (!(fakeEntity instanceof LivingEntity livingFakeEntity)) return baseRecipe;
             fakeEntity.setPos(Vec3.atCenterOf(machine.getPos()));
 
             var minecraftFakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
             minecraftFakePlayer.setPos(Vec3.atCenterOf(machine.getPos()));
             minecraftFakePlayer.setItemInHand(InteractionHand.MAIN_HAND, sword.copy());
 
-            var lootParams = new LootParams.Builder(serverLevel)
-                    .withParameter(LootContextParams.THIS_ENTITY, fakeEntity)
-                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(machine.getPos()))
-                    .withParameter(LootContextParams.DAMAGE_SOURCE, serverLevel.damageSources().magic())
-                    .withParameter(LootContextParams.KILLER_ENTITY, minecraftFakePlayer)
-                    .withParameter(LootContextParams.DIRECT_KILLER_ENTITY, minecraftFakePlayer)
-                    .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, minecraftFakePlayer)
-                    .create(LootContextParamSets.ENTITY);
-
-            var drops = lootTable.getRandomItems(lootParams);
+            livingFakeEntity.setLastHurtByPlayer(minecraftFakePlayer);
+            var drops = new ArrayList<ItemEntity>();
+            livingFakeEntity.captureDrops(drops);
+            var accessor = (LivingEntityAccessor) livingFakeEntity;
+            var damageSource = serverLevel.damageSources().playerAttack(minecraftFakePlayer);
+            int lootingLevel = ForgeHooks.getLootingLevel(livingFakeEntity, minecraftFakePlayer, damageSource);
+            accessor.callDropFromLootTable(damageSource, true);
+            accessor.callDropCustomDeathLoot(damageSource, lootingLevel, true);
+            // noinspection DataFlowIssue
+            livingFakeEntity.captureDrops(null);
 
             var copy = baseRecipe.copy();
             copy.duration = (int) (copy.duration * durationMultiplier);
@@ -95,7 +97,8 @@ public class SpawnerExtractionRecipeModifier implements RecipeModifier {
             if (!drops.isEmpty()) {
                 int maxChance = ChanceLogic.getMaxChancedValue();
                 var newContents = drops.stream()
-                        .map(stack -> new Content(SizedIngredient.create(stack), maxChance, maxChance, 0))
+                        .map(itemEntity -> new Content(SizedIngredient.create(itemEntity.getItem()), maxChance,
+                                maxChance, 0))
                         .toList();
                 var combined = new ArrayList<>(copy.outputs.getOrDefault(GTRecipeCapabilities.ITEM, List.of()));
                 combined.addAll(newContents);

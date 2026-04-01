@@ -12,15 +12,18 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import site.siredvin.gttruesteam.*;
+import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.shared.cooling.PassiveCoolingMachine;
 
 public class CoolingTower {
 
     public static MultiblockMachineDefinition MACHINE = GTTrueSteam.REGISTRATE
-            .multiblock("cooling_tower", (holder) -> new PassiveCoolingMachine(holder, 30, 10))
+            .multiblock("cooling_tower",
+                    (holder) -> new PassiveCoolingMachine(holder, Constants.CT_CAPACITY_BOOST, Constants.CT_RATE_BOOST))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TrueSteamRecipeTypes.FLUID_COOLING)
             .appearanceBlock(() -> GTBlocks.LIGHT_CONCRETE.get())
+            .recipeModifier(new CoolingTowerRecipeModifier())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("   XXXXX   ", "   CCMCC   ", "           ", "           ", "           ", "           ",
                             "           ", "           ", "           ", "           ", "           ", "           ",
