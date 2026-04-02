@@ -28,6 +28,7 @@ import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.cooling_tower.CoolingTower;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
@@ -458,6 +459,17 @@ public class TrueSteamRecipes {
                 'C', TrueSteamBlocks.SlightlyCorrosionProofCasing.asStack(),
                 'S', CustomTags.MV_CIRCUITS,
                 'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.Aluminium));
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingTower.MACHINE.getId(),
+                CoolingTower.MACHINE.asStack(),
+                "ICI",
+                "EFE",
+                "PPP",
+                'C', CoolingBox.MACHINE.asStack(),
+                'I', TrueSteamItems.InfernalCircuit,
+                'E', CustomTags.EV_CIRCUITS,
+                'F', new MaterialEntry(TagPrefix.frameGt, GTMaterials.TitaniumCarbide),
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.CoolingConcept.getMaterial()));
 
         SCANNER_RECIPES.recipeBuilder(TrueSteamItems.PurifiedInfernalDust.getId())
                 .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug)

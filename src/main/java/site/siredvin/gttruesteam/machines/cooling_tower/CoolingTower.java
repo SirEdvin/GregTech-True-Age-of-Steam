@@ -74,9 +74,10 @@ public class CoolingTower {
                                     .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                                     .or(Predicates.blocks(GTBlocks.LIGHT_CONCRETE.get())))
                     .build())
+            .tooltips(TrueSteamLang.CT_TOOLTIP_1, TrueSteamLang.CT_TOOLTIP_2)
             .workableCasingModel(
                     GTCEu.id("block/stones/light_concrete/stone"),
-                    GTCEu.id("block/multiblock/vacuum_freezer"))
+                    GTTrueSteam.id("block/machines/cooling_tower"))
             .register();
 
     public static void sayHi() {}

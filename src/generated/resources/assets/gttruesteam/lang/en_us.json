@@ -135,6 +135,8 @@
   "item_tooltip.gttruesteam.coating_shrine_2": "§7Coating is primitive and imperfect process, fluid in the middle will be consume each 100 crafts. You can right click on controller to get about of charges left.",
   "item_tooltip.gttruesteam.cooling_box_1": "§3Surprisingly effective device, that works by using cooling coils to accumulate cooling capacity and discharge it to cool fluids or items",
   "item_tooltip.gttruesteam.cooling_box_2": "§7Recipes usually shows amount of accumulated cooling capacity required as well as how capacity they will consume. You can right click it to get accumulate cooling capacity. Better cooling coils impact maximum capacity as well as capacity generation over time.",
+  "item_tooltip.gttruesteam.ct_1": "§3Industrial-grade cooling solution",
+  "item_tooltip.gttruesteam.ct_2": "§7Specifically crafted passive cooling tower. It has infinite parallels, 30x more capacity, 10x more speed than Cooling Box and just look awesome by itself.",
   "item_tooltip.gttruesteam.igp_1": "§bMore dense versions of steam is always appreciate",
   "item_tooltip.gttruesteam.igp_2": "§7Machine for compressing gases into their dense variants. By default you lose up to 25% of initial gas mass without perfect conditions.",
   "item_tooltip.gttruesteam.igp_3": "§7Achieving perfect condition is no simple feat. It can occur on two seconds intervals are require all input hatches to be filled from 35% to 85% of its capacity. Some hatches (like ME hatches) don't have capacity, which makes perfect condition impossible.",

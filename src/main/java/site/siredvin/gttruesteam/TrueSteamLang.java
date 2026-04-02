@@ -153,6 +153,13 @@ public class TrueSteamLang {
             "item_tooltip", GTTrueSteam.id("igp_3"),
             "§7Achieving perfect condition is no simple feat. It can occur on two seconds intervals are require all input hatches to be filled from 35% to 85% of its capacity. Some hatches (like ME hatches) don't have capacity, which makes perfect condition impossible.");
 
+    public static MutableComponent CT_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("ct_1"),
+            "§3Industrial-grade cooling solution");
+    public static MutableComponent CT_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("ct_2"),
+            "§7Specifically crafted passive cooling tower. It has infinite parallels, 30x more capacity, 10x more speed than Cooling Box and just look awesome by itself.");
+
     public static MutableComponent BEATING_HUSK_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("beating_husk_1"),
             "§4This husk is no longer empty, it is beating like a heart full of energy...");
