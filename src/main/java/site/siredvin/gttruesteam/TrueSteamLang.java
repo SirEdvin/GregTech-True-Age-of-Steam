@@ -158,7 +158,7 @@ public class TrueSteamLang {
             "§3Industrial-grade cooling solution");
     public static MutableComponent CT_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("ct_2"),
-            "§7Specifically crafted passive cooling tower. It has infinite parallels, 30x more capacity, 10x more speed than Cooling Box and just look awesome by itself.");
+            "§7Specifically crafted passive cooling tower. It has infinite parallels, 30 times more capacity, 10 times more speed than Cooling Box and just look awesome by itself.");
 
     public static MutableComponent BEATING_HUSK_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("beating_husk_1"),

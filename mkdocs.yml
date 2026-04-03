@@ -60,5 +60,6 @@ nav:
       - Concept Infusion Matrix: multiblocks/concept-infusion-matrix.md
       - Industrial gas pressurizer: multiblocks/industrial-gas-pressurizer.md
       - Spawner extraction machine: multiblocks/spawner-extraction-machine.md
+      - Cooling tower: multiblocks/cooling-tower.md
   - Machines:
       - Single-Block Boilers: machines/single-block-boilers.md

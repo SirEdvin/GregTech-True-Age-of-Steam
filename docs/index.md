@@ -68,4 +68,14 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     [:octicons-arrow-right-24: Read more](multiblocks/spawner-extraction-machine.md)
 
+-   ![Cooling tower](images/cooling-tower.png)
+
+    ---
+
+    **Cooling tower** &nbsp;·&nbsp; :material-lightning-bolt: EV
+
+    Industrial-grade passive cooling facility.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/cooling-tower.md)
+
 </div>
