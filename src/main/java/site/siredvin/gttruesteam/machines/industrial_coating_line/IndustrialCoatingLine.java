@@ -49,8 +49,8 @@ public class IndustrialCoatingLine {
                     TrueSteamLang.INDUSTRIAL_COATING_LINE_TOOLTIP_1,
                     TrueSteamLang.INDUSTRIAL_COATING_LINE_TOOLTIP_2)
             .workableCasingModel(
-                    GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
-                    GTCEu.id("block/multiblock/implosion_compressor"))
+                    GTTrueSteam.id("block/bathing_infused_casing"),
+                    GTCEu.id("block/multiblock/gcym/large_chemical_bath"))
             .register();
 
     public static void sayHi() {}
