@@ -29,6 +29,7 @@ import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
 import site.siredvin.gttruesteam.machines.cooling_tower.CoolingTower;
+import site.siredvin.gttruesteam.machines.industrial_coating_line.IndustrialCoatingLine;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
@@ -393,6 +394,16 @@ public class TrueSteamRecipes {
                 provider);
         pipeCasingRecipe(TrueSteamConcepts.CoolingConcept.getMaterial(), TrueSteamBlocks.CoolingInfusedPipeCasing,
                 provider);
+        casingRecipe(TrueSteamConcepts.BathingConcept.getMaterial(), TrueSteamBlocks.BathingInfusedCasing, provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.WhirlpoolCasing.getId())
+                .inputItems(TrueSteamBlocks.BathingInfusedCasing)
+                .inputFluids(GTMaterials.Water.getFluid(1000))
+                .outputItems(TrueSteamBlocks.WhirlpoolCasing)
+                .duration(200)
+                .EUt(30)
+                .circuitMeta(1)
+                .save(provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())
                 .inputItems(TagPrefix.ingot, GTMaterials.Steel)
@@ -451,6 +462,15 @@ public class TrueSteamRecipes {
                 'C', GTBlocks.STEEL_HULL.asStack(),
                 'S', CustomTags.ULV_CIRCUITS,
                 'T', new MaterialEntry(TagPrefix.pipeNormalItem, GTMaterials.Tin));
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, IndustrialCoatingLine.MACHINE.getId(),
+                IndustrialCoatingLine.MACHINE.asStack(),
+                "TST",
+                "SCS",
+                "TST",
+                'C', GTBlocks.CASING_STAINLESS_CLEAN.asStack(),
+                'S', CustomTags.HV_CIRCUITS,
+                'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.StainlessSteel));
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingBox.MACHINE.getId(), CoolingBox.MACHINE.asStack(),
                 "TST",

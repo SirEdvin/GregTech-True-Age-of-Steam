@@ -49,7 +49,12 @@
       "WebFetch(domain:minecraft.fandom.com)",
       "Bash(defuddle parse:*)",
       "Bash(xargs -I{} bash -c \"jar tf {} 2>/dev/null | grep -l \"\"LootContextParam\"\" {}\")",
-      "mcp__intellij-index__ide_search_text"
+      "mcp__intellij-index__ide_search_text",
+      "Bash(gh search *)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(git *)",
+      "Bash(python3 *)"
     ]
   },
   "hooks": {

@@ -39,6 +39,11 @@ public class TrueSteamConcepts {
             RecipeConcept.create(
                     "steam", 0xc9c9c9, GTRecipeTypes.STEAM_TURBINE_FUELS, 4, List.of(MaterialFlags.GENERATE_ROD)));
 
+    public static Concept BathingConcept = register(
+            RecipeConcept.create(
+                    "bathing", 0x1e88bf, GTRecipeTypes.CHEMICAL_BATH_RECIPES, 5,
+                    List.of(MaterialFlags.GENERATE_PLATE, MaterialFlags.GENERATE_FRAME)));
+
     public static Concept CoolingConcept = register(
             CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept), List.of(
                     MaterialFlags.GENERATE_FOIL, MaterialFlags.GENERATE_FRAME, MaterialFlags.GENERATE_PLATE),
