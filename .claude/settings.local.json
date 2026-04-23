@@ -49,7 +49,19 @@
       "WebFetch(domain:minecraft.fandom.com)",
       "Bash(defuddle parse:*)",
       "Bash(xargs -I{} bash -c \"jar tf {} 2>/dev/null | grep -l \"\"LootContextParam\"\" {}\")",
-      "mcp__intellij-index__ide_search_text"
+      "mcp__intellij-index__ide_search_text",
+      "Bash(gh search *)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(git *)",
+      "Bash(python3 *)",
+      "mcp__github__get_file_contents",
+      "Bash(magick /tmp/tile_00.png -scale 256x256 -filter point /tmp/tile_00_big.png)",
+      "Bash(magick /tmp/tile_00.png -format \"Pixel \\(0,0\\)=%[pixel:p{0,0}] \\(15,0\\)=%[pixel:p{15,0}] \\(0,15\\)=%[pixel:p{0,15}] \\(15,15\\)=%[pixel:p{15,15}] \\(7,7\\)=%[pixel:p{7,7}] \\(15,7\\)=%[pixel:p{15,7}] \\(7,15\\)=%[pixel:p{7,15}]\\\\n\" info:)",
+      "mcp__github__search_code",
+      "mcp__github__search_repositories",
+      "Bash(magick identify *)",
+      "Bash(magick /tmp/v8_2x2.png -scale 512x512 -filter point /tmp/v8_2x2_big.png)"
     ]
   },
   "hooks": {

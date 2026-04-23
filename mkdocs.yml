@@ -54,6 +54,7 @@ nav:
   - Home: index.md
   - Multiblocks:
       - Coating Shrine: multiblocks/coating-shrine.md
+      - Industrial Coating Line: multiblocks/industrial-coating-line.md
       - Infernal Boiler: multiblocks/infernal-boiler.md
       - Cooling Box: multiblocks/cooling-box.md
       - Regulated Cryo Chamber: multiblocks/rcc.md
