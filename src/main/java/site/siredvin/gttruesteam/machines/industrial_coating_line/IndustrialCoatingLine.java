@@ -40,7 +40,7 @@ public class IndustrialCoatingLine {
                     .where("I", Predicates.abilities(PartAbility.IMPORT_ITEMS))
                     .where("O", Predicates.abilities(PartAbility.EXPORT_ITEMS))
                     .where("E", Predicates.ability(PartAbility.INPUT_ENERGY)
-                            .or(Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())))
+                            .or(Predicates.blocks(TrueSteamBlocks.BathingInfusedCasing.get())))
                     .where("H", Predicates.ability(PartAbility.IMPORT_FLUIDS)
                             .or(Predicates.blocks(TrueSteamBlocks.BathingInfusedCasing.get())))
                     .where("F", TrueSteamPredicates.industrialCoatingFluidCells())

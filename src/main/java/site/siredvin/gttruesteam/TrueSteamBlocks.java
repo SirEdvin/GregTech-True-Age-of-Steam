@@ -24,6 +24,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
+import site.siredvin.gttruesteam.common.BeatingBoilerHuskBlock;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 import site.siredvin.gttruesteam.common.TSCoilType;
 import site.siredvin.gttruesteam.common.TooltipBlockItem;
@@ -131,7 +132,8 @@ public class TrueSteamBlocks {
             .build()
             .register();
 
-    public static BlockEntry<Block> BeatingBoilerHusk = GTTrueSteam.REGISTRATE.block("beating_boiler_husk", Block::new)
+    public static BlockEntry<BeatingBoilerHuskBlock> BeatingBoilerHusk = GTTrueSteam.REGISTRATE
+            .block("beating_boiler_husk", BeatingBoilerHuskBlock::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
             .addLayer(() -> RenderType::solid)
