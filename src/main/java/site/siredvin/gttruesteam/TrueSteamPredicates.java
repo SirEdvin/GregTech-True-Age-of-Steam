@@ -109,7 +109,8 @@ public class TrueSteamPredicates {
                     new ArrayList<>());
             fluidPoses.add(blockWorldState.getPos());
             return true;
-        }, () -> fluidBlockInfo).addTooltips(net.minecraft.network.chat.Component.literal("Any fluid source can be used"));
+        }, () -> fluidBlockInfo)
+                .addTooltips(net.minecraft.network.chat.Component.literal("Any fluid source can be used"));
     }
 
     public static TraceabilityPredicate optionalBeatingBoilerHusk() {

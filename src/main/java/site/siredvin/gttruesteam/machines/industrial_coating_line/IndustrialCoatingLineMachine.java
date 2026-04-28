@@ -26,9 +26,9 @@ public class IndustrialCoatingLineMachine extends WorkableElectricMultiblockMach
         super.onStructureFormed();
         var positions = getMultiblockState().getMatchContext()
                 .get(TrueSteamPredicates.INDUSTRIAL_COATING_FLUID_POS_MARK);
-        fluidCellPositions = positions instanceof List<?> list
-                ? list.stream().filter(BlockPos.class::isInstance).map(BlockPos.class::cast).toList()
-                : Collections.emptyList();
+        fluidCellPositions = positions instanceof List<?> list ?
+                list.stream().filter(BlockPos.class::isInstance).map(BlockPos.class::cast).toList() :
+                Collections.emptyList();
     }
 
     @Override

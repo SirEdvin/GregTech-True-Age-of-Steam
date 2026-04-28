@@ -5,15 +5,8 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
-import com.gregtechceu.gtceu.common.data.GTMachines;
-
-import com.lowdragmc.lowdraglib.utils.BlockInfo;
-
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Blocks;
 
 import site.siredvin.gttruesteam.GTTrueSteam;
 import site.siredvin.gttruesteam.TrueSteamBlocks;

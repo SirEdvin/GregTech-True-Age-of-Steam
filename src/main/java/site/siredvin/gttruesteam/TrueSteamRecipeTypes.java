@@ -34,9 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.gregtechceu.gtceu.api.GTValues.VA;
 import static com.gregtechceu.gtceu.api.GTValues.HV;
-
+import static com.gregtechceu.gtceu.api.GTValues.VA;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
 
 public class TrueSteamRecipeTypes {
