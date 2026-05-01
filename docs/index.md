@@ -78,4 +78,14 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     [:octicons-arrow-right-24: Read more](multiblocks/cooling-tower.md)
 
+-   ![Industrial coating line](images/industrial-coating-line.png)
+
+    ---
+
+    **Industrial coating line** &nbsp;·&nbsp; :material-lightning-bolt: HV
+
+    Industrial upgrade for coating.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/industrial-coating-line.md)
+
 </div>

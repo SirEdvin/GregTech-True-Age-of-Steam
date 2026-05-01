@@ -16,7 +16,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
 import site.siredvin.gttruesteam.api.ICoatingMachine;
 
@@ -51,7 +50,7 @@ public class CoatingFluidCondition extends RecipeCondition<CoatingFluidCondition
 
     @Override
     public Component getTooltips() {
-        return TrueSteamLang.COATING_FLUID_CONDITION;
+        return null;
     }
 
     public Fluid getRequiredFluidRecord() {

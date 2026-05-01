@@ -162,10 +162,10 @@ public class TrueSteamLang {
 
     public static MutableComponent INDUSTRIAL_COATING_LINE_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("industrial_coating_line_1"),
-            "§6Industrial upgrade of the Coating Shrine — fluid is supplied from hatches, not consumed from the center.");
+            "§6Coating with style");
     public static MutableComponent INDUSTRIAL_COATING_LINE_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("industrial_coating_line_2"),
-            "§7Each fluid cell present in the structure adds one parallel for the matching fluid. Multiple different fluids can coexist in separate cells.");
+            "§7Much desired fully automatable coating machine. Fluid is no longer consumed, each fluid cell present in the structure adds one parallel for the matching fluid. Multiple different fluids can coexist in separate cells. ");
 
     public static MutableComponent BEATING_HUSK_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("beating_husk_1"),

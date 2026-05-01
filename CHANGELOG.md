@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KubeJS plugin for generating new cooling coils
 - Fluid cooling recipes
 - Cooling tower
+- Industrial coating line
 
 ### Changed
 

@@ -396,11 +396,11 @@ public class TrueSteamRecipes {
                 provider);
         casingRecipe(TrueSteamConcepts.BathingConcept.getMaterial(), TrueSteamBlocks.BathingInfusedCasing, provider);
 
-        ASSEMBLER_RECIPES.recipeBuilder(TrueSteamBlocks.WhirlpoolCasing.getId())
+        CENTRIFUGE_RECIPES.recipeBuilder(TrueSteamBlocks.WhirlpoolCasing.getId())
                 .inputItems(TrueSteamBlocks.BathingInfusedCasing)
                 .inputFluids(GTMaterials.Water.getFluid(1000))
                 .outputItems(TrueSteamBlocks.WhirlpoolCasing)
-                .duration(200)
+                .duration(400)
                 .EUt(30)
                 .circuitMeta(1)
                 .save(provider);
@@ -465,11 +465,12 @@ public class TrueSteamRecipes {
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, IndustrialCoatingLine.MACHINE.getId(),
                 IndustrialCoatingLine.MACHINE.asStack(),
-                "TST",
+                "TIT",
                 "SCS",
-                "TST",
-                'C', GTBlocks.CASING_STAINLESS_CLEAN.asStack(),
+                "TIT",
+                'C', TrueSteamBlocks.BathingInfusedCasing.asStack(),
                 'S', CustomTags.HV_CIRCUITS,
+                'I', TrueSteamItems.InfernalCircuit.asStack(),
                 'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.StainlessSteel));
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingBox.MACHINE.getId(), CoolingBox.MACHINE.asStack(),
