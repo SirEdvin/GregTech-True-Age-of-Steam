@@ -24,6 +24,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import site.siredvin.gttruesteam.api.ICoolingCoilType;
+import site.siredvin.gttruesteam.common.BeatingBoilerHuskBlock;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 import site.siredvin.gttruesteam.common.TSCoilType;
 import site.siredvin.gttruesteam.common.TooltipBlockItem;
@@ -93,6 +94,24 @@ public class TrueSteamBlocks {
     public static BlockEntry<Block> CoolingInfusedPipeCasing = createCasingBlock("cooling_infused_pipe_casing",
             GTTrueSteam.id("block/cooling_infused_pipe_casing"));
 
+    public static BlockEntry<Block> BathingInfusedCasing = createCasingBlock("bathing_infused_casing",
+            GTTrueSteam.id("block/bathing_infused_casing"));
+
+    public static BlockEntry<Block> WhirlpoolCasing = GTTrueSteam.REGISTRATE
+            .block("whirlpool_casing", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+            .addLayer(() -> RenderType::solid)
+            .exBlockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), prov.models().cubeBottomTop(
+                    ctx.getName(),
+                    GTTrueSteam.id("block/bathing_infused_casing"),
+                    GTTrueSteam.id("block/bathing_infused_casing"),
+                    GTTrueSteam.id("block/whirlpool_casing_top"))))
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .item(BlockItem::new)
+            .build()
+            .register();
+
     public static BlockEntry<CoolingCoilBlock> COIL_FROSTBITE_MAGNALIUM = createCoolingCoil(
             TSCoilType.FROSTBITE_MAGNALIUM);
     public static BlockEntry<CoolingCoilBlock> COIL_COOLING_COMETAL = createCoolingCoil(
@@ -113,7 +132,8 @@ public class TrueSteamBlocks {
             .build()
             .register();
 
-    public static BlockEntry<Block> BeatingBoilerHusk = GTTrueSteam.REGISTRATE.block("beating_boiler_husk", Block::new)
+    public static BlockEntry<BeatingBoilerHuskBlock> BeatingBoilerHusk = GTTrueSteam.REGISTRATE
+            .block("beating_boiler_husk", BeatingBoilerHuskBlock::new)
             .initialProperties(() -> Blocks.IRON_BLOCK)
             .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
             .addLayer(() -> RenderType::solid)

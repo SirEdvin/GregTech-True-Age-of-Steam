@@ -12,14 +12,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamLang;
+import site.siredvin.gttruesteam.api.ICoatingMachine;
 
 import java.util.Objects;
 
-public class CoatingShrineMachine extends WorkableMultiblockMachine {
+public class CoatingShrineMachine extends WorkableMultiblockMachine implements ICoatingMachine {
 
     public CoatingShrineMachine(IMachineBlockEntity holder) {
         super(holder);
@@ -32,6 +34,17 @@ public class CoatingShrineMachine extends WorkableMultiblockMachine {
 
     public BlockState getFluid() {
         return Objects.requireNonNull(getLevel()).getBlockState(getFluidPos());
+    }
+
+    @Override
+    public boolean hasFluid(Fluid fluid) {
+        var fluidState = getFluid().getFluidState();
+        return !fluidState.isEmpty() && fluidState.isSource() && fluidState.is(fluid);
+    }
+
+    @Override
+    public int countFluidCells(Fluid fluid) {
+        return hasFluid(fluid) ? 1 : 0;
     }
 
     @Override

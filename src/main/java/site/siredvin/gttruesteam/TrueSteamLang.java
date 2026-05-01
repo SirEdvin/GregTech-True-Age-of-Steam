@@ -160,6 +160,13 @@ public class TrueSteamLang {
             "item_tooltip", GTTrueSteam.id("ct_2"),
             "§7Specifically crafted passive cooling tower. It has infinite parallels, 30 times more capacity, 10 times more speed than Cooling Box and just look awesome by itself.");
 
+    public static MutableComponent INDUSTRIAL_COATING_LINE_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("industrial_coating_line_1"),
+            "§6Coating with style");
+    public static MutableComponent INDUSTRIAL_COATING_LINE_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("industrial_coating_line_2"),
+            "§7Much desired fully automatable coating machine. Fluid is no longer consumed, each fluid cell present in the structure adds one parallel for the matching fluid. Multiple different fluids can coexist in separate cells. ");
+
     public static MutableComponent BEATING_HUSK_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("beating_husk_1"),
             "§4This husk is no longer empty, it is beating like a heart full of energy...");

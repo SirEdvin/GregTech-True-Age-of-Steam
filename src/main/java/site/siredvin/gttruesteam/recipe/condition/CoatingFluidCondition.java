@@ -16,9 +16,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
-import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrineMachine;
+import site.siredvin.gttruesteam.api.ICoatingMachine;
 
 @NoArgsConstructor
 public class CoatingFluidCondition extends RecipeCondition<CoatingFluidCondition> {
@@ -51,7 +50,7 @@ public class CoatingFluidCondition extends RecipeCondition<CoatingFluidCondition
 
     @Override
     public Component getTooltips() {
-        return TrueSteamLang.COATING_FLUID_CONDITION;
+        return null;
     }
 
     public Fluid getRequiredFluidRecord() {
@@ -62,10 +61,8 @@ public class CoatingFluidCondition extends RecipeCondition<CoatingFluidCondition
     @Override
     protected boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine;
-        if (machine instanceof CoatingShrineMachine coatingShrineMachine) {
-            var blockState = coatingShrineMachine.getFluid();
-            var fluidState = blockState.getFluidState();
-            return !fluidState.isEmpty() && fluidState.isSource() && fluidState.is(getRequiredFluidRecord());
+        if (machine instanceof ICoatingMachine coatingMachine) {
+            return coatingMachine.hasFluid(getRequiredFluidRecord());
         }
         return false;
     }

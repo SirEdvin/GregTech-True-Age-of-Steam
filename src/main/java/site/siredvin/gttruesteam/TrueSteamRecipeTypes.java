@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeSerializer;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
@@ -15,6 +16,7 @@ import com.gregtechceu.gtceu.integration.xei.handlers.fluid.CycleFluidEntryHandl
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -24,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.industrial_coating_line.IndustrialCoatingLine;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.spawner_extraction.SpawnerExtractionMachine;
@@ -33,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.gregtechceu.gtceu.api.GTValues.HV;
+import static com.gregtechceu.gtceu.api.GTValues.VA;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
 
 public class TrueSteamRecipeTypes {
@@ -104,40 +109,83 @@ public class TrueSteamRecipeTypes {
                     }
                 }
             });
+    public static GTRecipeType INDUSTRIAL_COATING_LINE = register("industrial_coating_line",
+            GTRecipeTypes.MULTIBLOCK, "Industrial Coating Line")
+            .setMaxIOSize(1, 1, 1, 0)
+            .setEUIO(IO.IN)
+            .setIconSupplier(() -> IndustrialCoatingLine.MACHINE.getItem().getDefaultInstance())
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+            .setUiBuilder(TrueSteamRecipeTypes::buildCoatingFluidUi);
+
     public static GTRecipeType COATING = register("coating", GTRecipeTypes.MULTIBLOCK, "Coating")
             .setMaxIOSize(1, 1, 0, 0)
             .setEUIO(IO.NONE)
             .setIconSupplier(() -> CoatingShrine.MACHINE.getItem().getDefaultInstance())
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
-            .setUiBuilder((recipe, widgetGroup) -> {
-                List<Fluid> fluids = new ArrayList<>();
-                // noinspection rawtypes
-                for (RecipeCondition condition : recipe.conditions) {
-                    if (condition instanceof CoatingFluidCondition coatingFluid) {
-                        fluids.add(coatingFluid.getRequiredFluidRecord());
-                    }
-                }
-                if (fluids.isEmpty()) {
-                    return;
-                }
-
-                int xOffset = 35;
-                int yOffset = 0;
-                int i = 0;
-                for (Fluid set : fluids) {
-                    List<FluidEntryList> slots = Collections
-                            .singletonList(FluidStackList.of(new FluidStack(set, 1000)));
-                    TankWidget tank = new TankWidget(new CycleFluidEntryHandler(slots),
-                            widgetGroup.getSize().width - 30 - xOffset, widgetGroup.getSize().height - 30 + yOffset,
-                            false, false)
-                            .setBackground(GuiTextures.FLUID_SLOT).setShowAmount(false);
-                    widgetGroup.addWidget(tank);
-
-                    i++;
-                    xOffset = 20 * (2 - (i % 3)) - 5;
-                    yOffset = 20 * (i / 3);
-                }
+            .setUiBuilder(TrueSteamRecipeTypes::buildCoatingFluidUi)
+            .onRecipeBuild((builder, consumer) -> {
+                var condition = builder.conditions.stream()
+                        .filter(c -> c instanceof CoatingFluidCondition)
+                        .map(c -> (CoatingFluidCondition) c)
+                        .findFirst().orElse(null);
+                if (condition == null) return;
+                var fluid = condition.getRequiredFluidRecord();
+                var newId = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                        GTTrueSteam.MOD_ID, builder.id.getPath() + "_industrial");
+                var newBuilder = INDUSTRIAL_COATING_LINE.recipeBuilder(newId)
+                        .duration(builder.duration)
+                        .inputFluids(new FluidStack(fluid, 2))
+                        .EUt(VA[HV])
+                        .addCondition(new CoatingFluidCondition(fluid));
+                builder.input.forEach((cap, contents) -> newBuilder.input.put(cap, new ArrayList<>(contents)));
+                builder.output.forEach((cap, contents) -> newBuilder.output.put(cap, new ArrayList<>(contents)));
+                newBuilder.save(consumer);
             });
+
+    // Shared UI builder for coating fluid conditions display
+    @SuppressWarnings("rawtypes")
+    private static void buildCoatingFluidUi(com.gregtechceu.gtceu.api.recipe.GTRecipe recipe,
+                                            com.lowdragmc.lowdraglib.gui.widget.WidgetGroup widgetGroup) {
+        List<Fluid> fluids = new ArrayList<>();
+        for (RecipeCondition condition : recipe.conditions) {
+            if (condition instanceof CoatingFluidCondition coatingFluid) {
+                fluids.add(coatingFluid.getRequiredFluidRecord());
+            }
+        }
+        if (fluids.isEmpty()) {
+            return;
+        }
+
+        // Push tank/label below the EU stat rows (Total EU + Usage line) when present
+        int extraDownShift = RecipeHelper.getRealEUt(recipe).isEmpty() ? 0 : 20;
+        int firstTankX = widgetGroup.getSize().width - 30 - 35;
+        int firstTankY = widgetGroup.getSize().height - 30 + extraDownShift;
+        Component label = TrueSteamLang.COATING_FLUID_CONDITION;
+        int labelWidth = Minecraft.getInstance().font.width(label);
+        widgetGroup.addWidget(new LabelWidget(firstTankX - labelWidth - 3, firstTankY + 5, label));
+
+        int xOffset = 35;
+        int yOffset = 0;
+        int i = 0;
+        for (Fluid set : fluids) {
+            List<FluidEntryList> slots = Collections
+                    .singletonList(FluidStackList.of(new FluidStack(set, 1000)));
+            TankWidget tank = new TankWidget(new CycleFluidEntryHandler(slots),
+                    widgetGroup.getSize().width - 30 - xOffset,
+                    widgetGroup.getSize().height - 30 + extraDownShift + yOffset,
+                    false, false)
+                    .setBackground(GuiTextures.FLUID_SLOT).setShowAmount(false);
+            widgetGroup.addWidget(tank);
+
+            i++;
+            xOffset = 20 * (2 - (i % 3)) - 5;
+            yOffset = 20 * (i / 3);
+        }
+
+        if (extraDownShift > 0) {
+            widgetGroup.setSizeHeight(widgetGroup.getSize().height + extraDownShift);
+        }
+    }
 
     public static GTRecipeType SPAWNER_EXTRACTION = register("spawner_extraction", GTRecipeTypes.MULTIBLOCK,
             "Spawner extraction")

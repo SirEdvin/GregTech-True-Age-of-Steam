@@ -26,6 +26,7 @@ public class TrueSteamPredicates {
     public static String MACHINE_TYPE_MARK = "MachineType";
     public static String MACHINE_POS_LIST_MARK = "MachinePos";
     public static String BEATING_BOILER_HUSK_MARK = "BeatingBoiler";
+    public static String INDUSTRIAL_COATING_FLUID_POS_MARK = "IndustrialCoatingFluidPos";
     public static List<Block> MV_MACHINES = new ArrayList<>();
 
     public static TraceabilityPredicate coolingCoils() {
@@ -97,6 +98,19 @@ public class TrueSteamPredicates {
                     .map(m -> new BlockInfo(m.defaultBlockState(), true))
                     .toArray(BlockInfo[]::new);
         });
+    }
+
+    public static TraceabilityPredicate industrialCoatingFluidCells() {
+        var fluidBlockInfo = new BlockInfo[] { BlockInfo.fromBlock(Blocks.LAVA) };
+        return new TraceabilityPredicate(blockWorldState -> {
+            var fluidState = blockWorldState.getBlockState().getFluidState();
+            if (fluidState.isEmpty() || !fluidState.isSource()) return false;
+            List<BlockPos> fluidPoses = blockWorldState.getMatchContext().getOrPut(INDUSTRIAL_COATING_FLUID_POS_MARK,
+                    new ArrayList<>());
+            fluidPoses.add(blockWorldState.getPos());
+            return true;
+        }, () -> fluidBlockInfo)
+                .addTooltips(net.minecraft.network.chat.Component.literal("Any fluid source can be used"));
     }
 
     public static TraceabilityPredicate optionalBeatingBoilerHusk() {

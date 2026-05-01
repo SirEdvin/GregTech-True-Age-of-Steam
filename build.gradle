@@ -126,6 +126,17 @@ legacyForge {
             programArguments.addAll('--refresh-dependencies')
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
         }
+        multiblockPreviews {
+            client()
+            sourceSet = sourceSets.main
+            programArguments.addAll('--width', '1280', '--height', '720')
+            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            systemProperty('gttruesteam.generateMultiblockPreviews', 'true')
+            systemProperty('gttruesteam.multiblockPreviewDebug', providers.gradleProperty('multiblockPreviewDebug').orElse('false').get())
+            systemProperty('gttruesteam.multiblockPreviewFilter', providers.gradleProperty('multiblockPreviewFilter').orElse('').get())
+            systemProperty('gttruesteam.multiblockPreviewFormat', providers.gradleProperty('multiblockPreviewFormat').orElse('gif').get())
+            systemProperty('gttruesteam.multiblockPreviewOutput', file('build/multiblock-previews').getAbsolutePath())
+        }
         server {
             server()
             sourceSet = sourceSets.main
@@ -214,6 +225,58 @@ tasks.named('processResources', ProcessResources).configure {
 }
 
 tasks.named('jar', Jar).configure { finalizedBy 'reobfJar' }
+tasks.named('runMultiblockPreviews').configure {
+    def useVirtualDisplay = providers.gradleProperty('multiblockPreviewVirtualDisplay')
+            .map { it.toBoolean() }
+            .orElse(true)
+    def xvfbProcess = null
+    gradle.buildFinished {
+        if (xvfbProcess != null) {
+            xvfbProcess.destroy()
+        }
+    }
+    doFirst {
+        if (!useVirtualDisplay.get()) {
+            return
+        }
+
+        def xvfbOutput = new ByteArrayOutputStream()
+        exec {
+            commandLine 'sh', '-c', 'command -v Xvfb'
+            standardOutput = xvfbOutput
+            errorOutput = new ByteArrayOutputStream()
+            ignoreExitValue = true
+        }
+        def xvfbExecutable = xvfbOutput.toString().trim()
+        if (xvfbExecutable.isEmpty()) {
+            throw new GradleException('Xvfb is required for generateMultiblockPreviews. Install xvfb, or run with -PmultiblockPreviewVirtualDisplay=false to use the active display.')
+        }
+
+        def displayNumber = (90..199).find { !file("/tmp/.X${it}-lock").exists() }
+        if (displayNumber == null) {
+            throw new GradleException('No free Xvfb display number found in range :90-:199')
+        }
+        def display = ":${displayNumber}"
+        def logFile = file("${buildDir}/multiblock-previews/xvfb.log")
+        logFile.parentFile.mkdirs()
+        xvfbProcess = new ProcessBuilder(xvfbExecutable, display, '-screen', '0', '1280x720x24', '-nolisten', 'tcp')
+                .redirectErrorStream(true)
+                .redirectOutput(logFile)
+                .start()
+        Thread.sleep(500)
+        if (!xvfbProcess.isAlive()) {
+            throw new GradleException("Xvfb failed to start; see ${logFile}")
+        }
+
+        environment 'DISPLAY', display
+        logger.lifecycle("Running multiblock previews on virtual display ${display}")
+    }
+}
+tasks.register('generateMultiblockPreviews') {
+    group = 'documentation'
+    description = 'Runs a client to generate preview screenshots for addon multiblocks.'
+    dependsOn 'runMultiblockPreviews'
+}
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
