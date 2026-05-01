@@ -6,7 +6,7 @@ First player need to build [Coating shrine](../multiblocks/coating-shrine.md). T
 
 ## MV
 
-Mv opens access to aluminum for aluminium bronze and infernal alloy. Also mv circuits, which combined with infernal alloy required to make [Infernal boiler](../multiblocks/infernal-boiler.md), first steam producing multiblock of GregTech True Age of Steam. Player would also need [Cooling box](../multiblocks/cooling-box.md) to cool maintenence fluid that is required to get infernal slug and process it into purified infernal dust.
+Mv opens access to aluminum for aluminum bronze and infernal alloy. Also, mv circuits, which combined with infernal alloy required to make [Infernal boiler](../multiblocks/infernal-boiler.md), first steam producing multiblock of GregTech True Age of Steam. Player would also need [Cooling box](../multiblocks/cooling-box.md) to cool maintenance fluid that is required to get infernal slug and process it into purified infernal dust.
 
 [Infernal boiler](../multiblocks/infernal-boiler.md) can and should be upgraded with better coils and better power hatches on the way, as it boost power production greatly.
 
@@ -31,6 +31,6 @@ Heating cometal also used to create tier 3 of single-block boilers.
 
 ## EV
 
-[Regulated Cryo Chamber](../multiblocks/rcc.md) is somewhat upgrade from Vacuum Freezer. It provides EU-free paralles and speed boost in continuous crafting.
+[Regulated Cryo Chamber](../multiblocks/rcc.md) is somewhat upgrade from Vacuum Freezer. It provides EU-free parallels and speed boost in continuous crafting.
 
-[Cooling tower](../multiblocks/cooling-tower.md) is direct upgrade from [Cooling box](../multiblocks/cooling-box.md), which is just 16 times better in terms of cooling capacity and its aggregation speed. Also 10 times faster.
+[Cooling tower](../multiblocks/cooling-tower.md) is direct upgrade from [Cooling box](../multiblocks/cooling-box.md), which is just 16 times better in terms of cooling capacity and its aggregation speed. Also, 10 times faster.
