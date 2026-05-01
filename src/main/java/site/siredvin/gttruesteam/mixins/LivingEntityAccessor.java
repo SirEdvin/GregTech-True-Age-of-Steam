@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(LivingEntity.class)
 public interface LivingEntityAccessor {
 
-    @Invoker
+    @Invoker("dropFromLootTable")
     void callDropFromLootTable(DamageSource damageSource, boolean hitByPlayer);
 
-    @Invoker
+    @Invoker("dropCustomDeathLoot")
     void callDropCustomDeathLoot(DamageSource damageSource, int looting, boolean hitByPlayer);
 }
