@@ -64,3 +64,7 @@ nav:
       - Cooling tower: multiblocks/cooling-tower.md
   - Machines:
       - Single-Block Boilers: machines/single-block-boilers.md
+  - Modpack Authors:
+      - General progression design: modpacks/progression-design.md
+      - Exploration and resources progression notes: modpacks/exploration-progression-design.md
+      - KubeJS Cooling Coils: modpacks/kubejs-cooling-coils.md
