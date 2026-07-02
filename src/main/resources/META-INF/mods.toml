@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-license = "${mod_license}"
+license = "${modLicenseVersion}"
 
 # This is a URL to e.g. your GitHub or CurseForge issues page.
 # It will appear in any crash reports this mod is directly involved in.
@@ -8,35 +8,35 @@ license = "${mod_license}"
 # A list of mods - how many allowed here is determined by the individual mod loader
 
 [[mods]]
-    modId = "${mod_id}"
+    modId = "${modIdVersion}"
     version = "${version}"
-    displayName = "${mod_name}"
-    displayURL = "${mod_url}"
+    displayName = "${modNameVersion}"
+    displayURL = "${modUrlVersion}"
     # This will be displayed as your mod's logo in the Mods panel.
      logoFile="pack.png" #optional
     # Some more fluff displayed in the Mods panel. Feel free to issue your special thanks here!
     # credits="Thanks to Mojang for making this great game" #optional
     # Some more fluff displayed in the Mods panel. Plug your stuff here!
-    authors="${mod_author}"
+    authors="${modAuthorVersion}"
     description = '''
 Mod that tries to make Steam power generation great for use!
 '''
 
-    [[dependencies.${mod_id}]]
+    [[dependencies.${modIdVersion}]]
         modId = "forge"
         mandatory = true
-        versionRange = "[${forge_version},)"
+        versionRange = "[${forgeMajorVersion},)"
         ordering = "NONE"
         side = "BOTH"
-    [[dependencies.${mod_id}]]
+    [[dependencies.${modIdVersion}]]
         modId = "minecraft"
         mandatory = true
-        versionRange = "[${minecraft_version},)"
+        versionRange = "[${minecraftVersion},)"
         ordering = "NONE"
         side = "BOTH"
-    [[dependencies.${mod_id}]]
+    [[dependencies.${modIdVersion}]]
         modId = "gtceu"
         mandatory = true
-        versionRange = "[${gtceu_version},)"
+        versionRange = "[${gtceuVersion},)"
         ordering = "AFTER"
         side = "BOTH"
