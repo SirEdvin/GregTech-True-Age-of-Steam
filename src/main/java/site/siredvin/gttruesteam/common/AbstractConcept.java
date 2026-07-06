@@ -41,6 +41,8 @@ public class AbstractConcept implements Concept {
                 .save(provider);
         var infusedBuilder = GTRecipeTypes.CHEMICAL_RECIPES.recipeBuilder(infusedAir.getResourceLocation())
                 .inputFluids(GTMaterials.Oxygen.getFluid(1000), GTMaterials.Nitrogen.getFluid(3900));
+        if (this.catalysts.size() > 1)
+            infusedBuilder.circuitMeta(this.catalysts.size() - 1);
         this.catalysts.forEach(infusedBuilder::notConsumable);
         infusedBuilder.outputFluids(infusedAir.getFluid(10000))
                 .EUt(132)

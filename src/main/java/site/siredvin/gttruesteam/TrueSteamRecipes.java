@@ -211,7 +211,7 @@ public class TrueSteamRecipes {
                 .outputItems(next.get(1).asStack())
                 .duration(100).EUt(VH[MV]).save(provider);
         ASSEMBLER_RECIPES.recipeBuilder(next.get(2).getId())
-                .inputItems(TagPrefix.plate, TrueSteamMaterials.LavaCoatedSteel, 5)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial(), 5)
                 .inputItems(next.get(1).asStack()).circuitMeta(4)
                 .outputItems(next.get(2).asStack())
                 .duration(100).EUt(VH[MV]).save(provider);
