@@ -1,6 +1,8 @@
 package site.siredvin.gttruesteam;
 
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -9,30 +11,41 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
+import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.cim.ConceptInfusionMatrix;
 import site.siredvin.gttruesteam.machines.coating_shrine.CoatingShrine;
 import site.siredvin.gttruesteam.machines.cooling_box.CoolingBox;
+import site.siredvin.gttruesteam.machines.cooling_tower.CoolingTower;
+import site.siredvin.gttruesteam.machines.industrial_coating_line.IndustrialCoatingLine;
 import site.siredvin.gttruesteam.machines.industrial_gas_pressurizer.IndustrialGasPressurizer;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoiler;
 import site.siredvin.gttruesteam.machines.regulated_cryo_chamber.RegulatedCryoChamber;
+import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
+import site.siredvin.gttruesteam.machines.spawner_extraction.SpawnerExtractionMachine;
 import site.siredvin.gttruesteam.recipe.condition.CoatingFluidCondition;
 import site.siredvin.gttruesteam.recipe.condition.CoolingCapacityCondition;
+import site.siredvin.gttruesteam.recipe.condition.SpawnerEntityTypeCondition;
+import site.siredvin.gttruesteam.recipe.condition.SpawnerMobTypeCondition;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
-import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.FLUID_COOLING;
-import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
+import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.*;
 
 public class TrueSteamRecipes {
 
@@ -61,6 +74,16 @@ public class TrueSteamRecipes {
                 "P|P", "|F|", "P|P", 'P', new MaterialEntry(TagPrefix.plate, casingMaterial),
                 'F', new MaterialEntry(TagPrefix.frameGt, casingMaterial), '|',
                 new MaterialEntry(TagPrefix.pipeNormalFluid, casingMaterial));
+
+        ASSEMBLER_RECIPES.recipeBuilder(casingOutput.getId())
+                .inputItems(TagPrefix.pipeNormalFluid, casingMaterial, 4)
+                .inputItems(TagPrefix.plate, casingMaterial, 4)
+                .inputItems(TagPrefix.frameGt, casingMaterial, 1)
+                .outputItems(casingOutput)
+                .duration(200)
+                .EUt(16)
+                .circuitMeta(1)
+                .save(provider);
     }
 
     private static void registerInfernalActivationRecipes(Consumer<FinishedRecipe> provider, Material material,
@@ -300,6 +323,38 @@ public class TrueSteamRecipes {
                 .duration(100).EUt(64).save(provider);
     }
 
+    private static void registerCoolingRecipes(Consumer<FinishedRecipe> provider) {
+        for (MaterialRegistry registry : GTCEuAPI.materialManager.getRegistries()) {
+            for (Material material : registry.getAllMaterials()) {
+                if (TagPrefix.ingotHot.doGenerateItem(material)) {
+                    var molten = GTUtil.getMoltenFluid(material);
+                    if (molten != null) {
+                        GTRecipeBuilder coolingBuilder = FLUID_COOLING.recipeBuilder(material.getName())
+                                .inputFluids(new FluidStack(molten, L))
+                                .duration(200)
+                                .outputFluids(material.getFluid(L));
+
+                        if (material.getBlastTemperature() >= 5000) {
+                            coolingBuilder
+                                    .addData(COOLING_CONSUMED,
+                                            material.getMass() * Constants.FLUID_COOLING_OVER_5K_COST_COEF)
+                                    .addCondition(new CoolingCapacityCondition(Math.toIntExact(
+                                            material.getMass() * Constants.FLUID_COOLING_OVER_5K_REQUIRED_COEF +
+                                                    Constants.BASE_FLUID_COOLING_REQUIREMENT)));
+                        } else {
+                            coolingBuilder
+                                    .addData(COOLING_CONSUMED, material.getMass() * Constants.FLUID_COOLING_COST_COEF)
+                                    .addCondition(new CoolingCapacityCondition(
+                                            Math.toIntExact(material.getMass() * Constants.FLUID_COOLING_REQUIRED_COEF +
+                                                    Constants.BASE_FLUID_COOLING_REQUIREMENT)));
+                        }
+                        coolingBuilder.save(provider);
+                    }
+                }
+            }
+        }
+    }
+
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
         registerInfernalChargingLoop(provider);
         registerBoilerRecipes(provider);
@@ -333,6 +388,22 @@ public class TrueSteamRecipes {
 
         casingRecipe(TrueSteamMaterials.CorrosionTemperedBrass, TrueSteamBlocks.SlightlyCorrosionProofCasing, provider);
         casingRecipe(TrueSteamMaterials.InfernalAlloy, TrueSteamBlocks.InfernalAlloyCasing, provider);
+        casingRecipe(TrueSteamConcepts.ExtractionConcept.getMaterial(), TrueSteamBlocks.ExtractionInfusedCasing,
+                provider);
+        pipeCasingRecipe(TrueSteamConcepts.ExtractionConcept.getMaterial(), TrueSteamBlocks.ExtractionInfusedPipeCasing,
+                provider);
+        pipeCasingRecipe(TrueSteamConcepts.CoolingConcept.getMaterial(), TrueSteamBlocks.CoolingInfusedPipeCasing,
+                provider);
+        casingRecipe(TrueSteamConcepts.BathingConcept.getMaterial(), TrueSteamBlocks.BathingInfusedCasing, provider);
+
+        CENTRIFUGE_RECIPES.recipeBuilder(TrueSteamBlocks.WhirlpoolCasing.getId())
+                .inputItems(TrueSteamBlocks.BathingInfusedCasing)
+                .inputFluids(GTMaterials.Water.getFluid(1000))
+                .outputItems(TrueSteamBlocks.WhirlpoolCasing)
+                .duration(400)
+                .EUt(30)
+                .circuitMeta(1)
+                .save(provider);
 
         TrueSteamRecipeTypes.COATING.recipeBuilder(TrueSteamMaterials.LavaCoatedSteel.getResourceLocation())
                 .inputItems(TagPrefix.ingot, GTMaterials.Steel)
@@ -392,6 +463,16 @@ public class TrueSteamRecipes {
                 'S', CustomTags.ULV_CIRCUITS,
                 'T', new MaterialEntry(TagPrefix.pipeNormalItem, GTMaterials.Tin));
 
+        VanillaRecipeHelper.addShapedRecipe(provider, true, IndustrialCoatingLine.MACHINE.getId(),
+                IndustrialCoatingLine.MACHINE.asStack(),
+                "TIT",
+                "SCS",
+                "TIT",
+                'C', TrueSteamBlocks.BathingInfusedCasing.asStack(),
+                'S', CustomTags.HV_CIRCUITS,
+                'I', TrueSteamItems.InfernalCircuit.asStack(),
+                'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.StainlessSteel));
+
         VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingBox.MACHINE.getId(), CoolingBox.MACHINE.asStack(),
                 "TST",
                 "SCS",
@@ -399,6 +480,17 @@ public class TrueSteamRecipes {
                 'C', TrueSteamBlocks.SlightlyCorrosionProofCasing.asStack(),
                 'S', CustomTags.MV_CIRCUITS,
                 'T', new MaterialEntry(TagPrefix.pipeNormalFluid, GTMaterials.Aluminium));
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, CoolingTower.MACHINE.getId(),
+                CoolingTower.MACHINE.asStack(),
+                "ICI",
+                "EFE",
+                "PPP",
+                'C', CoolingBox.MACHINE.asStack(),
+                'I', TrueSteamItems.InfernalCircuit,
+                'E', CustomTags.EV_CIRCUITS,
+                'F', new MaterialEntry(TagPrefix.frameGt, GTMaterials.TitaniumCarbide),
+                'P', new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.CoolingConcept.getMaterial()));
 
         SCANNER_RECIPES.recipeBuilder(TrueSteamItems.PurifiedInfernalDust.getId())
                 .inputItems(TagPrefix.dust, TrueSteamMaterials.InfernalSlug)
@@ -547,7 +639,52 @@ public class TrueSteamRecipes {
                 new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.CompressionConcept.getMaterial()), 'C',
                 new MaterialEntry(TagPrefix.frameGt, TrueSteamConcepts.CompressionConcept.getMaterial()));
 
+        VanillaRecipeHelper.addShapedRecipe(provider, true, SpawnerExtractionMachine.MACHINE.getId(),
+                SpawnerExtractionMachine.MACHINE.asStack(),
+                "III", "HCH", "WHW", 'I', TrueSteamItems.InfernalCircuit, 'H', CustomTags.HV_CIRCUITS, 'W',
+                new MaterialEntry(TagPrefix.plate, TrueSteamConcepts.ExtractionConcept.getMaterial()), 'C',
+                TrueSteamBlocks.ExtractionInfusedCasing.asItem().getDefaultInstance());
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder("spawner_loot_extraction")
+                .notConsumable(Ingredient.of(ItemTags.SWORDS))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .duration(200)
+                .EUt(VH[HV])
+                .addData(TrueSteamRecipeTypes.LOOT_TABLE_DROPS, true)
+                .save(provider);
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder(GTTrueSteam.id("blaze_dupicate"))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .inputFluids(GTMaterials.Blaze.getFluid(250))
+                .outputFluids(GTMaterials.Blaze.getFluid(1000))
+                .circuitMeta(1)
+                .duration(200)
+                .addCondition(new SpawnerEntityTypeCondition(EntityType.BLAZE))
+                .EUt(VH[HV])
+                .save(provider);
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder(GTTrueSteam.id("lava_dupicate"))
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .inputFluids(GTMaterials.Lava.getFluid(250))
+                .outputFluids(GTMaterials.Lava.getFluid(1000))
+                .circuitMeta(1)
+                .addCondition(new SpawnerEntityTypeCondition(EntityType.MAGMA_CUBE))
+                .duration(200)
+                .EUt(VH[LV])
+                .save(provider);
+
+        TrueSteamRecipeTypes.SPAWNER_EXTRACTION.recipeBuilder(TrueSteamMaterials.HellishWater.getResourceLocation())
+                .inputFluids(TrueSteamConcepts.ExtractionConcept.getInfusedAir().getFluid(250))
+                .inputFluids(GTMaterials.DistilledWater.getFluid(250))
+                .outputFluids(TrueSteamMaterials.HellishWater.getFluid(250))
+                .circuitMeta(2)
+                .addCondition(new SpawnerMobTypeCondition(MobType.NETHER))
+                .duration(200)
+                .EUt(VH[MV])
+                .save(provider);
+
         registerSpringRecipes(provider);
         registerCoolingCoilsRecipes(provider);
+        registerCoolingRecipes(provider);
     }
 }

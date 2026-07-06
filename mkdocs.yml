@@ -54,10 +54,17 @@ nav:
   - Home: index.md
   - Multiblocks:
       - Coating Shrine: multiblocks/coating-shrine.md
+      - Industrial Coating Line: multiblocks/industrial-coating-line.md
       - Infernal Boiler: multiblocks/infernal-boiler.md
       - Cooling Box: multiblocks/cooling-box.md
       - Regulated Cryo Chamber: multiblocks/rcc.md
       - Concept Infusion Matrix: multiblocks/concept-infusion-matrix.md
       - Industrial gas pressurizer: multiblocks/industrial-gas-pressurizer.md
+      - Spawner extraction machine: multiblocks/spawner-extraction-machine.md
+      - Cooling tower: multiblocks/cooling-tower.md
   - Machines:
       - Single-Block Boilers: machines/single-block-boilers.md
+  - Modpack Authors:
+      - General progression design: modpacks/progression-design.md
+      - Exploration and resources progression notes: modpacks/exploration-progression-design.md
+      - KubeJS Cooling Coils: modpacks/kubejs-cooling-coils.md

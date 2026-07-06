@@ -53,10 +53,6 @@ public enum TSCoilType implements StringRepresentable, ICoolingCoilType {
         this.coolingRate = coolingRate;
     }
 
-    public int getTier() {
-        return this.ordinal();
-    }
-
     @NotNull
     @Override
     public String toString() {

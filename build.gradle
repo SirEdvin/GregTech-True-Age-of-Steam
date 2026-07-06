@@ -74,6 +74,23 @@ repositories {
         }
     }
 
+    maven {
+        name = "Lat's Maven (Rhino, KubeJS)"
+        url = "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+
+    maven {
+        name = "Shedaniel maven"
+        url = "https://maven.shedaniel.me/"
+        content {
+            includeGroupAndSubgroups("me.shedaniel")
+            includeGroup("dev.architectury")
+        }
+    }
+
 }
 
 version = mod_version
@@ -108,6 +125,17 @@ legacyForge {
             sourceSet = sourceSets.main
             programArguments.addAll('--refresh-dependencies')
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+        }
+        multiblockPreviews {
+            client()
+            sourceSet = sourceSets.main
+            programArguments.addAll('--width', '1280', '--height', '720')
+            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            systemProperty('gttruesteam.generateMultiblockPreviews', 'true')
+            systemProperty('gttruesteam.multiblockPreviewDebug', providers.gradleProperty('multiblockPreviewDebug').orElse('false').get())
+            systemProperty('gttruesteam.multiblockPreviewFilter', providers.gradleProperty('multiblockPreviewFilter').orElse('').get())
+            systemProperty('gttruesteam.multiblockPreviewFormat', providers.gradleProperty('multiblockPreviewFormat').orElse('gif').get())
+            systemProperty('gttruesteam.multiblockPreviewOutput', file('build/multiblock-previews').getAbsolutePath())
         }
         server {
             server()
@@ -154,12 +182,16 @@ dependencies {
     modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     modRuntimeOnly("dev.emi:emi-forge:${emi_version}+${minecraft_version}")
     modRuntimeOnly("curse.maven:jade-324717:5390389")
+    modRuntimeOnly("curse.maven:kubejs-aisle-tool-1236291:7543948")
 
     // GregTech and dependencies
     modImplementation("com.gregtechceu.gtceu:gtceu-${minecraft_version}:${gtceu_version}:slim") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-${minecraft_version}:${ldlib_version}") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
     modImplementation("dev.toma.configuration:configuration-forge-${minecraft_version}:${configuration_version}")
+    modImplementation("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    modImplementation("dev.latvian.mods:rhino-forge:${rhino_version}")
+    modImplementation("dev.architectury:architectury-forge:${architectury_version}")
 
     modRuntimeOnly("maven.modrinth:ae2:15.2.13")
 
@@ -168,7 +200,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
-// See com.example.examplemod.mixin.DummyMixin for information about mixins
 mixin {
     add sourceSets.main, "mixins.${mod_id}.refmap.json"
     config "${mod_id}.mixins.json"
@@ -194,6 +225,58 @@ tasks.named('processResources', ProcessResources).configure {
 }
 
 tasks.named('jar', Jar).configure { finalizedBy 'reobfJar' }
+tasks.named('runMultiblockPreviews').configure {
+    def useVirtualDisplay = providers.gradleProperty('multiblockPreviewVirtualDisplay')
+            .map { it.toBoolean() }
+            .orElse(true)
+    def xvfbProcess = null
+    gradle.buildFinished {
+        if (xvfbProcess != null) {
+            xvfbProcess.destroy()
+        }
+    }
+    doFirst {
+        if (!useVirtualDisplay.get()) {
+            return
+        }
+
+        def xvfbOutput = new ByteArrayOutputStream()
+        exec {
+            commandLine 'sh', '-c', 'command -v Xvfb'
+            standardOutput = xvfbOutput
+            errorOutput = new ByteArrayOutputStream()
+            ignoreExitValue = true
+        }
+        def xvfbExecutable = xvfbOutput.toString().trim()
+        if (xvfbExecutable.isEmpty()) {
+            throw new GradleException('Xvfb is required for generateMultiblockPreviews. Install xvfb, or run with -PmultiblockPreviewVirtualDisplay=false to use the active display.')
+        }
+
+        def displayNumber = (90..199).find { !file("/tmp/.X${it}-lock").exists() }
+        if (displayNumber == null) {
+            throw new GradleException('No free Xvfb display number found in range :90-:199')
+        }
+        def display = ":${displayNumber}"
+        def logFile = file("${buildDir}/multiblock-previews/xvfb.log")
+        logFile.parentFile.mkdirs()
+        xvfbProcess = new ProcessBuilder(xvfbExecutable, display, '-screen', '0', '1280x720x24', '-nolisten', 'tcp')
+                .redirectErrorStream(true)
+                .redirectOutput(logFile)
+                .start()
+        Thread.sleep(500)
+        if (!xvfbProcess.isAlive()) {
+            throw new GradleException("Xvfb failed to start; see ${logFile}")
+        }
+
+        environment 'DISPLAY', display
+        logger.lifecycle("Running multiblock previews on virtual display ${display}")
+    }
+}
+tasks.register('generateMultiblockPreviews') {
+    group = 'documentation'
+    description = 'Runs a client to generate preview screenshots for addon multiblocks.'
+    dependsOn 'runMultiblockPreviews'
+}
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly

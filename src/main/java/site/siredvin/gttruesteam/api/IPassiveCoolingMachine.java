@@ -1,6 +1,6 @@
 package site.siredvin.gttruesteam.api;
 
-public interface ICoolingMachine {
+public interface IPassiveCoolingMachine {
 
     int getCoolingCapacity();
 }

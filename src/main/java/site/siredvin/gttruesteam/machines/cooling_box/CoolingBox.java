@@ -10,11 +10,12 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import net.minecraft.world.level.block.Blocks;
 
 import site.siredvin.gttruesteam.*;
+import site.siredvin.gttruesteam.machines.shared.cooling.PassiveCoolingMachine;
 
 public class CoolingBox {
 
     public static MultiblockMachineDefinition MACHINE = GTTrueSteam.REGISTRATE
-            .multiblock("cooling_box", CoolingBoxMachine::new)
+            .multiblock("cooling_box", PassiveCoolingMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(TrueSteamRecipeTypes.FLUID_COOLING)
             .appearanceBlock(() -> TrueSteamBlocks.SlightlyCorrosionProofCasing.get())

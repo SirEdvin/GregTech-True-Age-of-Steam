@@ -3,6 +3,8 @@ package site.siredvin.gttruesteam;
 import net.minecraft.Util;
 import net.minecraft.network.chat.MutableComponent;
 
+import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
+
 public class TrueSteamLang {
 
     public static String COIL_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("cooling_coils"));
@@ -13,6 +15,8 @@ public class TrueSteamLang {
             GTTrueSteam.id("cooling_coils_capacity"));
     public static String COIL_COOLING_REDUCTION_KEY = Util.makeDescriptionId("tooltip",
             GTTrueSteam.id("cooling_coils_reduction"));
+    public static String COIL_COOLING_PERFECT_OC_KEY = Util.makeDescriptionId("tooltip",
+            GTTrueSteam.id("cooling_coils_perfect_oc"));
     public static String COOLING_CAPACITY_MESSAGE_KEY = Util.makeDescriptionId("message",
             GTTrueSteam.id("cooling_capacity"));
     public static String COATING_CHARGES_MESSAGE_KEY = Util.makeDescriptionId("message",
@@ -31,6 +35,12 @@ public class TrueSteamLang {
     public static String COOLING_REQUIRED_KEY = Util.makeDescriptionId("condition", GTTrueSteam.id("cooling_capacity"));
     public static String INNER_RECIPE_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
             GTTrueSteam.id("inner_recipe_type"));
+    public static String SPAWNER_ENTITY_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
+            GTTrueSteam.id("spawner_entity_type"));
+    public static String SPAWNER_MOB_TYPE_CONDITION_KEY = Util.makeDescriptionId("condition",
+            GTTrueSteam.id("spawner_mob_type"));
+    public static String SPAWNER_ENTITY_DISPLAY_KEY = Util.makeDescriptionId("display",
+            GTTrueSteam.id("spawner_entity"));
 
     public static MutableComponent COATING_FLUID_CONDITION = GTTrueSteam.REGISTRATE.addLang("condition",
             GTTrueSteam.id("coating_fluid"), "Coating fluid:");
@@ -42,6 +52,10 @@ public class TrueSteamLang {
     public static MutableComponent BEATING_HUSK_CONDITION = GTTrueSteam.REGISTRATE.addLang(
             "condition", GTTrueSteam.id("beating_husk"),
             "Beating husks required");
+    public static MutableComponent SPAWNER_ENTITY_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
+            SPAWNER_ENTITY_TYPE_CONDITION_KEY, "Required mob: %s");
+    public static MutableComponent SPAWNER_MOB_TYPE_CONDITION = GTTrueSteam.REGISTRATE.addRawLang(
+            SPAWNER_MOB_TYPE_CONDITION_KEY, "Required type: %s");
 
     public static MutableComponent COATING_CHARGES = GTTrueSteam.REGISTRATE.addLang("tooltip",
             GTTrueSteam.id("coating_charges"), "Coating charges: ");
@@ -54,9 +68,14 @@ public class TrueSteamLang {
 
     public static MutableComponent COIL_COOLING_CAPACITY = GTTrueSteam.REGISTRATE.addRawLang(COIL_COOLING_CAPACITY_KEY,
             "§bBase Cooling Capacity: §f%d ηK");
+    public static MutableComponent COOLING_COIL_RCC = GTTrueSteam.REGISTRATE.addLang("tooltip",
+            GTTrueSteam.id("cooling_coil_rcc"),
+            "§6Regulared cryo chamber:");
     public static MutableComponent COIL_COOLING_REDUCTION = GTTrueSteam.REGISTRATE.addRawLang(
             COIL_COOLING_REDUCTION_KEY,
-            "§bMax duration reduction: §f%d%%");
+            "    §bMax duration reduction: §f%d%%");
+    public static MutableComponent COOLING_PERFECT_OC = GTTrueSteam.REGISTRATE.addRawLang(COIL_COOLING_PERFECT_OC_KEY,
+            "    §bPerfect OC: §fRecipe with %s or less base voltage");
     public static MutableComponent CHARGING_CYCLES = GTTrueSteam.REGISTRATE.addRawLang(CHARGING_CYCLES_KEY,
             "Charging for %d cycles");
     public static MutableComponent INFERNAL_CYCLES_UNTIL_THROTTLE = GTTrueSteam.REGISTRATE.addRawLang(
@@ -134,12 +153,39 @@ public class TrueSteamLang {
             "item_tooltip", GTTrueSteam.id("igp_3"),
             "§7Achieving perfect condition is no simple feat. It can occur on two seconds intervals are require all input hatches to be filled from 35% to 85% of its capacity. Some hatches (like ME hatches) don't have capacity, which makes perfect condition impossible.");
 
+    public static MutableComponent CT_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("ct_1"),
+            "§3Industrial-grade cooling solution");
+    public static MutableComponent CT_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("ct_2"),
+            "§7Specifically crafted passive cooling tower. It has infinite parallels, 30 times more capacity, 10 times more speed than Cooling Box and just look awesome by itself.");
+
+    public static MutableComponent INDUSTRIAL_COATING_LINE_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("industrial_coating_line_1"),
+            "§6Coating with style");
+    public static MutableComponent INDUSTRIAL_COATING_LINE_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("industrial_coating_line_2"),
+            "§7Much desired fully automatable coating machine. Fluid is no longer consumed, each fluid cell present in the structure adds one parallel for the matching fluid. Multiple different fluids can coexist in separate cells. ");
+
     public static MutableComponent BEATING_HUSK_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("beating_husk_1"),
             "§4This husk is no longer empty, it is beating like a heart full of energy...");
     public static MutableComponent BEATING_HUSK_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
             "item_tooltip", GTTrueSteam.id("beating_husk_2"),
             "§7Optional upgrade for §cInfernal boiler §7that allows better heating recipes");
+
+    public static MutableComponent SEM_TOOLTIP_1 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("sem_1"),
+            "A machine capable of extracting resources from spawners");
+    public static MutableComponent SEM_TOOLTIP_2 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("sem_3"),
+            "§7Machine has two recipe logic. For the first one, you just put sword inside and pump extraction air. Machine will produce mob loot from this spawner. Each craft takes 1 durability from the sword. Sword damage and enchantments like looting, unbreakable, sharpness affects this logic.");
+    public static MutableComponent SEM_TOOLTIP_3 = GTTrueSteam.REGISTRATE.addLang(
+            "item_tooltip", GTTrueSteam.id("sem_2"),
+            "§7Second logic is just common fluid transformation that require specific mob or mob type inside spawner. For example, if mob inside spawner belong to nether, you can transform distilled water into hellish one.");
+
+    public static MutableComponent SPAWNER_ENTITY_DISPLAY = GTTrueSteam.REGISTRATE
+            .addRawLang(SPAWNER_ENTITY_DISPLAY_KEY, "Mob inside: %s");
 
     public static MutableComponent COOLING_CAPACITY_MESSAGE = GTTrueSteam.REGISTRATE
             .addRawLang(COOLING_CAPACITY_MESSAGE_KEY, "Current cooling capacity: %d");
@@ -151,5 +197,9 @@ public class TrueSteamLang {
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.liquid_ender_air", "Liquid ender air");
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.blaze", "Liquid blaze");
         GTTrueSteam.REGISTRATE.addRawLang("block.gtceu.ice", "Liquid ice");
+
+        for (MobType mobType : MobType.values()) {
+            GTTrueSteam.REGISTRATE.addRawLang(mobType.getTranslationKey(), mobType.readableName());
+        }
     }
 }

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import site.siredvin.gttruesteam.TrueSteamLang;
 import site.siredvin.gttruesteam.TrueSteamRecipeConditions;
-import site.siredvin.gttruesteam.api.ICoolingMachine;
+import site.siredvin.gttruesteam.api.IPassiveCoolingMachine;
 
 @NoArgsConstructor
 public class CoolingCapacityCondition extends RecipeCondition<CoolingCapacityCondition> {
@@ -47,7 +47,7 @@ public class CoolingCapacityCondition extends RecipeCondition<CoolingCapacityCon
     @Override
     protected boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
         var machine = recipeLogic.machine;
-        if (machine instanceof ICoolingMachine coolingMachine) {
+        if (machine instanceof IPassiveCoolingMachine coolingMachine) {
             return coolingMachine.getCoolingCapacity() > this.requiredCapacity;
         }
         return false;

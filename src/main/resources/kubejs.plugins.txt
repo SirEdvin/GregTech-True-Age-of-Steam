@@ -1,0 +1,1 @@
+site.siredvin.gttruesteam.integrations.kubejs.Plugin

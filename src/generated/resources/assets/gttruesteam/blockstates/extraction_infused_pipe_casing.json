@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "gttruesteam:block/extraction_infused_pipe_casing"
+    },
+    "active=true": {
+      "model": "gttruesteam:block/extraction_infused_pipe_casing_active"
+    }
+  }
+}

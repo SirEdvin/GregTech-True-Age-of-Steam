@@ -15,7 +15,10 @@ public class TrueSteamConcepts {
 
     public static List<Concept> CONCEPTS = new ArrayList<>();
     public static Concept ExtractionConcept = register(
-            RecipeConcept.create("extraction", 0x113c44, GTRecipeTypes.EXTRACTOR_RECIPES, 0));
+            RecipeConcept.create(
+                    "extraction", 0x113c44, GTRecipeTypes.EXTRACTOR_RECIPES, 0,
+                    List.of(MaterialFlags.GENERATE_PLATE, MaterialFlags.GENERATE_FRAME),
+                    builder -> builder.fluidPipeProperties(500, 100, true)));
     public static Concept CompressionConcept = register(
             RecipeConcept.create(
                     "compression", 0x434d14, GTRecipeTypes.COMPRESSOR_RECIPES, 1,
@@ -36,9 +39,18 @@ public class TrueSteamConcepts {
             RecipeConcept.create(
                     "steam", 0xc9c9c9, GTRecipeTypes.STEAM_TURBINE_FUELS, 4, List.of(MaterialFlags.GENERATE_ROD)));
 
+    public static Concept BathingConcept = register(
+            RecipeConcept.create(
+                    "bathing", 0x1e88bf, GTRecipeTypes.CHEMICAL_BATH_RECIPES, 5,
+                    List.of(MaterialFlags.GENERATE_PLATE, MaterialFlags.GENERATE_FRAME)));
+
     public static Concept CoolingConcept = register(
             CombinedConcept.create("cooling", 0x107AB0, List.of(HeatingConcept, PolarizationConcept), List.of(
-                    MaterialFlags.GENERATE_FOIL)));
+                    MaterialFlags.GENERATE_FOIL, MaterialFlags.GENERATE_FRAME, MaterialFlags.GENERATE_PLATE),
+                    builder -> builder.fluidPipeProperties(200, 100, true, false, true, false)));
+
+    public static Concept DecompressionConcept = register(
+            CombinedConcept.create("decompression", 0xbcb2eb, List.of(CompressionConcept, PolarizationConcept)));
 
     public static Concept register(Concept concept) {
         CONCEPTS.add(concept);

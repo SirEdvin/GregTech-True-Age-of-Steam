@@ -4,15 +4,20 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
+import com.gregtechceu.gtceu.common.data.models.GTModels;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
-import lombok.Builder;
 import lombok.Getter;
 import site.siredvin.gttruesteam.*;
 import site.siredvin.gttruesteam.recipe.condition.BeatingHuskCondition;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.STEAM_TURBINE_FUELS;
 import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
@@ -20,27 +25,36 @@ import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILIN
 public class SteamRecord {
 
     @Getter
-    private Material basicSteam;
+    private final Material basicSteam;
 
     @Getter
-    private Material denseSteam;
+    private final Material denseSteam;
 
     @Getter
-    private Material criticalSteam;
+    private final Material criticalSteam;
 
     @Getter
-    private Material denseCriticalSteam;
+    private final Material denseCriticalSteam;
 
     @Getter
-    private SteamConfiguration configuration;
+    private final SteamConfiguration configuration;
+
+    @Getter
+    private final Supplier<Block> solidifiedDenseSteam;
+
+    @Getter
+    private final Supplier<Block> solidifiedDenseCriticalSteam;
 
     public SteamRecord(SteamConfiguration configuration, Material basicSteam, Material denseSteam,
-                       Material criticalSteam, Material denseCriticalSteam) {
+                       Material criticalSteam, Material denseCriticalSteam, Supplier<Block> solidifiedDenseSteam,
+                       Supplier<Block> solidifiedDenseCriticalSteam) {
         this.configuration = configuration;
         this.basicSteam = basicSteam;
         this.denseSteam = denseSteam;
         this.criticalSteam = criticalSteam;
         this.denseCriticalSteam = denseCriticalSteam;
+        this.solidifiedDenseSteam = solidifiedDenseSteam;
+        this.solidifiedDenseCriticalSteam = solidifiedDenseCriticalSteam;
     }
 
     private void registerPressurizeRecipe(Consumer<FinishedRecipe> provider, Material output, Material original) {
@@ -182,8 +196,30 @@ public class SteamRecord {
                                     density * Constants.STEAM_COMPRESSION_COEF * Constants.STEAM_CRITICAL_BOOST))
                             .customStill())
                     .buildAndRegister();
+            var solidifiedDenseSteam = GTTrueSteam.REGISTRATE
+                    .block("solidified_dense_" + baseName + "_steam", Block::new)
+                    .initialProperties(() -> Blocks.IRON_BLOCK)
+                    .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                    .addLayer(() -> RenderType::solid)
+                    .exBlockstate(
+                            GTModels.cubeAllModel(GTTrueSteam.id("block/fluids/fluid.dense_" + baseName + "_steam")))
+                    .item(BlockItem::new)
+                    .build()
+                    .register();
+
+            var solidifiedDenseCriticalSteam = GTTrueSteam.REGISTRATE
+                    .block("solidified_dense_" + criticalName + "_steam", Block::new)
+                    .initialProperties(() -> Blocks.IRON_BLOCK)
+                    .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                    .addLayer(() -> RenderType::solid)
+                    .exBlockstate(GTModels
+                            .cubeAllModel(GTTrueSteam.id("block/fluids/fluid.dense_" + criticalName + "_steam")))
+                    .item(BlockItem::new)
+                    .build()
+                    .register();
             return new SteamRecord(
-                    configuration, baseSteam, denseSteam, criticalSteam, denseCriticalSteam);
+                    configuration, baseSteam, denseSteam, criticalSteam, denseCriticalSteam, solidifiedDenseSteam,
+                    solidifiedDenseCriticalSteam);
         }
     }
 }

@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Recipe collision for concepts
 - Recipe for heating boilers
 
-## [0.3.0] - 2026-05-02
+## [0.3.0] - 2026-05-01
 
 ### Added
 
@@ -34,17 +34,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update for infernal boiler in form of beating husks
 - Better purified infernal dust recipes
 - Buff boilers a little and introduce tier 3 for boilers
+- Spawner extraction machine
+- KubeJS plugin for generating new cooling coils
+- Fluid cooling recipes
+- Cooling tower
+- Industrial coating line
 
 ### Changed
 
 - RCC now use EU-free parallels per coil level
 - Infernal boiler now correctly uses parallels in supreme heat state.
 - Estranged metal now produces tier 3 coils and requires cooling cometal
+- Cooling coil tooltip is not more informative
 
 ### Fixed
 
 - Endlessly escalating distilled water loop'
 - Husk of the boiler texture
+- Issue with coating shrine rendering clipping
 
 ## [0.2.3] - 2026-03-01
 

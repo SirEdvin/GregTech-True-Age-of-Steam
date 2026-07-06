@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "gttruesteam:block/extraction_infused_pipe_casing"
+  }
+}

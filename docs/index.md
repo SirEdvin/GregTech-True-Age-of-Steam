@@ -58,4 +58,34 @@ It introduces new machines and multiblocks all connected to an ultimate goal: in
 
     [:octicons-arrow-right-24: Read more](multiblocks/industrial-gas-pressurizer.md)
 
+-   ![Spawner extraction machine](images/spawner-extraction-machine.png)
+
+    ---
+
+    **Spawner extraction machine** &nbsp;·&nbsp; :material-lightning-bolt: HV
+
+    Multiblock for extracting loot from spawners and crafting hellish water.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/spawner-extraction-machine.md)
+
+-   ![Cooling tower](images/cooling-tower.png)
+
+    ---
+
+    **Cooling tower** &nbsp;·&nbsp; :material-lightning-bolt: EV
+
+    Industrial-grade passive cooling facility.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/cooling-tower.md)
+
+-   ![Industrial coating line](images/industrial-coating-line.png)
+
+    ---
+
+    **Industrial coating line** &nbsp;·&nbsp; :material-lightning-bolt: HV
+
+    Industrial upgrade for coating.
+
+    [:octicons-arrow-right-24: Read more](multiblocks/industrial-coating-line.md)
+
 </div>
