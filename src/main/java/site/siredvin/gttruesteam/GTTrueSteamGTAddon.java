@@ -51,7 +51,7 @@ public class GTTrueSteamGTAddon implements IGTAddon {
      * CustomRecipeCapabilities.PRESSURE, false);
      * public static final ContentJS<Double> PRESSURE_OUT = new ContentJS<>(NumberComponent.ANY_DOUBLE,
      * CustomRecipeCapabilities.PRESSURE, true);
-     * 
+     *
      * @Override
      * public void registerRecipeKeys(KJSRecipeKeyEvent event) {
      * event.registerKey(CustomRecipeCapabilities.PRESSURE, Pair.of(PRESSURE_IN, PRESSURE_OUT));
