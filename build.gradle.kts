@@ -82,6 +82,24 @@ githubShaking {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven("https://mvn.siredvin.site/minecraft") {
+        name = "SirEdvin's Minecraft repository"
+        content {
+            includeGroup("site.siredvin")
+            includeGroupByRegex("site\\.siredvin(\\..*)?")
+            includeGroup("net.minecraftforge")
+            includeGroup("net.minecraftforge.gradle")
+            includeGroup("net.neoforged")
+            includeGroup("net.neoforged.moddev")
+            includeGroup("org.parchmentmc")
+            includeGroup("org.parchmentmc.feather")
+            includeGroup("org.parchmentmc.data")
+            includeGroup("org.spongepowered")
+            includeGroup("org.spongepowered.gradle.vanilla")
+            includeGroup("net.fabricmc")
+            includeGroup("fabric-loom")
+        }
+    }
     maven {
         name = "GTCEu Maven"
         url = uri("https://maven.gtceu.com")
