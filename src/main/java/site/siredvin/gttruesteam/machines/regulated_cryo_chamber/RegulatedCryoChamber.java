@@ -29,7 +29,7 @@ public class RegulatedCryoChamber {
                             .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                             .or(Predicates.autoAbilities(true, false, false)))
                     .where('C', TrueSteamPredicates.coolingCoils())
-                    .where('#', Predicates.air())
+                    .where('#', Predicates.any())
                     .build())
             .tooltips(
                     TrueSteamLang.RCC_TOOLTIP_1,

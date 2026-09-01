@@ -30,7 +30,7 @@ public class SpawnerExtractionMachine {
                     .aisle("EXKXE", "EGGGE", "EGGGE", "EGGGE", "EGGGE", "EGGGE", "EXXXE")
                     .where("E", Predicates.blocks(TrueSteamBlocks.ExtractionInfusedCasing.get()))
                     .where("G", Predicates.blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where(" ", Predicates.blocks(Blocks.AIR))
+                    .where(" ", Predicates.any())
                     .where("L", Predicates.anyLamp().or(Predicates.blocks(Blocks.GLOWSTONE)))
                     .where("P", Predicates.blocks(TrueSteamBlocks.ExtractionInfusedPipeCasing.get()))
                     .where("K", Predicates.controller(Predicates.blocks(definition.get())))

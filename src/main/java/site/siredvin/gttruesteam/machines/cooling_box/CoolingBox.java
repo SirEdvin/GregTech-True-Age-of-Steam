@@ -7,8 +7,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 
-import net.minecraft.world.level.block.Blocks;
-
 import site.siredvin.gttruesteam.*;
 import site.siredvin.gttruesteam.machines.shared.cooling.PassiveCoolingMachine;
 
@@ -27,7 +25,7 @@ public class CoolingBox {
                     .aisle("CCKCC", "CSSSC", "CSSSC", "CSSSC", "CCCCC")
                     .where("C", Predicates.blocks(TrueSteamBlocks.SlightlyCorrosionProofCasing.get()))
                     .where("S", TrueSteamPredicates.coolingCoils())
-                    .where(" ", Predicates.blocks(Blocks.AIR))
+                    .where(" ", Predicates.any())
                     .where("K", Predicates.controller(Predicates.blocks(definition.get())))
                     .where("M", Predicates.ability(PartAbility.MAINTENANCE))
                     .where("O", Predicates.ability(PartAbility.EXPORT_FLUIDS))
