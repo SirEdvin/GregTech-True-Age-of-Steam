@@ -1,3 +1,4 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.publish.maven.MavenPublication
@@ -294,6 +295,10 @@ tasks.withType<JavaCompile>().configureEach {
 modPublishing {
     output.set(tasks.named<Jar>("jar").get())
     shake()
+}
+
+tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+    uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }
 
 publishingShaking {
