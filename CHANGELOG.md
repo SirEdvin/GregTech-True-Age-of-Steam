@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-09-01
+
+### Change
+
+- In most multis now insides use any instead of air predicate
+
 ## [0.3.1] - 2026-07-11
 
 ### Fixed
