@@ -37,16 +37,18 @@ public class AbstractConcept implements Concept {
         builder.inputFluids(TrueSteamMaterials.ConceptualizedSteel.getFluid(Constants.FLUID_BLOCK))
                 .outputFluids(material.getFluid(Constants.FLUID_BLOCK))
                 .EUt(256)
-                .duration(600)
-                .save(provider);
+                .duration(600);
         var infusedBuilder = GTRecipeTypes.CHEMICAL_RECIPES.recipeBuilder(infusedAir.getResourceLocation())
                 .inputFluids(GTMaterials.Oxygen.getFluid(1000), GTMaterials.Nitrogen.getFluid(3900));
-        if (this.catalysts.size() > 1)
+        if (this.catalysts.size() > 1) {
             infusedBuilder.circuitMeta(this.catalysts.size() - 1);
+            builder.circuitMeta(this.catalysts.size() - 1);
+        }
         this.catalysts.forEach(infusedBuilder::notConsumable);
         infusedBuilder.outputFluids(infusedAir.getFluid(10000))
                 .EUt(132)
                 .duration(300)
                 .save(provider);
+        builder.save(provider);
     }
 }
