@@ -40,7 +40,7 @@ public class InfernalBoiler {
                     .where('S', Predicates.heatingCoils())
                     .where('M', Predicates.abilities(PartAbility.MUFFLER))
                     .where('H', Predicates.abilities(PartAbility.MAINTENANCE))
-                    .where('#', Predicates.blocks(Blocks.AIR))
+                    .where('#', Predicates.any())
                     .where('K', TrueSteamPredicates.optionalBeatingBoilerHusk())
                     .where(' ', Predicates.any())
                     .where('E',

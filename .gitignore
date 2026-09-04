@@ -34,3 +34,4 @@ run-data/
 
 .codex
 opencode.json
+.env
