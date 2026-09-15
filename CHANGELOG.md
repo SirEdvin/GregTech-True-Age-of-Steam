@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Concept Infusion Matrix now no longer consider paused machine as running
+
 ## [0.3.3] - 2029-09-05
 
 ### Fixed
