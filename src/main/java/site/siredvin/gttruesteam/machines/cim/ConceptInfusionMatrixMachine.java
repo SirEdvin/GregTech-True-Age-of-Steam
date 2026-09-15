@@ -1,7 +1,6 @@
 package site.siredvin.gttruesteam.machines.cim;
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
-import com.gregtechceu.gtceu.api.capability.IWorkable;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -46,11 +45,8 @@ public class ConceptInfusionMatrixMachine extends WorkableElectricMultiblockMach
             var entity = level.getBlockEntity(pos);
             if (entity instanceof MetaMachineBlockEntity) {
                 var meta = ((MetaMachineBlockEntity) entity).metaMachine;
-                if (meta instanceof IWorkable workable) {
-                    if (!workable.isActive()) {
-                        return false;
-                    }
-                } else {
+                // isActive remains true while a recipe is waiting for power or other per-tick inputs.
+                if (!(meta instanceof IRecipeLogicMachine recipeMachine) || !recipeMachine.getRecipeLogic().isWorking()) {
                     return false;
                 }
             } else {
