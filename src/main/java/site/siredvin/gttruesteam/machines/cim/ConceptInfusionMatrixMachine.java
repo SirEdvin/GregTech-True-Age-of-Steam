@@ -2,7 +2,6 @@ package site.siredvin.gttruesteam.machines.cim;
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
@@ -46,7 +45,8 @@ public class ConceptInfusionMatrixMachine extends WorkableElectricMultiblockMach
             var entity = level.getBlockEntity(pos);
             if (entity instanceof MetaMachineBlockEntity) {
                 var meta = ((MetaMachineBlockEntity) entity).metaMachine;
-                if (!isInnerMachineRunning(meta)) {
+                // isActive remains true while a recipe is waiting for power or other per-tick inputs.
+                if (!(meta instanceof IRecipeLogicMachine recipeMachine) || !recipeMachine.getRecipeLogic().isWorking()) {
                     return false;
                 }
             } else {
@@ -54,11 +54,6 @@ public class ConceptInfusionMatrixMachine extends WorkableElectricMultiblockMach
             }
         }
         return true;
-    }
-
-    static boolean isInnerMachineRunning(MetaMachine machine) {
-        // isActive remains true while a recipe is waiting for power or other per-tick inputs.
-        return machine instanceof IRecipeLogicMachine recipeMachine && recipeMachine.getRecipeLogic().isWorking();
     }
 
     public String machineRecipe() {

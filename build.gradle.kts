@@ -150,9 +150,6 @@ repositories {
 }
 
 dependencies {
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:5.14.2")
-
     compileOnly("org.jetbrains:annotations:26.0.1")
 
     compileOnly(fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion"))
