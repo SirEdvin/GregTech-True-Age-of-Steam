@@ -80,7 +80,7 @@ public record RedstoneRule(String valueId, Type type, Operator operator, String 
             var rule = rules.get(i);
             if (!rule.isValid() || descriptors.get(rule.valueId()) != rule.type()) continue;
             var value = snapshot.computeIfAbsent(rule.valueId(), provider::readRedstoneValue);
-            if (value.isPresent() && rule.matches(value.get())) output ^= rule.strength();
+            if (value.isPresent() && rule.matches(value.get())) output |= rule.strength();
         }
         return output;
     }
