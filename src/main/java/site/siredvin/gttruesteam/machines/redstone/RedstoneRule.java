@@ -75,12 +75,13 @@ public record RedstoneRule(String valueId, Type type, Operator operator, String 
         var descriptors = new HashMap<String, Type>();
         provider.redstoneValues().forEach(value -> descriptors.put(value.id(), value.type()));
         var snapshot = new HashMap<String, Optional<Value>>();
+        int output = 0;
         for (int i = 0; i < Math.min(capacity, rules.size()); i++) {
             var rule = rules.get(i);
             if (!rule.isValid() || descriptors.get(rule.valueId()) != rule.type()) continue;
             var value = snapshot.computeIfAbsent(rule.valueId(), provider::readRedstoneValue);
-            if (value.isPresent() && rule.matches(value.get())) return rule.strength();
+            if (value.isPresent() && rule.matches(value.get())) output ^= rule.strength();
         }
-        return 0;
+        return output;
     }
 }

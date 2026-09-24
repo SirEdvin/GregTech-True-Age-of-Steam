@@ -17,7 +17,8 @@ public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine
     @Override
     public java.util.List<Descriptor> redstoneValues() {
         return java.util.List.of(new Descriptor("heat_counter", "gttruesteam.redstone.heat_counter", Type.INTEGER),
-                new Descriptor("heat_level", "gttruesteam.redstone.heat_level", Type.STRING));
+                new Descriptor("heat_level", "gttruesteam.redstone.heat_level", Type.STRING),
+                new Descriptor("cycles_until_throttle", "gttruesteam.redstone.cycles_until_throttle", Type.INTEGER));
     }
 
     @Override
@@ -26,6 +27,7 @@ public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine
         return switch (id) {
             case "heat_counter" -> java.util.Optional.of(Value.integer(getRecipeLogic().getCycleCounter()));
             case "heat_level" -> java.util.Optional.of(Value.string(getRecipeLogic().getHeatLevel().name()));
+            case "cycles_until_throttle" -> java.util.Optional.of(Value.integer(getRecipeLogic().getInfernalCharges()));
             default -> java.util.Optional.empty();
         };
     }

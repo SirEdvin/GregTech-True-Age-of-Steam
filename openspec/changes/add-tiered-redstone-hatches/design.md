@@ -25,7 +25,13 @@ Non-goals: No expression language, grouped AND/OR conditions, hysteresis, tolera
 
 Introduce an addon-owned provider interface and small immutable descriptor/value types under `api`, with stable string identifiers, translatable labels, and explicit INTEGER/FLOAT/STRING/BOOLEAN tags. Use signed 64-bit integers and finite Java doubles internally for the numeric contract; expose the existing boiler counter losslessly. Use explicit unavailable results, not fabricated defaults. An evaluation snapshots each referenced value once so repeated rules cannot observe different readiness values during one pass.
 
-A rule stores value identifier, expected type, operator, typed operand where applicable, and output strength. Keep the ordered evaluator separate from world/UI code. Reject incompatible types instead of coercing strings or booleans. Exact numeric equality uses numerical equality, including equal signed zero; reject NaN and infinities. Strings use exact case-sensitive equality. Alternative: generic untyped maps or expression parsing would make validation and persistence less reliable without serving this scope.
+A rule stores value identifier, expected type, operator, typed operand where applicable, and output strength. Keep the evaluator separate from world/UI code. Evaluate every valid matching rule and bitwise-XOR its strength into the output; zero contributes nothing, identical strengths cancel, and ordering has no effect. Reject incompatible types instead of coercing strings or booleans. Exact numeric equality uses numerical equality, including equal signed zero; reject NaN and infinities. Strings use exact case-sensitive equality. Alternative: generic untyped maps or expression parsing would make validation and persistence less reliable without serving this scope.
+
+### Shared observations and first-rule editing
+
+Wrap attached formed controllers with `MultiblockRedstoneObservations`. Preserve custom descriptors, then add reserved recipe progress/duration tick counts and current recipe ID for `IRecipeLogicMachine` controllers. Idle progress/duration are zero, and idle recipe ID is unavailable rather than the cached last recipe. Existing controller interfaces remain optional for these defaults. Boiler `cycles_until_throttle` delegates to its existing infernal charges. No additional patterns become eligible.
+
+Initialize the editor to slot zero and retain a valid edit/draft selection after deletion or clicks on unallocated rows. A fresh connected hatch can save its first rule directly; Add is not an invisible prerequisite.
 
 ### Tiered regular multiblock part
 
@@ -45,7 +51,7 @@ Alternative: recipe completion callbacks miss idle heat decay/readiness transiti
 
 Use existing LDLib/GTCEu modular UI conventions with a scrollable ordered list, selected-row editor, add/delete, and explicit up/down buttons. Show connection status, current values, tier capacity, validation state, and output. Operator selection follows value type; boolean checks have no operand field. Show stable heat-level tokens clearly so equality rules are understandable.
 
-Serialize ordered rules as bounded structured entries in the hatch's persisted data using supported pinned APIs. Validate the same model on load and on every server mutation. Reject invalid UI submissions atomically, retaining the previous configuration. Preserve unknown identifiers as invalid visible entries rather than rebinding by index. Drop excess tail entries on malformed over-capacity saves; disable malformed entries within the retained capacity. Bound strings to 256 characters and encoded identifiers to 128 characters; reject oversized UI payloads and safely invalidate oversized saved entries. Reordering is a validated server operation, not a client-only list change.
+Serialize ordered rules as bounded structured entries in the hatch's persisted data using supported pinned APIs. Validate the same model on load and on every server mutation. Reject invalid UI submissions atomically, retaining the previous configuration. Preserve unknown identifiers as invalid visible entries rather than rebinding by index. Drop excess tail entries on malformed over-capacity saves; disable malformed entries within the retained capacity. Bound strings to 256 characters and encoded identifiers to 128 characters; reject oversized UI payloads and safely invalidate oversized saved entries. Reordering is a validated server operation for organization only; it does not change XOR output.
 
 Alternative: independent widgets mutating fields directly risks partially valid rules and tier-limit bypass.
 

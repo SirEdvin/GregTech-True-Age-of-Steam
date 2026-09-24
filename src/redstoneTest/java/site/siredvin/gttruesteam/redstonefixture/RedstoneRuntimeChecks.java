@@ -163,7 +163,8 @@ public final class RedstoneRuntimeChecks {
                 check(!boiler.part().saveRule(t, heat(EQUAL, "1", 15)), "tier " + t + " rejects excess rules");
             });
             steps.add(() -> {
-                check(boiler.part().output() == t && pressurizer.part().output() == t, "tier " + t + " samples idle formed controllers");
+                int expected = t ^ (t % 2 == 0 ? 15 : 0);
+                check(boiler.part().output() == expected && pressurizer.part().output() == expected, "tier " + t + " XORs all rules on idle formed controllers");
                 check(!boiler.part().saveRule(0, heat(EQUAL, "1", 16)), "reject invalid output");
                 check(!boiler.part().moveRule(-1, 0) && !boiler.part().moveRule(0, 100), "reject invalid reorder");
             });
@@ -173,11 +174,11 @@ public final class RedstoneRuntimeChecks {
             pressurizer.part().saveRule(0, ready(IS_FALSE, 0));
         });
         steps.add(() -> {
-            check(boiler.part().output() == 0 && pressurizer.part().output() == 0, "matching zero terminates evaluation");
+            check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "matching zero contributes zero without terminating evaluation");
             boiler.part().moveRule(0, 1); pressurizer.part().moveRule(0, 1);
         });
         steps.add(() -> {
-            check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "reordering changes output");
+            check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "reordering preserves XOR output");
             for (Direction face : Direction.values()) {
                 check(level.getSignal(boiler.hatch(), face.getOpposite()) == (face == Direction.NORTH ? 15 : 0), "front-only signal " + face);
             }
@@ -244,8 +245,21 @@ public final class RedstoneRuntimeChecks {
             boiler.part().addedToController(unsupported.machine());
         });
         steps.add(() -> {
-            check(unsupported.machine().isFormed() && boiler.part().provider() == null && boiler.part().output() == 0,
-                    "formed unsupported controller fails safe to zero");
+            check(unsupported.machine().isFormed() && boiler.part().provider() != null && boiler.part().output() == 0,
+                    "generic controller supplies defaults but missing custom values do not match");
+            var provider = boiler.part().provider();
+            check(provider.readRedstoneValue("recipe_progress_ticks").orElseThrow().value().equals(0L) &&
+                    provider.readRedstoneValue("recipe_id").isEmpty(), "idle generic controller exposes zero progress and unavailable recipe ID");
+            var logic = ((com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine) unsupported.machine()).getRecipeLogic();
+            var recipe = com.gregtechceu.gtceu.common.data.GTRecipeTypes.BLAST_RECIPES.recipeBuilder("redstone_fixture")
+                    .duration(200).buildRawRecipe();
+            logic.setupRecipe(recipe);
+            logic.setProgress(12);
+            check(provider.readRedstoneValue("recipe_progress_ticks").orElseThrow().value().equals(12L), "generic recipe progress uses ticks");
+            check(provider.readRedstoneValue("recipe_duration_ticks").orElseThrow().value().equals((long) logic.getDuration()), "generic duration uses effective recipe duration");
+            check(provider.readRedstoneValue("recipe_id").orElseThrow().value().equals(recipe.id.toString()), "generic active recipe ID is namespaced");
+            logic.resetRecipeLogic();
+            check(provider.readRedstoneValue("recipe_id").isEmpty(), "idle cached recipe is not exposed as active");
             boiler.part().removedFromController(unsupported.machine());
             boiler.form();
         });
@@ -291,6 +305,13 @@ public final class RedstoneRuntimeChecks {
 
     private static void testValues() {
         var machine = (InfernalBoilerMachine) boiler.machine();
+        machine.getRecipeLogic().setInfernalCharges(2);
+        check(machine.readRedstoneValue("cycles_until_throttle").orElseThrow().value().equals(2L), "remaining throttle cycles exposed");
+        machine.getRecipeLogic().trackCycle(1);
+        check(machine.readRedstoneValue("cycles_until_throttle").orElseThrow().value().equals(1L), "remaining cycles decrease on recipe completion");
+        machine.getRecipeLogic().setInfernalCharges(0);
+        check(machine.readRedstoneValue("cycles_until_throttle").orElseThrow().value().equals(0L), "throttled boiler reports zero cycles");
+        machine.getRecipeLogic().setInfernalCharges(512);
         for (int heat : new int[] { 0, 32, 33, 64, 65, 128, 129, 256, 257, 512 }) {
             machine.getRecipeLogic().setCycleCounter(heat);
             check(machine.readRedstoneValue("heat_counter").orElseThrow().value().equals((long) heat), "counter " + heat);

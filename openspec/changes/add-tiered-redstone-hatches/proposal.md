@@ -8,11 +8,11 @@ Multiblock-specific operating values cannot currently drive configurable redston
 
 - Add LV, MV, HV, EV, IV, and LuV redstone output hatches, supporting respectively 1, 2, 3, 4, 5, and 6 rules.
 - Provide a controller interface exposing stable value identifiers, display labels, types, and current values: integer, float, string, and boolean.
-- Evaluate rules in UI order; the first matching rule determines output strength 0–15, including a matching zero-strength rule. No match or unavailable controller produces zero.
+- Evaluate every rule and bitwise-XOR matching output strengths 0–15. Ordering is organizational only; matching zero does not stop evaluation. No match or unavailable controller produces zero.
 - Support six numeric comparisons (<, >, ==, <=, >=, !=), exact float equality, string equality/inequality, and boolean true/false checks.
 - Provide a hatch UI for adding, editing, deleting, and reordering rules, with type-specific controls and server-side validation.
 - Emit from the oriented front face only; persist configuration and safely clear output when detached or invalidated.
-- Expose the Infernal Boiler's integer heat counter and string heat level, and the Industrial Gas Pressurizer's boolean perfect-condition state.
+- Expose the Infernal Boiler's integer heat counter, string heat level and integer cycles until throttle, and the Industrial Gas Pressurizer's boolean perfect-condition state. Add shared progress/duration in ticks and current recipe ID for any accepting recipe-capable controller.
 - Permit at most one optional hatch per supported multiblock, replacing its primary casing material in its pattern; do not require a hatch for existing structures.
 - Add tier registrations, models, localized UI/tooltips, survival recipes, and verification coverage.
 

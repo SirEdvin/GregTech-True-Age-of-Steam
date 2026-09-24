@@ -10,7 +10,7 @@ public class TrueSteamLang {
     static {
         String[][] translations = {
                 { "tooltip", "Up to %s rules; emits redstone from the front. No energy required." },
-                { "priority", "First matching rule wins; no match outputs 0." },
+                { "priority", "Matching strengths are XORed; order does not matter." },
                 { "connected", "Controller connected" }, { "disconnected", "No formed controller" },
                 { "capacity", "Rules: %s/%s    Output: %s" },
                 { "add", "Add" }, { "up", "Up" }, { "down", "Down" }, { "delete", "Delete" },
@@ -21,7 +21,11 @@ public class TrueSteamLang {
                 { "less", "<" }, { "greater", ">" }, { "equal", "=" }, { "not_equal", "≠" },
                 { "less_equal", "≤" }, { "greater_equal", "≥" }, { "is_true", "Is true" }, { "is_false", "Is false" },
                 { "heat_counter", "Heat counter" }, { "heat_level", "Heat level" },
-                { "perfect_condition", "Perfect condition" }
+                { "perfect_condition", "Perfect condition" },
+                { "cycles_until_throttle", "Cycles until throttle" },
+                { "recipe_progress_ticks", "Recipe progress (ticks)" },
+                { "recipe_duration_ticks", "Recipe duration (ticks)" },
+                { "recipe_id", "Recipe ID" }
         };
         for (var entry : translations) GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone." + entry[0], entry[1]);
     }

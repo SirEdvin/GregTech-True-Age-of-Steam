@@ -47,16 +47,20 @@ Each rule SHALL select one exposed value, a valid comparison, and an integer out
 - **WHEN** a rule has an unparseable operand, nonfinite float, missing value, or incompatible type
 - **THEN** it does not match and the UI identifies the invalid or unavailable rule
 
-### Requirement: Ordered first-match output
-Rules SHALL be evaluated top to bottom against current controller observations, with each distinct value read at most once per evaluation. The first valid matching rule SHALL set the output, including output zero, and later rules SHALL NOT affect that evaluation. No matching rule SHALL produce zero. Evaluation SHALL occur on the server at least once per server tick while attached to a loaded formed controller, independently of whether its recipe is active.
+### Requirement: Bitwise XOR output
+Every rule within tier capacity SHALL be evaluated against current controller observations, with each distinct value read at most once per evaluation. The output SHALL be the bitwise XOR of all valid matching rule strengths. Nonmatching or invalid rules SHALL contribute zero. When no rule matches, output SHALL be zero. Evaluation SHALL occur on the server at least once per server tick while attached to a loaded formed controller, independently of whether its recipe is active. Reordering SHALL NOT affect output.
 
-#### Scenario: First rule wins
-- **WHEN** the first matching rule requests strength 4 and a later matching rule requests strength 15
-- **THEN** the output is 4
+#### Scenario: Matching strengths combine
+- **WHEN** two matching rules request strengths 15 and 3
+- **THEN** the output is their bitwise XOR, 12
 
-#### Scenario: Zero terminates evaluation
-- **WHEN** the first matching rule requests strength 0 and a later matching rule requests a positive strength
-- **THEN** the output remains 0
+#### Scenario: Zero does not terminate evaluation
+- **WHEN** a matching rule requests strength 0 and another matching rule requests a positive strength
+- **THEN** the output equals the positive strength
+
+#### Scenario: Equal strengths cancel
+- **WHEN** exactly two matching rules request the same strength
+- **THEN** the output is zero
 
 #### Scenario: No match or inactive machine
 - **WHEN** no rule matches
@@ -65,9 +69,13 @@ Rules SHALL be evaluated top to bottom against current controller observations, 
 ### Requirement: Editable ordered rule UI
 The hatch UI SHALL display connection status, exposed value labels/types/current values when available, ordered rules, capacity, and current output. It SHALL support adding, editing, deleting, and moving rules up or down. Controls SHALL reflect the selected value's type. Valid edits SHALL take effect no later than the next server tick. Unattached hatches SHALL show their disconnected status and retained configuration without inventing available values.
 
-#### Scenario: Reordering changes priority
+#### Scenario: Reordering is organizational
 - **WHEN** a player moves a lower matching rule above another matching rule
-- **THEN** the visible order updates and the new first matching rule determines output by the next server tick
+- **THEN** the visible order updates and output remains unchanged
+
+#### Scenario: Save the first rule
+- **WHEN** a player opens a connected empty hatch, selects heat counter greater than 15, and saves
+- **THEN** the first rule is stored without requiring a separate Add or row-selection action
 
 #### Scenario: Invalid client mutation
 - **WHEN** a client submits an out-of-range strength, excess rule, incompatible operator, invalid operand, or out-of-bounds reorder

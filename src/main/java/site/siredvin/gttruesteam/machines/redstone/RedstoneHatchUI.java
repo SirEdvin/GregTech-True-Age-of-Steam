@@ -52,7 +52,7 @@ public class RedstoneHatchUI extends WidgetGroup {
         upButton = button(68, 124, 60, 16, key("up"), () -> move(-1));
         downButton = button(132, 124, 60, 16, key("down"), () -> move(1));
         deleteButton = button(196, 124, 96, 16, key("delete"), () -> {
-            if (machine.deleteRule(selected)) select(-1);
+            if (machine.deleteRule(selected)) select(Math.min(selected, machine.rules().size()));
         });
         addWidget(addButton);
         addWidget(upButton);
@@ -97,6 +97,7 @@ public class RedstoneHatchUI extends WidgetGroup {
         // Popups must receive input before the fields they overlap.
         addWidget(valueSelector);
         addWidget(operatorSelector);
+        select(0);
     }
 
     private TextFieldWidget boundedField(int x, int width, int maximum, Supplier<String> supplier,
@@ -159,7 +160,6 @@ public class RedstoneHatchUI extends WidgetGroup {
 
     private void select(int index) {
         if (index < 0 || index > machine.rules().size() || index >= machine.capacity()) {
-            selected = -1;
             return;
         }
         selected = index;

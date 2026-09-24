@@ -2,12 +2,12 @@
 
 ## Executed results
 
-- JUnit: 36 tests, zero failures/errors/skips; XML under `build/test-results/test`.
+- JUnit: 37 tests, zero failures/errors/skips; XML under `build/test-results/test`.
 - Final `./gradlew --no-daemon spotlessApply test build` and subsequent `spotlessCheck build`: passed.
-- `timeout 120s ./gradlew --no-daemon runData`: all providers and HashCache completed, then exit 124 from timeout. This is the project's accepted workflow; no shutdown fix is claimed. Final generation wrote zero changed files and removed no stale files.
-- Dedicated-server initial fixture: 143 passing assertions covering both multiblocks, zero/one/two hatches, all tiers/capacities, first-match output including zero, direction/rotation, a real lamp, unchanged-output notification suppression, hatch break/reform, observation thresholds/readiness, six crafting recipes, actual chunk unload/reload, and an injected association with a formed non-observable Electric Blast Furnace failing safely to zero.
+- `timeout 110s ./gradlew --no-daemon runData`: all providers and HashCache completed, then exit 124 from timeout. This is the project's accepted workflow; no shutdown fix is claimed. The revision regenerated localization for XOR and shared recipe/throttle observations.
+- Dedicated-server initial fixture: 151 passing assertions covering both multiblocks, zero/one/two hatches, all tiers/capacities, XOR output including zero contributions, direction/rotation, a real lamp, unchanged-output notification suppression, hatch break/reform, observation thresholds/readiness, six crafting recipes, actual chunk unload/reload, and generic recipe defaults on an injected association with a formed Electric Blast Furnace without the custom observation interface.
 - Separate world-restart fixture: 3 passing assertions covering saved rules and recomputed output.
-- Final client fixture: 20 passing assertions using real UI clicks/typing for add/reorder/delete, zero output, invalid strength rejection, string/boolean selection, disconnect/reconnect and oversized strength-packet rejection. All six item models resolve; screenshots show the localized six-slot editor.
+- Final client fixture: 22 passing assertions using real UI clicks/typing for add/reorder/delete, zero output, invalid strength rejection, string/boolean selection, disconnect/reconnect, oversized strength-packet rejection, and saving heat_counter > 15 on a fresh hatch without Add. All six item models resolve; screenshots show the localized six-slot editor.
 
 ## Pinned integration audit
 
@@ -30,7 +30,7 @@ Fixtures are opt-in and excluded from release artifacts. Use only the disposable
 3. `timeout 180s ./gradlew --no-daemon -PredstoneTest -PredstoneTestPhase=reload runServer`
 4. Copy `run-redstone-test/world-extra/` into a fresh `run-redstone-test/saves/redstone-client/`, keeping `run-redstone-test/redstone-positions.json`. Set TMPDIR to an existing scratch directory, then run `timeout 180s xvfb-run -a ./gradlew --no-daemon -PredstoneTest -PredstoneTestPhase=client runClient`.
 
-Server reports: `run-redstone-test/redstone-initial.json` and `redstone-reload.json`. Client report/screenshots: `$TMPDIR/redstone-client/`. This session's TMPDIR is `/home/siredvin/.hermes/profiles/albina/cache/scratch`; logs there include `redstone-runtime.log`, `redstone-client.log`, `redstone-rundata-final.log`, and `redstone-final-build.log`.
+Server reports: `run-redstone-test/redstone-initial.json` and `redstone-reload.json`. Client report/screenshots: `$TMPDIR/redstone-client/`. This session's TMPDIR is `/home/siredvin/.hermes/profiles/albina/cache/scratch`; logs there include `redstone-runtime.log`, `redstone-client.log`, `redstone-rundata-revision.log`, and `redstone-final-build.log`.
 
 Artifact: `build/libs/gttruesteam-forge-1.20.1-0.3.3.jar` (development build, no version bump).
 
@@ -38,4 +38,4 @@ Artifact: `build/libs/gttruesteam-forge-1.20.1-0.3.3.jar` (development build, no
 
 The final client fixture renders all six tier items beside the shared LuV editor; the inspected screenshot shows textured casings and front overlays without missing-texture placeholders. Integer/string/boolean screens use the same editor. Float behavior is unit-tested because neither initial controller exposes a float. Pattern exclusions and unchanged recipe/readiness mechanics are additionally checked by source review. These are focused integration checks, not an exhaustive modpack playtest.
 
-No commits, pushes or publication have been performed.
+Initial implementation was published in PR #13. Follow-up verification covers the requested XOR/default-observation/save-editor revision.

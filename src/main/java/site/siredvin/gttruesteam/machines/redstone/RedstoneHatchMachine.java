@@ -71,7 +71,7 @@ public class RedstoneHatchMachine extends TieredPartMachine implements IFancyUIM
         if (chunk == null) return null;
         var machine = MetaMachine.getMachine(chunk, pos);
         if (machine instanceof IMultiController controller && controller.isFormed() &&
-                !machine.isInValid() && machine instanceof RedstoneObservable observable) return observable;
+                !machine.isInValid()) return new MultiblockRedstoneObservations(controller);
         return null;
     }
 

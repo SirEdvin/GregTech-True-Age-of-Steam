@@ -123,14 +123,15 @@ class RedstoneRuleTest {
     }
 
     @Test
-    void firstMatchIncludesZeroAndReordering() {
+    void xorIncludesEveryMatchAndIgnoresOrdering() {
         var provider = provider(Type.INTEGER, Optional.of(Value.integer(5)), new AtomicInteger());
         var low = rule(Type.INTEGER, GREATER, "0", 4);
         var high = rule(Type.INTEGER, EQUAL, "5", 15);
         var zero = rule(Type.INTEGER, EQUAL, "5", 0);
-        assertEquals(4, RedstoneRule.evaluate(List.of(low, high), 6, provider));
-        assertEquals(15, RedstoneRule.evaluate(List.of(high, low), 6, provider));
-        assertEquals(0, RedstoneRule.evaluate(List.of(zero, high), 6, provider));
+        assertEquals(4 ^ 15, RedstoneRule.evaluate(List.of(low, high), 6, provider));
+        assertEquals(4 ^ 15, RedstoneRule.evaluate(List.of(high, low), 6, provider));
+        assertEquals(15, RedstoneRule.evaluate(List.of(zero, high), 6, provider));
+        assertEquals(0, RedstoneRule.evaluate(List.of(high, high), 6, provider));
         assertEquals(0, RedstoneRule.evaluate(List.of(), 6, provider));
         assertEquals(0, RedstoneRule.evaluate(List.of(high), 6, null));
     }
@@ -146,6 +147,15 @@ class RedstoneRuleTest {
         assertEquals(0, RedstoneRule.evaluate(rules, capacity, provider));
         assertEquals(1, reads.get());
         assertEquals(capacity, RedstoneRuleCodec.decode(RedstoneRuleCodec.encode(rules), capacity).size());
+    }
+
+    @Test
+    void allMatchingRulesShareOneSnapshot() {
+        var reads = new AtomicInteger();
+        var provider = provider(Type.INTEGER, Optional.of(Value.integer(5)), reads);
+        assertEquals(15 ^ 3, RedstoneRule.evaluate(List.of(rule(Type.INTEGER, EQUAL, "5", 0),
+                rule(Type.INTEGER, EQUAL, "5", 15), rule(Type.INTEGER, EQUAL, "5", 3)), 6, provider));
+        assertEquals(1, reads.get());
     }
 
     @Test

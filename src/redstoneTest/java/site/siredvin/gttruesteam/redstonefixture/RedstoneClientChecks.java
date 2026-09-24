@@ -101,15 +101,15 @@ public final class RedstoneClientChecks {
                 }
                 case 3 -> { edit(4, "0"); edit(190, "3"); }
                 case 4 -> click(250, 174);
-                case 5 -> server(() -> check(part(boilerHatch).rules().size() == 2 && part(boilerHatch).output() == 11, "UI adds lower priority rule"));
+                case 5 -> server(() -> check(part(boilerHatch).rules().size() == 2 && part(boilerHatch).output() == (11 ^ 3), "UI adds rule contributing to XOR"));
                 case 6 -> click(80, 130);
-                case 7 -> { screenshot("after-up.png"); server(() -> check(part(boilerHatch).output() == 3, "UI up control changes first-match output: " + part(boilerHatch).rules() + " output=" + part(boilerHatch).output())); }
+                case 7 -> { screenshot("after-up.png"); server(() -> check(part(boilerHatch).output() == (11 ^ 3), "UI reorder preserves XOR output")); }
                 case 8 -> { screenshot("ordered.png"); edit(190, "16"); }
                 case 9 -> click(250, 174);
-                case 10 -> server(() -> check(part(boilerHatch).rules().get(0).strength() == 3 && part(boilerHatch).output() == 3, "UI rejects strength 16 atomically"));
+                case 10 -> server(() -> check(part(boilerHatch).rules().get(0).strength() == 3 && part(boilerHatch).output() == (11 ^ 3), "UI rejects strength 16 atomically"));
                 case 11 -> edit(190, "0");
                 case 12 -> click(250, 174);
-                case 13 -> server(() -> check(part(boilerHatch).output() == 0, "UI saves matching zero output"));
+                case 13 -> server(() -> check(part(boilerHatch).output() == 11, "UI matching zero leaves other contributions unchanged"));
                 case 14 -> click(220, 130);
                 case 15 -> server(() -> check(part(boilerHatch).rules().size() == 1 && part(boilerHatch).output() == 11, "UI delete restores next rule"));
                 case 16 -> click(12, 36);
@@ -143,6 +143,25 @@ public final class RedstoneClientChecks {
                 }
                 case 34 -> click(250, 174);
                 case 35 -> server(() -> check(part(gasHatch).rules().get(0).strength() == 7, "oversized strength packet is rejected rather than truncated to 15"));
+                case 36 -> server(() -> {
+                    while (!part(boilerHatch).rules().isEmpty()) part(boilerHatch).deleteRule(0);
+                    open(boilerHatch);
+                });
+                case 37 -> choose(4, 0);
+                case 38 -> choose(190, 1);
+                case 39 -> { edit(4, "15"); edit(190, "15"); }
+                case 40 -> click(250, 174);
+                case 41 -> server(() -> {
+                    check(part(boilerHatch).rules().size() == 1 &&
+                            part(boilerHatch).rules().get(0).operator() == site.siredvin.gttruesteam.machines.redstone.RedstoneRule.Operator.GREATER &&
+                            part(boilerHatch).rules().get(0).operand().equals("15"), "fresh hatch saves heat_counter > 15 without hidden Add prerequisite");
+                });
+                case 42 -> click(220, 130);
+                case 43 -> choose(190, 1);
+                case 44 -> edit(4, "15");
+                case 45 -> click(250, 174);
+                case 46 -> server(() -> check(part(boilerHatch).rules().size() == 1 &&
+                        part(boilerHatch).rules().get(0).operand().equals("15"), "editor saves again after deleting the last rule"));
                 default -> finish(null);
             }
         } catch (Throwable failure) { finish(failure); }

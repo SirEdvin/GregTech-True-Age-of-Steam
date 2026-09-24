@@ -8,14 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- LV–LuV Redstone Hatches with 1–6 ordered rules, configurable output strengths from 0 to 15, and front-face-only output without energy consumption. The first matching rule wins, including a matching zero; no match or disconnected controller outputs zero.
-- Infernal Boilers expose integer `heat_counter` and string `heat_level` (`NONE`, `BASIC`, `ADVANCED`, `PROGRESSIVE`, `SUPREME`). Industrial Gas Pressurizers expose boolean `perfect_condition` with true/false checks.
+- LV–LuV Redstone Hatches with 1–6 rules, configurable output strengths from 0 to 15, and front-face-only output without energy consumption. All matching strengths are combined with bitwise XOR; order does not matter. No match or disconnected controller outputs zero.
+- Infernal Boilers expose integer `heat_counter`, integer `cycles_until_throttle`, and string `heat_level` (`NONE`, `BASIC`, `ADVANCED`, `PROGRESSIVE`, `SUPREME`). Industrial Gas Pressurizers expose boolean `perfect_condition` with true/false checks.
+- Any accepting recipe-capable multiblock exposes `recipe_progress_ticks`, `recipe_duration_ticks`, and `recipe_id`. Idle progress/duration are zero; an idle recipe ID is unavailable.
 - Each supported multiblock accepts one optional redstone hatch in a primary casing position (Infernal Alloy Casing or Clean Stainless Steel Casing, including existing casing alternatives). Other blocks and mandatory hatch positions are unchanged.
 - Hatch editors support numeric comparisons, case-sensitive string equality/inequality, and rule reordering. Craft each tier using its machine hull, circuit, and a comparator.
 
 ### Fixed
 
 - Concept Infusion Matrix now no longer consider paused machine as running
+- Fresh redstone hatch editors can save the first rule directly without requiring Add first.
 
 ## [0.3.3] - 2029-09-05
 
