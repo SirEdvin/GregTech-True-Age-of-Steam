@@ -7,6 +7,19 @@ import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
 
 public class TrueSteamLang {
 
+    static {
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tier", "Heat hatch tier: %s");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.coefficient", "Nominal sending coefficient: %s J/(K × update)");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tooltip", "Bidirectional heat via front-face computer heat vents. Actual transfer is limited by donor energy and equilibrium, not receiving tier.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.temperature", "Temperature: %s K");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.stored", "Stored heat: %s J");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.capacity", "Safe capacity: %s J");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.maximum", "Maximum safe temperature: %s K");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.melting", "DANGER: Melting! Failure in %s game ticks");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.unavailable", "Heat controller unavailable");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.invalid", "Invalid thermal configuration");
+    }
+
     public static String COIL_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("cooling_coils"));
     public static String MACHINE_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("machine"));
     public static String BEATING_HUSK_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("beating_husk"));

@@ -1,6 +1,7 @@
 package site.siredvin.gttruesteam;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -11,6 +12,7 @@ import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.model.machine.overlays.WorkableOverlays;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.model.builder.MachineModelBuilder;
@@ -22,8 +24,12 @@ import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import site.siredvin.gttruesteam.common.BoilerLevel;
+import site.siredvin.gttruesteam.machines.parts.HeatHatchMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamLiquidBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolarBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolidBoilerMachine;
@@ -38,6 +44,20 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.VENT_OVER
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.addWorkableOverlays;
 
 public class TrueSteamMachines {
+
+    public static final List<MachineDefinition> HEAT_HATCHES = List.of(GTValues.HV, GTValues.EV, GTValues.IV, GTValues.LuV)
+            .stream().map(tier -> GTTrueSteam.REGISTRATE
+                    .machine(GTValues.VN[tier].toLowerCase(java.util.Locale.ROOT) + "_heat_hatch",
+                            holder -> new HeatHatchMachine(holder, tier))
+                    .langValue(GTValues.VN[tier] + " Heat Hatch")
+                    .tier(tier)
+                    .rotationState(RotationState.ALL)
+                    .abilities(TrueSteamPartAbilities.HEAT)
+                    .tooltips(Component.translatable("gttruesteam.heat.coefficient", HeatHatchMachine.coefficient(tier)),
+                            Component.translatable("gttruesteam.heat.tooltip"),
+                            Component.translatable("gtceu.part_sharing.disabled"))
+                    .overlayTieredHullModel(GTCEu.id("block/machine/part/data_access_hatch"))
+                    .register()).toList();
 
     public static final ResourceLocation LC_STEAM_HULL_MODEL = GTTrueSteam.id("block/lava_coated_boiler");
     public static final ResourceLocation IA_STEAM_HULL_MODEL = GTTrueSteam.id("block/infernal_alloy_boiler");
@@ -89,6 +109,16 @@ public class TrueSteamMachines {
             TrueSteamMaterials.InfernalAlloy, 16 * FluidType.BUCKET_VOLUME, "Infernal alloy drum");
 
     public static void sayHi() {}
+
+    @Mod.EventBusSubscriber(modid = GTTrueSteam.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static final class HeatCreativeContents {
+        @SubscribeEvent
+        public static void addHatches(BuildCreativeModeTabContentsEvent event) {
+            if (event.getTab() == GTCreativeModeTabs.MACHINE.get()) {
+                HEAT_HATCHES.forEach(definition -> event.accept(definition.asStack()));
+            }
+        }
+    }
 
     public static ModelFile steamHullModel(BlockModelProvider models, BoilerLevel boilerLevel) {
         switch (boilerLevel) {
