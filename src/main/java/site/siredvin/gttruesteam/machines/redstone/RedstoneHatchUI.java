@@ -1,10 +1,12 @@
 package site.siredvin.gttruesteam.machines.redstone;
 
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
 import com.lowdragmc.lowdraglib.gui.widget.SelectorWidget;
 import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -41,13 +43,16 @@ public class RedstoneHatchUI extends WidgetGroup {
     public RedstoneHatchUI(RedstoneHatchMachine machine) {
         super(0, 0, 300, 228);
         this.machine = machine;
-        addWidget(new LabelWidget(4, 2, () -> text(machine.provider() == null ? "disconnected" : "connected")));
-        addWidget(new LabelWidget(4, 14, () -> text("capacity", machine.rules().size(), machine.capacity(), machine.output())));
-        for (int i = 0; i < machine.capacity(); i++) {
-            int index = i;
-            addWidget(button(4, 30 + i * 15, 22, 14, Integer.toString(i + 1), () -> select(index)));
-            addWidget(new LabelWidget(30, 32 + i * 15, () -> summary(index)));
-        }
+        setBackground(GuiTextures.BACKGROUND_INVERSE);
+        addWidget(new DraggableScrollableWidgetGroup(4, 4, 292, 116).setBackground(GuiTextures.DISPLAY)
+                .addWidget(new ComponentPanelWidget(4, 5, this::addRuleDisplay)
+                        .setMaxWidthLimit(276)
+                        .clickHandler((data, click) -> {
+                            if (click.isRemote) return;
+                            try {
+                                select(Integer.parseInt(data));
+                            } catch (NumberFormatException ignored) {}
+                        })));
         addButton = button(4, 124, 60, 16, key("add"), () -> select(machine.rules().size()));
         upButton = button(68, 124, 60, 16, key("up"), () -> move(-1));
         downButton = button(132, 124, 60, 16, key("down"), () -> move(1));
@@ -59,7 +64,7 @@ public class RedstoneHatchUI extends WidgetGroup {
         addWidget(downButton);
         addWidget(deleteButton);
         var valueSelector = new SelectorWidget(4, 144, 182, 18, List.of(), -1)
-                .setButtonBackground(ResourceBorderTexture.BUTTON_COMMON)
+                .setButtonBackground(GuiTextures.BUTTON)
                 .setCandidatesSupplier(() -> descriptors().stream().map(RedstoneObservable.Descriptor::labelKey).toList())
                 .setSupplier(() -> descriptors().stream().filter(value -> value.id().equals(valueId))
                         .map(RedstoneObservable.Descriptor::labelKey).findFirst().orElse(valueId))
@@ -73,7 +78,7 @@ public class RedstoneHatchUI extends WidgetGroup {
                     });
                 });
         var operatorSelector = new SelectorWidget(190, 144, 102, 18, List.of(), -1)
-                .setButtonBackground(ResourceBorderTexture.BUTTON_COMMON)
+                .setButtonBackground(GuiTextures.BUTTON)
                 .setCandidatesSupplier(() -> Arrays.stream(RedstoneRule.Operator.values()).filter(op -> op.supports(type))
                         .map(op -> key(op.name().toLowerCase(Locale.ROOT))).toList())
                 .setSupplier(() -> operator == null ? "" : key(operator.name().toLowerCase(Locale.ROOT)))
@@ -91,13 +96,26 @@ public class RedstoneHatchUI extends WidgetGroup {
             if (!isRemote() && value.length() <= 2) strength = value;
         }).setHoverTooltips(key("strength")));
         addWidget(button(238, 166, 54, 18, key("save"), this::save));
-        addWidget(new LabelWidget(4, 190, this::currentValue));
-        addWidget(new LabelWidget(4, 204, () -> message));
-        addWidget(new LabelWidget(4, 216, key("priority")));
+        addWidget(new DraggableScrollableWidgetGroup(4, 188, 292, 36).setBackground(GuiTextures.DISPLAY)
+                .addWidget(new ComponentPanelWidget(4, 3, lines -> {
+                    lines.add(Component.literal(currentValue()));
+                    lines.add(Component.literal(message));
+                    lines.add(Component.translatable(key("priority")));
+                }).setSpace(1).setMaxWidthLimit(276)));
         // Popups must receive input before the fields they overlap.
         addWidget(valueSelector);
         addWidget(operatorSelector);
         select(0);
+    }
+
+    private void addRuleDisplay(List<Component> lines) {
+        lines.add(Component.translatable(key(machine.provider() == null ? "disconnected" : "connected")));
+        lines.add(Component.translatable(key("capacity"), machine.rules().size(), machine.capacity(), machine.output()));
+        for (int index = 0; index < machine.capacity(); index++) {
+            var row = Component.literal("[" + (index + 1) + "]");
+            lines.add(ComponentPanelWidget.withButton(row, Integer.toString(index)).copy()
+                    .append(Component.literal(" " + summary(index))));
+        }
     }
 
     private TextFieldWidget boundedField(int x, int width, int maximum, Supplier<String> supplier,
@@ -129,7 +147,7 @@ public class RedstoneHatchUI extends WidgetGroup {
 
     private ButtonWidget button(int x, int y, int width, int height, String label, Runnable action) {
         return new ButtonWidget(x, y, width, height,
-                new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON, new TextTexture(label)), click -> {
+                new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture(label)), click -> {
                     if (!click.isRemote) action.run();
                 });
     }

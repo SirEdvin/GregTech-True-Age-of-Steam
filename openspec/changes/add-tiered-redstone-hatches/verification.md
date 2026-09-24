@@ -13,6 +13,8 @@
 
 Dependencies remain unchanged: GTCEu 7.5.1 and LDLib 1.0.40.b.
 
+UI consistency follow-up: compared `MaintenanceHatchPartMachine.createUIWidget()` (configurable branch) and `IDisplayUIMachine.createUI()`. Replaced generic labels/row buttons with native scrollable display/component panels and GTCEu background/button textures. The refreshed client fixture passed all 22 assertions; the inspected screenshot shows recessed display panels with wrapped clickable rule text. Build/tests and formatting also passed for this follow-up.
+
 - Lifecycle: `TieredPartMachine`, `controllerPositions`, `removedFromController`, `onLoad`, `onUnload`, `onRotated`, `subscribeServerTick`.
 - Non-loading lookup: `ServerChunkCache.getChunkNow` and `MetaMachine.getMachine(chunk, pos)`.
 - Output: `IRedstoneSignalMachine.updateSignal`, `getOutputSignal`, `getOutputDirectSignal`, `canConnectRedstone`. Minecraft query directions oppose the emitting face. Notify only on output change or rotation.
