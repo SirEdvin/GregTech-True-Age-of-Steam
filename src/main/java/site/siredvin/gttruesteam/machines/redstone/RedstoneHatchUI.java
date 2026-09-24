@@ -17,18 +17,20 @@ public class RedstoneHatchUI extends WidgetGroup {
     private int lastCount = -1;
 
     public RedstoneHatchUI(RedstoneHatchMachine machine) {
-        super(0, 0, 320, 218);
+        super(0, 0, 376, 218);
         this.machine = machine;
         setBackground(GuiTextures.BACKGROUND_INVERSE);
-        addWidget(new WidgetGroup(4, 4, 312, 28)
+        addWidget(new WidgetGroup(4, 4, 368, 28)
                 .addWidget(new ComponentPanelWidget(4, 4, lines -> {
                     lines.add(Component.translatable("gttruesteam.redstone." +
                             (machine.provider() == null ? "disconnected" : "connected")));
                     lines.add(Component.translatable("gttruesteam.redstone.capacity", machine.rules().size(),
                             machine.capacity(), machine.output()));
-                }).setMaxWidthLimit(296)).setBackground(GuiTextures.DISPLAY));
-        rows = new WidgetGroup(0, 0, 304, RedstoneRuleWidget.HEIGHT);
-        var viewport = new DraggableScrollableWidgetGroup(4, 36, 312, 178).setYScrollBarWidth(4)
+                }).setMaxWidthLimit(352)).setBackground(GuiTextures.DISPLAY));
+        addWidget(new ComponentPanelWidget(20, 37, lines -> lines.add(Component.translatable("gttruesteam.redstone.condition"))));
+        addWidget(new ComponentPanelWidget(262, 37, lines -> lines.add(Component.translatable("gttruesteam.redstone.output"))));
+        rows = new WidgetGroup(0, 0, 360, RedstoneRuleWidget.HEIGHT);
+        var viewport = new DraggableScrollableWidgetGroup(4, 50, 368, 164).setYScrollBarWidth(4)
                 .setYBarStyle(GuiTextures.BACKGROUND_INVERSE, GuiTextures.BUTTON);
         editors = new RedstoneRuleWidget[machine.capacity()];
         // Earlier rows' dropdowns must draw and receive clicks above later rows.
@@ -43,7 +45,7 @@ public class RedstoneHatchUI extends WidgetGroup {
     private void showRows(int saved) {
         int count = Math.min(saved + 1, machine.capacity());
         for (int index = 0; index < editors.length; index++) editors[index].setVisible(index < count);
-        rows.setSize(new Size(304, count * RedstoneRuleWidget.HEIGHT + 40));
+        rows.setSize(new Size(360, count * RedstoneRuleWidget.HEIGHT + 70));
     }
 
     @Override

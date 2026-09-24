@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 /** An independent draft and atomic Save action for one rule. */
 public class RedstoneRuleWidget extends WidgetGroup {
-    public static final int HEIGHT = 70;
+    public static final int HEIGHT = 40;
     private final RedstoneHatchMachine machine;
     private final int index;
     private final DraggableScrollableWidgetGroup viewport;
@@ -43,14 +43,13 @@ public class RedstoneRuleWidget extends WidgetGroup {
     private int lastFlags = -1;
 
     public RedstoneRuleWidget(RedstoneHatchMachine machine, int index, DraggableScrollableWidgetGroup viewport) {
-        super(0, index * HEIGHT, 304, HEIGHT);
+        super(0, index * HEIGHT, 360, HEIGHT);
         this.machine = machine;
         this.index = index;
         this.viewport = viewport;
-        setBackground(GuiTextures.BACKGROUND_INVERSE);
         refresh();
-        addWidget(new ComponentPanelWidget(5, 8, lines -> lines.add(Component.literal(Integer.toString(index + 1)))));
-        var valueSelector = selector(24, 168)
+        addWidget(new ComponentPanelWidget(3, 8, lines -> lines.add(Component.literal(Integer.toString(index + 1)))));
+        var valueSelector = selector(16, 112)
                 .setButtonBackground(GuiTextures.BUTTON)
                 .setCandidatesSupplier(() -> descriptors().stream().map(RedstoneObservable.Descriptor::labelKey).toList())
                 .setSupplier(() -> descriptors().stream().filter(value -> value.id().equals(valueId))
@@ -65,7 +64,7 @@ public class RedstoneRuleWidget extends WidgetGroup {
                         message = "";
                     });
                 });
-        var operatorSelector = selector(196, 100)
+        var operatorSelector = selector(132, 40)
                 .setButtonBackground(GuiTextures.BUTTON)
                 .setCandidatesSupplier(() -> Arrays.stream(RedstoneRule.Operator.values()).filter(op -> op.supports(type))
                         .map(op -> key(op.name().toLowerCase(Locale.ROOT))).toList())
@@ -75,20 +74,21 @@ public class RedstoneRuleWidget extends WidgetGroup {
                     Arrays.stream(RedstoneRule.Operator.values()).filter(op -> op.supports(type) &&
                             key(op.name().toLowerCase(Locale.ROOT)).equals(label)).findFirst().ifPresent(op -> operator = op);
                 });
-        operandField = field(24, 168, 256, () -> operand, value -> operand = value);
+        operandField = field(176, 64, 256, () -> operand, value -> operand = value);
         operandField.setHoverTooltips(key("operand"));
         addWidget(operandField);
-        addWidget(field(196, 36, 2, () -> strength, value -> strength = value).setHoverTooltips(key("strength")));
-        saveButton = button(236, 36, key("save"), this::save);
-        deleteButton = button(276, 20, "×", () -> {
+        addWidget(new ComponentPanelWidget(244, 8, lines -> lines.add(Component.literal("→"))));
+        addWidget(field(258, 28, 2, () -> strength, value -> strength = value).setHoverTooltips(key("strength")));
+        saveButton = button(290, 40, key("save"), this::save);
+        deleteButton = button(334, 20, "×", () -> {
             if (machine.deleteRule(index)) refresh();
         });
         deleteButton.setHoverTooltips(key("delete"));
         addWidget(saveButton);
         addWidget(deleteButton);
-        addWidget(new DraggableScrollableWidgetGroup(4, 48, 296, 18)
+        addWidget(new DraggableScrollableWidgetGroup(16, 24, 338, 14)
                 .addWidget(new ComponentPanelWidget(4, 4, lines -> lines.add(Component.literal(status())))
-                        .setMaxWidthLimit(280)).setBackground(GuiTextures.DISPLAY));
+                        .setMaxWidthLimit(324)));
         // Popups must receive input before the fields they overlap.
         addWidget(valueSelector);
         addWidget(operatorSelector);
@@ -167,13 +167,13 @@ public class RedstoneRuleWidget extends WidgetGroup {
     }
 
     private ButtonWidget button(int x, int width, String label, Runnable action) {
-        return new ButtonWidget(x, 26, width, 18, new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture(label)), click -> {
+        return new ButtonWidget(x, 4, width, 18, new GuiTextureGroup(GuiTextures.BUTTON, new TextTexture(label)), click -> {
             if (!click.isRemote) action.run();
         });
     }
 
     private TextFieldWidget field(int x, int width, int maximum, Supplier<String> supplier, Consumer<String> responder) {
-        return new TextFieldWidget(x, 26, width, 18, supplier, value -> {
+        return new TextFieldWidget(x, 4, width, 18, supplier, value -> {
             if (!isRemote()) { responder.accept(value); message = ""; }
         }) {
             @Override

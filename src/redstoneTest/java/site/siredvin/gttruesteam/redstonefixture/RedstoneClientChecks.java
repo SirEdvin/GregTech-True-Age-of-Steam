@@ -94,6 +94,11 @@ public final class RedstoneClientChecks {
                 case 1 -> server(() -> { form(boiler); open(boilerHatch); });
                 case 2 -> {
                     check(ui() != null, "real synchronized hatch screen opens");
+                    check(ui().widgets.stream().allMatch(widget -> widget.getSelfPosition().x + widget.getSize().width <= ui().getSize().width),
+                            "compact header and viewport fit within the hatch panel");
+                    check(field(176).getPosition().y == selector(16).getPosition().y &&
+                            field(258).getPosition().y == selector(132).getPosition().y,
+                            "compact condition and strength controls share one line");
                     var clientPart = (RedstoneHatchMachine) MetaMachine.getMachine(mc.level, boilerHatch);
                     check(clientPart.replacePartModelWhenFormed() && clientPart.getFormedAppearance(
                             mc.level.getBlockState(boilerHatch), boilerHatch, net.minecraft.core.Direction.NORTH) != null,
@@ -105,24 +110,24 @@ public final class RedstoneClientChecks {
                     screenshot("integer.png");
                     rowIndex = 1;
                 }
-                case 3 -> { edit(24, "0"); edit(196, "3"); }
+                case 3 -> { edit(176, "0"); edit(258, "3"); }
                 case 4 -> save();
                 case 5 -> server(() -> check(part(boilerHatch).rules().size() == 2 && part(boilerHatch).output() == 11, "UI adds rule contributing to OR"));
                 case 6 -> screenshot("rows.png");
                 case 7 -> server(() -> check(part(boilerHatch).rules().get(0).strength() == 11, "editing second row leaves first rule unchanged"));
-                case 8 -> { screenshot("ordered.png"); edit(196, "16"); }
+                case 8 -> { screenshot("ordered.png"); edit(258, "16"); }
                 case 9 -> save();
                 case 10 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 3 && part(boilerHatch).output() == 11, "UI rejects strength 16 atomically"));
-                case 11 -> edit(196, "0");
+                case 11 -> edit(258, "0");
                 case 12 -> save();
                 case 13 -> server(() -> check(part(boilerHatch).output() == 11, "UI matching zero leaves other contributions unchanged"));
                 case 14 -> delete();
                 case 15 -> server(() -> check(part(boilerHatch).rules().size() == 1 && part(boilerHatch).output() == 11, "UI delete restores next rule"));
                 case 16 -> rowIndex = 0;
-                case 17 -> choose(24, 1);
+                case 17 -> choose(16, 1);
                 case 18 -> {
-                    check(candidateCount(selector(196)) == 2, "string offers only equality and inequality");
-                    edit(24, "NONE"); edit(196, "5");
+                    check(candidateCount(selector(132)) == 2, "string offers only equality and inequality");
+                    edit(176, "NONE"); edit(258, "5");
                     server(() -> ((InfernalBoilerMachine) machine(boiler)).getRecipeLogic().setCycleCounter(0));
                 }
                 case 19 -> save();
@@ -130,12 +135,12 @@ public final class RedstoneClientChecks {
                 case 21 -> { screenshot("string.png"); server(() -> { form(gas); open(gasHatch); }); }
                 case 22 -> rowIndex = 0;
                 case 23 -> {
-                    check(!field(24).isVisible() && candidateCount(selector(196)) == 2, "boolean UI hides operand and offers true/false");
-                    screenshot("boolean.png"); choose(196, 0);
+                    check(!field(176).isVisible() && candidateCount(selector(132)) == 2, "boolean UI hides operand and offers true/false");
+                    screenshot("boolean.png"); choose(132, 0);
                 }
                 case 24 -> save();
                 case 25 -> server(() -> check(part(gasHatch).output() == 0, "boolean true rule does not match low tanks"));
-                case 26 -> choose(196, 1);
+                case 26 -> choose(132, 1);
                 case 27 -> save();
                 case 28 -> server(() -> check(part(gasHatch).output() == 7, "boolean false rule matches"));
                 case 29 -> server(() -> machine(gas).onStructureInvalid());
@@ -145,7 +150,7 @@ public final class RedstoneClientChecks {
                 case 33 -> {
                     var send = Widget.class.getDeclaredMethod("writeClientAction", int.class, java.util.function.Consumer.class);
                     send.setAccessible(true);
-                    send.invoke(field(196), 1, (java.util.function.Consumer<net.minecraft.network.FriendlyByteBuf>) buffer -> buffer.writeUtf("150"));
+                    send.invoke(field(258), 1, (java.util.function.Consumer<net.minecraft.network.FriendlyByteBuf>) buffer -> buffer.writeUtf("150"));
                 }
                 case 34 -> save();
                 case 35 -> server(() -> check(part(gasHatch).rules().get(0).strength() == 7, "oversized strength packet is rejected rather than truncated to 15"));
@@ -153,9 +158,9 @@ public final class RedstoneClientChecks {
                     while (!part(boilerHatch).rules().isEmpty()) part(boilerHatch).deleteRule(0);
                     open(boilerHatch);
                 });
-                case 37 -> choose(24, 0);
-                case 38 -> choose(196, 1);
-                case 39 -> { edit(24, "15"); edit(196, "15"); }
+                case 37 -> choose(16, 0);
+                case 38 -> choose(132, 1);
+                case 39 -> { edit(176, "15"); edit(258, "15"); }
                 case 40 -> save();
                 case 41 -> server(() -> {
                     check(part(boilerHatch).rules().size() == 1 &&
@@ -163,8 +168,8 @@ public final class RedstoneClientChecks {
                             part(boilerHatch).rules().get(0).operand().equals("15"), "fresh hatch saves heat_counter > 15 without hidden Add prerequisite");
                 });
                 case 42 -> delete();
-                case 43 -> choose(196, 1);
-                case 44 -> edit(24, "15");
+                case 43 -> choose(132, 1);
+                case 44 -> edit(176, "15");
                 case 45 -> save();
                 case 46 -> server(() -> check(part(boilerHatch).rules().size() == 1 &&
                         part(boilerHatch).rules().get(0).operand().equals("15"), "editor saves again after deleting the last rule"));
@@ -176,8 +181,8 @@ public final class RedstoneClientChecks {
                             "populate visible rule " + i);
                 });
                 case 48 -> { rowIndex = 5; scroll(-1); }
-                case 49 -> { screenshot("sixth-row.png"); choose(24, 1); }
-                case 50 -> { edit(24, "NONE"); edit(196, "6"); }
+                case 49 -> { screenshot("sixth-row.png"); choose(16, 1); }
+                case 50 -> { edit(176, "NONE"); edit(258, "6"); }
                 case 51 -> save();
                 case 52 -> server(() -> check(part(boilerHatch).rules().get(5).valueId().equals("heat_level") &&
                         part(boilerHatch).rules().get(5).operand().equals("NONE") && part(boilerHatch).rules().get(5).strength() == 6 &&
@@ -187,19 +192,22 @@ public final class RedstoneClientChecks {
                 case 54 -> delete();
                 case 55 -> server(() -> check(part(boilerHatch).rules().size() == 5 && part(boilerHatch).rules().get(1).strength() == 2,
                         "deleting middle row retains following rules"));
-                case 56 -> edit(196, "9");
+                case 56 -> edit(258, "9");
                 case 57 -> save();
                 case 58 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 9 &&
                         part(boilerHatch).rules().get(1).operand().equals("0"), "shifted row refreshes editor before next save"));
                 case 59 -> screenshot("final-rows.png");
-                case 60 -> choose(24, 4);
-                case 61 -> choose(196, 1);
-                case 62 -> { edit(24, "12.5"); edit(196, "8"); }
+                case 60 -> choose(16, 4);
+                case 61 -> choose(132, 1);
+                case 62 -> { edit(176, "12.5"); edit(258, "8"); }
                 case 63 -> save();
                 case 64 -> server(() -> check(part(boilerHatch).rules().get(1).valueId().equals("recipe_progress_percent") &&
                         part(boilerHatch).rules().get(1).type() == site.siredvin.gttruesteam.api.RedstoneObservable.Type.FLOAT &&
                         part(boilerHatch).rules().get(1).operand().equals("12.5"), "percentage UI saves fractional thresholds"));
-                case 65 -> ((com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup) ui().widgets.get(1)).setScrollYOffset(0);
+                case 65 -> {
+                    ((com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup) ui().widgets.get(3)).setScrollYOffset(0);
+                    org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), 0, 0);
+                }
                 case 66 -> {
                     check(com.lowdragmc.lowdraglib.utils.LocalizationUtils.format("gttruesteam.redstone.recipe_progress_percent")
                             .equals("Recipe progress (%)"), "percentage label escapes the literal percent sign");
@@ -266,11 +274,11 @@ public final class RedstoneClientChecks {
     }
     private static void save() {
         var position = row().getPosition();
-        clickAbsolute(position.x + 250, position.y + 34);
+        clickAbsolute(position.x + 298, position.y + 12);
     }
     private static void delete() {
         var position = row().getPosition();
-        clickAbsolute(position.x + 284, position.y + 34);
+        clickAbsolute(position.x + 342, position.y + 12);
     }
     private static void clickAbsolute(int x, int y) {
         Minecraft.getInstance().screen.mouseClicked(x, y, 0);
@@ -278,7 +286,7 @@ public final class RedstoneClientChecks {
     }
     private static void scroll(int direction) {
         var position = ui().getPosition();
-        for (int i = 0; i < 40; i++) Minecraft.getInstance().screen.mouseScrolled(position.x + 300, position.y + 180, direction);
+        for (int i = 0; i < 40; i++) Minecraft.getInstance().screen.mouseScrolled(position.x + 362, position.y + 180, direction);
     }
     private static RedstoneRuleWidget row() {
         return findRow(ui());

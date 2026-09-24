@@ -2,6 +2,8 @@
 
 ## Executed results
 
+Compact-row follow-up: reduced row height from 70 to 40 pixels, aligned all editing controls horizontally, added shared localized headings, and removed per-rule panel borders. Build/unit tests/Spotless passed; the client fixture passed 35 assertions, including new panel-bound and single-line-alignment checks plus existing independent editing, dropdown, sixth-row, deletion, and percentage coverage. Data generation completed providers/HashCache before the accepted timeout, updating the two language files. Runtime evaluation is unchanged.
+
 Percentage follow-up: added FLOAT `recipe_progress_percent` alongside ticks. Runtime checks cover idle/reset zero, fractional progress, effective duration, upper clamp, and decimal comparisons; client checks save `> 12.5` and verify percent-sign localization. Data generation completed all providers and HashCache before the accepted timeout; build and Spotless passed.
 
 - JUnit: 37 tests, zero failures/errors/skips; XML under `build/test-results/test`.
