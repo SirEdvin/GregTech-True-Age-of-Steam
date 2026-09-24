@@ -52,6 +52,7 @@ public class TrueSteamMachines {
                     .langValue(tierName + " Redstone Output Hatch")
                     .rotationState(RotationState.ALL)
                     .abilities(site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.ABILITY)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .overlayTieredHullModel(GTCEu.id("block/machine/part/data_access_hatch"))
                     .tooltips(Component.translatable("gttruesteam.redstone.tooltip", site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.capacityForTier(tier)),
                             Component.translatable("gttruesteam.redstone.priority"))

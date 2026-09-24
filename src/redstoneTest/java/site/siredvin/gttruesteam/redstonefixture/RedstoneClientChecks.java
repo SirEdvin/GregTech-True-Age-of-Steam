@@ -27,6 +27,7 @@ import com.google.gson.JsonParser;
 import site.siredvin.gttruesteam.TrueSteamMachines;
 import site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine;
 import site.siredvin.gttruesteam.machines.redstone.RedstoneHatchUI;
+import site.siredvin.gttruesteam.machines.redstone.RedstoneRuleWidget;
 import site.siredvin.gttruesteam.machines.industrial_heater.InfernalBoilerMachine;
 
 import java.nio.file.Path;
@@ -38,6 +39,7 @@ public final class RedstoneClientChecks {
     private static boolean opening;
     private static boolean finished;
     private static int phase;
+    private static int rowIndex;
     private static int ticks;
     private static int totalTicks;
     private static CompletableFuture<Void> operation = CompletableFuture.completedFuture(null);
@@ -92,45 +94,49 @@ public final class RedstoneClientChecks {
                 case 1 -> server(() -> { form(boiler); open(boilerHatch); });
                 case 2 -> {
                     check(ui() != null, "real synchronized hatch screen opens");
+                    var clientPart = (RedstoneHatchMachine) MetaMachine.getMachine(mc.level, boilerHatch);
+                    check(clientPart.replacePartModelWhenFormed() && clientPart.getFormedAppearance(
+                            mc.level.getBlockState(boilerHatch), boilerHatch, net.minecraft.core.Direction.NORTH) != null,
+                            "formed hatch appearance is synchronized to client");
                     for (int tier = 1; tier <= 6; tier++) {
                         var model = mc.getItemRenderer().getModel(TrueSteamMachines.REDSTONE_HATCHES[tier].asStack(), mc.level, mc.player, 0);
                         check(model != mc.getModelManager().getMissingModel(), "tier " + tier + " item model loads");
                     }
                     screenshot("integer.png");
-                    click(8, 127);
+                    rowIndex = 1;
                 }
-                case 3 -> { edit(4, "0"); edit(190, "3"); }
-                case 4 -> click(250, 174);
+                case 3 -> { edit(24, "0"); edit(196, "3"); }
+                case 4 -> save();
                 case 5 -> server(() -> check(part(boilerHatch).rules().size() == 2 && part(boilerHatch).output() == (11 ^ 3), "UI adds rule contributing to XOR"));
-                case 6 -> click(80, 130);
-                case 7 -> { screenshot("after-up.png"); server(() -> check(part(boilerHatch).output() == (11 ^ 3), "UI reorder preserves XOR output")); }
-                case 8 -> { screenshot("ordered.png"); edit(190, "16"); }
-                case 9 -> click(250, 174);
-                case 10 -> server(() -> check(part(boilerHatch).rules().get(0).strength() == 3 && part(boilerHatch).output() == (11 ^ 3), "UI rejects strength 16 atomically"));
-                case 11 -> edit(190, "0");
-                case 12 -> click(250, 174);
+                case 6 -> screenshot("rows.png");
+                case 7 -> server(() -> check(part(boilerHatch).rules().get(0).strength() == 11, "editing second row leaves first rule unchanged"));
+                case 8 -> { screenshot("ordered.png"); edit(196, "16"); }
+                case 9 -> save();
+                case 10 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 3 && part(boilerHatch).output() == (11 ^ 3), "UI rejects strength 16 atomically"));
+                case 11 -> edit(196, "0");
+                case 12 -> save();
                 case 13 -> server(() -> check(part(boilerHatch).output() == 11, "UI matching zero leaves other contributions unchanged"));
-                case 14 -> click(220, 130);
+                case 14 -> delete();
                 case 15 -> server(() -> check(part(boilerHatch).rules().size() == 1 && part(boilerHatch).output() == 11, "UI delete restores next rule"));
-                case 16 -> click(12, 36);
-                case 17 -> choose(4, 1);
+                case 16 -> rowIndex = 0;
+                case 17 -> choose(24, 1);
                 case 18 -> {
-                    check(candidateCount(selector(190)) == 2, "string offers only equality and inequality");
-                    edit(4, "NONE"); edit(190, "5");
+                    check(candidateCount(selector(196)) == 2, "string offers only equality and inequality");
+                    edit(24, "NONE"); edit(196, "5");
                     server(() -> ((InfernalBoilerMachine) machine(boiler)).getRecipeLogic().setCycleCounter(0));
                 }
-                case 19 -> click(250, 174);
+                case 19 -> save();
                 case 20 -> server(() -> check(part(boilerHatch).output() == 5, "string UI matches named heat level"));
                 case 21 -> { screenshot("string.png"); server(() -> { form(gas); open(gasHatch); }); }
-                case 22 -> click(12, 36);
+                case 22 -> rowIndex = 0;
                 case 23 -> {
-                    check(!field(4).isVisible() && candidateCount(selector(190)) == 2, "boolean UI hides operand and offers true/false");
-                    screenshot("boolean.png"); choose(190, 0);
+                    check(!field(24).isVisible() && candidateCount(selector(196)) == 2, "boolean UI hides operand and offers true/false");
+                    screenshot("boolean.png"); choose(196, 0);
                 }
-                case 24 -> click(250, 174);
+                case 24 -> save();
                 case 25 -> server(() -> check(part(gasHatch).output() == 0, "boolean true rule does not match low tanks"));
-                case 26 -> choose(190, 1);
-                case 27 -> click(250, 174);
+                case 26 -> choose(196, 1);
+                case 27 -> save();
                 case 28 -> server(() -> check(part(gasHatch).output() == 7, "boolean false rule matches"));
                 case 29 -> server(() -> machine(gas).onStructureInvalid());
                 case 30 -> { screenshot("disconnected.png"); server(() -> check(part(gasHatch).output() == 0, "disconnect while editor open clears output")); }
@@ -139,29 +145,53 @@ public final class RedstoneClientChecks {
                 case 33 -> {
                     var send = Widget.class.getDeclaredMethod("writeClientAction", int.class, java.util.function.Consumer.class);
                     send.setAccessible(true);
-                    send.invoke(field(190), 1, (java.util.function.Consumer<net.minecraft.network.FriendlyByteBuf>) buffer -> buffer.writeUtf("150"));
+                    send.invoke(field(196), 1, (java.util.function.Consumer<net.minecraft.network.FriendlyByteBuf>) buffer -> buffer.writeUtf("150"));
                 }
-                case 34 -> click(250, 174);
+                case 34 -> save();
                 case 35 -> server(() -> check(part(gasHatch).rules().get(0).strength() == 7, "oversized strength packet is rejected rather than truncated to 15"));
                 case 36 -> server(() -> {
                     while (!part(boilerHatch).rules().isEmpty()) part(boilerHatch).deleteRule(0);
                     open(boilerHatch);
                 });
-                case 37 -> choose(4, 0);
-                case 38 -> choose(190, 1);
-                case 39 -> { edit(4, "15"); edit(190, "15"); }
-                case 40 -> click(250, 174);
+                case 37 -> choose(24, 0);
+                case 38 -> choose(196, 1);
+                case 39 -> { edit(24, "15"); edit(196, "15"); }
+                case 40 -> save();
                 case 41 -> server(() -> {
                     check(part(boilerHatch).rules().size() == 1 &&
                             part(boilerHatch).rules().get(0).operator() == site.siredvin.gttruesteam.machines.redstone.RedstoneRule.Operator.GREATER &&
                             part(boilerHatch).rules().get(0).operand().equals("15"), "fresh hatch saves heat_counter > 15 without hidden Add prerequisite");
                 });
-                case 42 -> click(220, 130);
-                case 43 -> choose(190, 1);
-                case 44 -> edit(4, "15");
-                case 45 -> click(250, 174);
+                case 42 -> delete();
+                case 43 -> choose(196, 1);
+                case 44 -> edit(24, "15");
+                case 45 -> save();
                 case 46 -> server(() -> check(part(boilerHatch).rules().size() == 1 &&
                         part(boilerHatch).rules().get(0).operand().equals("15"), "editor saves again after deleting the last rule"));
+                case 47 -> server(() -> {
+                    for (int i = 1; i < 6; i++) check(part(boilerHatch).saveRule(i,
+                            new site.siredvin.gttruesteam.machines.redstone.RedstoneRule("heat_counter",
+                                    site.siredvin.gttruesteam.api.RedstoneObservable.Type.INTEGER,
+                                    site.siredvin.gttruesteam.machines.redstone.RedstoneRule.Operator.EQUAL, "0", i)),
+                            "populate visible rule " + i);
+                });
+                case 48 -> { rowIndex = 5; scroll(-1); }
+                case 49 -> { screenshot("sixth-row.png"); choose(24, 1); }
+                case 50 -> { edit(24, "NONE"); edit(196, "6"); }
+                case 51 -> save();
+                case 52 -> server(() -> check(part(boilerHatch).rules().get(5).valueId().equals("heat_level") &&
+                        part(boilerHatch).rules().get(5).operand().equals("NONE") && part(boilerHatch).rules().get(5).strength() == 6 &&
+                        part(boilerHatch).rules().get(4).valueId().equals("heat_counter"),
+                        "sixth row scrolls, opens unclipped dropdown and saves independently"));
+                case 53 -> { rowIndex = 1; scroll(1); }
+                case 54 -> delete();
+                case 55 -> server(() -> check(part(boilerHatch).rules().size() == 5 && part(boilerHatch).rules().get(1).strength() == 2,
+                        "deleting middle row retains following rules"));
+                case 56 -> edit(196, "9");
+                case 57 -> save();
+                case 58 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 9 &&
+                        part(boilerHatch).rules().get(1).operand().equals("0"), "shifted row refreshes editor before next save"));
+                case 59 -> screenshot("final-rows.png");
                 default -> finish(null);
             }
         } catch (Throwable failure) { finish(failure); }
@@ -200,28 +230,53 @@ public final class RedstoneClientChecks {
         return null;
     }
     private static TextFieldWidget field(int x) {
-        return ui().widgets.stream().filter(widget -> widget instanceof TextFieldWidget && widget.getSelfPosition().x == x)
+        return row().widgets.stream().filter(widget -> widget instanceof TextFieldWidget && widget.getSelfPosition().x == x)
                 .map(widget -> (TextFieldWidget) widget).findFirst().orElseThrow();
     }
     private static SelectorWidget selector(int x) {
-        return ui().widgets.stream().filter(widget -> widget instanceof SelectorWidget && widget.getSelfPosition().x == x)
+        return row().widgets.stream().filter(widget -> widget instanceof SelectorWidget && widget.getSelfPosition().x == x)
                 .map(widget -> (SelectorWidget) widget).findFirst().orElseThrow();
     }
     private static void edit(int x, String value) {
-        click(x + 8, 174);
+        var position = field(x).getPosition();
+        clickAbsolute(position.x + 8, position.y + 8);
         Minecraft.getInstance().screen.keyPressed(269, 0, 0);
         for (int i = 0; i < 256; i++) Minecraft.getInstance().screen.keyPressed(259, 0, 0);
         for (char character : value.toCharArray()) Minecraft.getInstance().screen.charTyped(character, 0);
     }
 
     private static void choose(int x, int index) {
-        click(x + 8, 150);
-        click(x + 8, 162 + index * 15 + 7);
+        var position = selector(x).getPosition();
+        clickAbsolute(position.x + 8, position.y + 8);
+        position = selector(x).getPosition();
+        clickAbsolute(position.x + 8, position.y + 18 + index * 15 + 7);
     }
-    private static void click(int x, int y) {
+    private static void save() {
+        var position = row().getPosition();
+        clickAbsolute(position.x + 250, position.y + 34);
+    }
+    private static void delete() {
+        var position = row().getPosition();
+        clickAbsolute(position.x + 284, position.y + 34);
+    }
+    private static void clickAbsolute(int x, int y) {
+        Minecraft.getInstance().screen.mouseClicked(x, y, 0);
+        Minecraft.getInstance().screen.mouseReleased(x, y, 0);
+    }
+    private static void scroll(int direction) {
         var position = ui().getPosition();
-        Minecraft.getInstance().screen.mouseClicked(position.x + x, position.y + y, 0);
-        Minecraft.getInstance().screen.mouseReleased(position.x + x, position.y + y, 0);
+        for (int i = 0; i < 40; i++) Minecraft.getInstance().screen.mouseScrolled(position.x + 300, position.y + 180, direction);
+    }
+    private static RedstoneRuleWidget row() {
+        return findRow(ui());
+    }
+    private static RedstoneRuleWidget findRow(Widget widget) {
+        if (widget instanceof RedstoneRuleWidget row && row.getSelfPosition().y == rowIndex * RedstoneRuleWidget.HEIGHT) return row;
+        if (widget instanceof WidgetGroup group) for (var child : group.widgets) {
+            var result = findRow(child);
+            if (result != null) return result;
+        }
+        return null;
     }
     private static void screenshot(String name) throws Exception {
         Files.createDirectories(OUTPUT);

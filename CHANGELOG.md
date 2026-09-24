@@ -12,12 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Infernal Boilers expose integer `heat_counter`, integer `cycles_until_throttle`, and string `heat_level` (`NONE`, `BASIC`, `ADVANCED`, `PROGRESSIVE`, `SUPREME`). Industrial Gas Pressurizers expose boolean `perfect_condition` with true/false checks.
 - Any accepting recipe-capable multiblock exposes `recipe_progress_ticks`, `recipe_duration_ticks`, and `recipe_id`. Idle progress/duration are zero; an idle recipe ID is unavailable.
 - Each supported multiblock accepts one optional redstone hatch in a primary casing position (Infernal Alloy Casing or Clean Stainless Steel Casing, including existing casing alternatives). Other blocks and mandatory hatch positions are unchanged.
-- Hatch editors support numeric comparisons, case-sensitive string equality/inequality, and rule reordering. Craft each tier using its machine hull, circuit, and a comparator.
+- Hatch editors support numeric comparisons and case-sensitive string equality/inequality in independent rule widgets with per-rule Save/Delete, without selecting a rule first. Craft each tier using its machine hull, circuit, and a comparator.
 
 ### Fixed
 
 - Concept Infusion Matrix now no longer consider paused machine as running
 - Fresh redstone hatch editors can save the first rule directly without requiring Add first.
+- Redstone hatches inherit their multiblock's casing appearance when formed and restore the tier hull when detached.
 
 ## [0.3.3] - 2029-09-05
 

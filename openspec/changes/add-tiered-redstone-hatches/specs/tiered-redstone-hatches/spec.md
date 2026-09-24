@@ -66,12 +66,20 @@ Every rule within tier capacity SHALL be evaluated against current controller ob
 - **WHEN** no rule matches
 - **THEN** output is 0, and the hatch continues observing a formed idle machine for future matches
 
-### Requirement: Editable ordered rule UI
-The hatch UI SHALL display connection status, exposed value labels/types/current values when available, ordered rules, capacity, and current output. It SHALL support adding, editing, deleting, and moving rules up or down. Controls SHALL reflect the selected value's type. Valid edits SHALL take effect no later than the next server tick. Unattached hatches SHALL show their disconnected status and retained configuration without inventing available values.
+### Requirement: Independent rule editor UI
+The hatch UI SHALL display connection status, exposed value labels/types/current values when available, rules, capacity, and current output. Each saved rule SHALL have its own compact editor with atomic Save and Delete controls, without selecting a rule first. A blank draft row SHALL be available while capacity remains. The list SHALL scroll so every tier's rules and selector options remain usable. The UI SHALL NOT require ordering controls because XOR is order-independent. Controls SHALL reflect each row's value type. Valid saves SHALL take effect no later than the next server tick. Unattached hatches SHALL show disconnected status and retained configuration without inventing available values.
 
-#### Scenario: Reordering is organizational
-- **WHEN** a player moves a lower matching rule above another matching rule
-- **THEN** the visible order updates and output remains unchanged
+#### Scenario: Independent row edits
+- **WHEN** a player changes and saves one rule's controls
+- **THEN** only that rule is replaced and other saved rules remain unchanged
+
+#### Scenario: Delete a middle rule
+- **WHEN** a player deletes a rule above another rule
+- **THEN** following editors refresh to their retained rules and remain editable without selection
+
+#### Scenario: Last-row selector
+- **WHEN** a player scrolls to the last rule and opens its selector
+- **THEN** its options remain reachable inside the viewport and do not act on another row
 
 #### Scenario: Save the first rule
 - **WHEN** a player opens a connected empty hatch, selects heat counter greater than 15, and saves
@@ -91,6 +99,13 @@ The hatch SHALL emit its selected redstone strength only through its oriented fr
 #### Scenario: Rotation and invalidation
 - **WHEN** a powered hatch rotates or its multiblock becomes invalid
 - **THEN** the previous output face is notified and no longer retains the old signal, and an invalidated hatch emits zero
+
+### Requirement: Controller casing appearance
+All hatch tiers SHALL inherit their formed controller's part appearance through GTCEu's standard part model lifecycle, retaining their hatch overlay. An unattached or invalidated hatch SHALL use its own tier hull.
+
+#### Scenario: Form and detach
+- **WHEN** either supported multiblock forms with a redstone hatch and is subsequently invalidated
+- **THEN** the formed hatch uses that controller's casing appearance and invalidation restores the unformed tier hull
 
 ### Requirement: Durable and defensive configuration
 Rule identifiers, types, operators, operands, output strengths, and ordering SHALL persist across chunk unload/reload and world restart. Malformed saved configuration SHALL NOT crash loading or bypass tier/type/strength constraints. Unknown values SHALL remain visibly unavailable rather than silently binding to another value by list position. Saved active output SHALL NOT override lifecycle safety.

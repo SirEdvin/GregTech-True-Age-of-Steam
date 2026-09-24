@@ -10,7 +10,8 @@ Multiblock-specific operating values cannot currently drive configurable redston
 - Provide a controller interface exposing stable value identifiers, display labels, types, and current values: integer, float, string, and boolean.
 - Evaluate every rule and bitwise-XOR matching output strengths 0–15. Ordering is organizational only; matching zero does not stop evaluation. No match or unavailable controller produces zero.
 - Support six numeric comparisons (<, >, ==, <=, >=, !=), exact float equality, string equality/inequality, and boolean true/false checks.
-- Provide a hatch UI for adding, editing, deleting, and reordering rules, with type-specific controls and server-side validation.
+- Provide compact independent rule editors with per-row Save/Delete, type-specific controls, and server-side validation, without selecting or reordering rules.
+- Inherit the controller's casing appearance when formed and restore the tier hull when detached, preserving the hatch overlay.
 - Emit from the oriented front face only; persist configuration and safely clear output when detached or invalidated.
 - Expose the Infernal Boiler's integer heat counter, string heat level and integer cycles until throttle, and the Industrial Gas Pressurizer's boolean perfect-condition state. Add shared progress/duration in ticks and current recipe ID for any accepting recipe-capable controller.
 - Permit at most one optional hatch per supported multiblock, replacing its primary casing material in its pattern; do not require a hatch for existing structures.

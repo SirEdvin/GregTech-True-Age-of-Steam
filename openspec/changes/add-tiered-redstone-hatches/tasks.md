@@ -21,13 +21,14 @@
 
 ## 4. UI and player-facing resources
 
-- [x] 4.1 Build the type-aware ordered-rule editor with value/operator selection, operand input where appropriate, strength 0–15, add/delete, and up/down controls; verify all six rules fit or scroll at LuV and reorder preserves actual server XOR output.
+- [x] 4.1 Build independent type-aware rule widgets with value/operator selection, operand input where appropriate, strength 0–15, and per-row Save/Delete without a shared rule selection; verify sixth-row scrolling/dropdowns and editing after middle-row deletion.
 - [x] 4.2 Add server-authoritative mutation validation, synchronized current values/output, connection status, and invalid-rule feedback; verify malformed or out-of-range client edits cannot corrupt configuration or exceed tier capacity, including edits after detach/reconnect.
 - [x] 4.3 Add localized labels/tooltips and tiered models with a visible front output overlay through the existing resource conventions; verify all six items and hatch screens render without missing translations/textures and dedicated-server loading avoids client-only class failures.
 - [x] 4.4 Add six shaped recipes in `TrueSteamRecipes`, each using a same-tier hull, same-tier circuit, and comparator; run data generation and verify generated recipe identifiers, ingredient tags, output tiers, and successful recipe viewing/crafting.
 
 - [x] 4.5 Reproduce and fix fresh-hatch saving of `heat_counter > 15`, including deleting and recreating the last rule.
 - [x] 4.6 Expose boiler cycles until throttle and shared recipe progress/duration/ID; verify defaults on a formed controller without the custom interface, without broadening patterns.
+- [x] 4.7 Register the formed model property and verify controller casing inheritance/restoration on both multiblocks at every tier, plus client-side appearance synchronization.
 
 ## 5. End-to-end verification and handoff
 

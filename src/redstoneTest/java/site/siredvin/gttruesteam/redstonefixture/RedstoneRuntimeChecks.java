@@ -156,6 +156,11 @@ public final class RedstoneRuntimeChecks {
             steps.add(() -> {
                 boiler.form(); pressurizer.form();
                 check(boiler.part().capacity() == t && pressurizer.part().capacity() == t, "tier " + t + " capacity and attachment");
+                for (Fixture fixture : List.of(boiler, pressurizer)) {
+                    check(fixture.part().replacePartModelWhenFormed() && fixture.casing().equals(
+                            fixture.part().getFormedAppearance(level.getBlockState(fixture.hatch()), fixture.hatch(), Direction.NORTH)),
+                            "tier " + t + " inherits controller casing at " + fixture.hatch());
+                }
                 for (int i = 0; i < t; i++) {
                     check(boiler.part().saveRule(i, heat(LESS_EQUAL, "999999", i == 0 ? t : 15)), "boiler tier rule " + t + "/" + i);
                     check(pressurizer.part().saveRule(i, ready(IS_FALSE, i == 0 ? t : 15)), "pressurizer tier rule " + t + "/" + i);
@@ -167,6 +172,13 @@ public final class RedstoneRuntimeChecks {
                 check(boiler.part().output() == expected && pressurizer.part().output() == expected, "tier " + t + " XORs all rules on idle formed controllers");
                 check(!boiler.part().saveRule(0, heat(EQUAL, "1", 16)), "reject invalid output");
                 check(!boiler.part().moveRule(-1, 0) && !boiler.part().moveRule(0, 100), "reject invalid reorder");
+                for (Fixture fixture : List.of(boiler, pressurizer)) {
+                    fixture.machine().onStructureInvalid();
+                    check(!fixture.part().replacePartModelWhenFormed() && fixture.part().getFormedAppearance(
+                            level.getBlockState(fixture.hatch()), fixture.hatch(), Direction.NORTH) == null,
+                            "tier " + t + " restores unformed tier hull at " + fixture.hatch());
+                    fixture.form();
+                }
             });
         }
         steps.add(() -> {

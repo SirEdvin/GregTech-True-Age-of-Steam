@@ -31,7 +31,7 @@ A rule stores value identifier, expected type, operator, typed operand where app
 
 Wrap attached formed controllers with `MultiblockRedstoneObservations`. Preserve custom descriptors, then add reserved recipe progress/duration tick counts and current recipe ID for `IRecipeLogicMachine` controllers. Idle progress/duration are zero, and idle recipe ID is unavailable rather than the cached last recipe. Existing controller interfaces remain optional for these defaults. Boiler `cycles_until_throttle` delegates to its existing infernal charges. No additional patterns become eligible.
 
-Initialize the editor to slot zero and retain a valid edit/draft selection after deletion or clicks on unallocated rows. A fresh connected hatch can save its first rule directly; Add is not an invisible prerequisite.
+Give every saved rule its own compact editor and show one blank draft row while capacity remains. No rule selection or Add action is needed before editing. Each row saves atomically through the existing server validation; deletion refreshes shifted rows from their retained rules.
 
 ### Tiered regular multiblock part
 
@@ -47,21 +47,21 @@ Use GTCEu's supported redstone output mechanism after verifying side conventions
 
 Alternative: recipe completion callbacks miss idle heat decay/readiness transitions; emitting on all faces conflicts with the user's chosen behavior.
 
-### Compact ordered-rule UI and defensive persistence
+### Independent rule widgets and defensive persistence
 
-Use the configurable maintenance hatch's concrete UI composition: `GuiTextures.BACKGROUND_INVERSE`, `DraggableScrollableWidgetGroup` with `GuiTextures.DISPLAY`, and `ComponentPanelWidget` for synchronized text and clickable rule selection. Use `GuiTextures.BUTTON` for editor actions and selectors, retaining the inherited GTCEu Fancy UI shell. The ordered list is scrollable and wraps long rule summaries. Show connection status, current values, tier capacity, validation state, and output. Operator selection follows value type; boolean checks have no operand field. Show stable heat-level tokens clearly so equality rules are understandable.
+Use the configurable maintenance hatch's GTCEu textures and synchronized component panels inside the inherited Fancy UI shell. A scrollable list contains independent `RedstoneRuleWidget` editors with value/operator selectors, operand, strength, Save, Delete, and current-value/validation display. There is no shared selected-rule editor or ordering control. Keep fixed widget identities for network synchronization, show a blank row while capacity remains, and preserve server validation for every atomic Save. Earlier rows receive popup input above later rows; opening a dropdown scrolls it into view, with trailing space for the last row's popup. Show connection status, tier capacity, and output separately. Boolean checks hide their operand field.
 
 Serialize ordered rules as bounded structured entries in the hatch's persisted data using supported pinned APIs. Validate the same model on load and on every server mutation. Reject invalid UI submissions atomically, retaining the previous configuration. Preserve unknown identifiers as invalid visible entries rather than rebinding by index. Drop excess tail entries on malformed over-capacity saves; disable malformed entries within the retained capacity. Bound strings to 256 characters and encoded identifiers to 128 characters; reject oversized UI payloads and safely invalidate oversized saved entries. Reordering is a validated server operation for organization only; it does not change XOR output.
 
-Alternative: independent widgets mutating fields directly risks partially valid rules and tier-limit bypass.
+Do not mutate persisted rule fields on every keystroke: independent widgets retain drafts and use the same validated atomic save operation.
 
 ### Registration, recipes, and resources
 
-Use addon-namespaced tier-specific identifiers, tier casing visuals, and a recognizable front output overlay. Add localization for type/operator labels, error states, rule controls, and capacity. Proposed survival default: one same-tier machine hull, one same-tier circuit, and one comparator in a shaped recipe per hatch; resolve exact ingredient symbols from the pinned dependency rather than inventing APIs. No upgrades or energy buffers are needed. Generate resources through existing providers and inspect their diff.
+Use addon-namespaced tier-specific identifiers, tier casing visuals, and a recognizable front output overlay. Register `GTMachineModelProperties.IS_FORMED` with default false: GTCEu's part lifecycle updates it on attachment/detachment, enabling the controller's casing appearance while formed and restoring the tier hull when detached. Keep the existing overlay. Add localization for type/operator labels, error states, rule controls, and capacity. Survival recipes use one same-tier machine hull, one same-tier circuit, and one comparator. No upgrades or energy buffers are needed. Generate resources through existing providers and inspect their diff.
 
 ### Verification structure
 
-Introduce focused automated tests for the pure rule model/evaluator and serialization boundaries with the smallest compatible test setup. Exercise live pattern attachment, global limit, redstone direction/rotation, detached zero output, and save/reload through GameTests if runnable or a documented client/server test world. Test all capacity tiers and all four data types; fixture providers cover float values even though initial controllers expose no floats. UI verification must include reordering and server-side rejected mutations, not just screenshots or compilation.
+Introduce focused automated tests for the pure rule model/evaluator and serialization boundaries. Exercise live pattern attachment, casing appearance across all tiers and both controllers, global limit, redstone direction/rotation, detached zero output, and save/reload in the isolated runtime fixture. Test all capacity tiers and all four data types; fixture providers cover float values. Client verification includes independent editing, middle-row deletion, last-row scrolling/dropdowns, and server-side rejected mutations, not just screenshots or compilation.
 
 ## Risks / Trade-offs
 
