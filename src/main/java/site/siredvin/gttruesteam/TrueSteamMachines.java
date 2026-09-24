@@ -39,6 +39,27 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.addWorkab
 
 public class TrueSteamMachines {
 
+    public static final MachineDefinition[] REDSTONE_HATCHES = registerRedstoneHatches();
+
+    private static MachineDefinition[] registerRedstoneHatches() {
+        var definitions = new MachineDefinition[com.gregtechceu.gtceu.api.GTValues.LuV + 1];
+        for (int tier = com.gregtechceu.gtceu.api.GTValues.LV; tier <= com.gregtechceu.gtceu.api.GTValues.LuV; tier++) {
+            int hatchTier = tier;
+            String tierName = com.gregtechceu.gtceu.api.GTValues.VN[tier];
+            definitions[tier] = GTTrueSteam.REGISTRATE.machine(tierName.toLowerCase(java.util.Locale.ROOT) + "_redstone_hatch",
+                    holder -> new site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine(holder, hatchTier))
+                    .tier(tier)
+                    .langValue(tierName + " Redstone Output Hatch")
+                    .rotationState(RotationState.ALL)
+                    .abilities(site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.ABILITY)
+                    .overlayTieredHullModel(GTCEu.id("block/machine/part/data_access_hatch"))
+                    .tooltips(Component.translatable("gttruesteam.redstone.tooltip", site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.capacityForTier(tier)),
+                            Component.translatable("gttruesteam.redstone.priority"))
+                    .register();
+        }
+        return definitions;
+    }
+
     public static final ResourceLocation LC_STEAM_HULL_MODEL = GTTrueSteam.id("block/lava_coated_boiler");
     public static final ResourceLocation IA_STEAM_HULL_MODEL = GTTrueSteam.id("block/infernal_alloy_boiler");
     public static final ResourceLocation HC_STEAM_HULL_MODEL = GTTrueSteam.id("block/heating_charged_boiler");

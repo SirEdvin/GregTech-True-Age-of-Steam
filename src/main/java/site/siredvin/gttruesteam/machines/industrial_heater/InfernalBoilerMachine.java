@@ -12,7 +12,23 @@ import site.siredvin.gttruesteam.TrueSteamPredicates;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 import site.siredvin.gttruesteam.TrueSteamStats;
 
-public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine {
+public class InfernalBoilerMachine extends CoilWorkableElectricMultiblockMachine implements site.siredvin.gttruesteam.api.RedstoneObservable {
+
+    @Override
+    public java.util.List<Descriptor> redstoneValues() {
+        return java.util.List.of(new Descriptor("heat_counter", "gttruesteam.redstone.heat_counter", Type.INTEGER),
+                new Descriptor("heat_level", "gttruesteam.redstone.heat_level", Type.STRING));
+    }
+
+    @Override
+    public java.util.Optional<Value> readRedstoneValue(String id) {
+        if (!isFormed()) return java.util.Optional.empty();
+        return switch (id) {
+            case "heat_counter" -> java.util.Optional.of(Value.integer(getRecipeLogic().getCycleCounter()));
+            case "heat_level" -> java.util.Optional.of(Value.string(getRecipeLogic().getHeatLevel().name()));
+            default -> java.util.Optional.empty();
+        };
+    }
 
     private int resetCounter = 0;
 
