@@ -168,8 +168,8 @@ public final class RedstoneRuntimeChecks {
                 check(!boiler.part().saveRule(t, heat(EQUAL, "1", 15)), "tier " + t + " rejects excess rules");
             });
             steps.add(() -> {
-                int expected = t ^ (t % 2 == 0 ? 15 : 0);
-                check(boiler.part().output() == expected && pressurizer.part().output() == expected, "tier " + t + " XORs all rules on idle formed controllers");
+                int expected = t == 1 ? t : 15;
+                check(boiler.part().output() == expected && pressurizer.part().output() == expected, "tier " + t + " ORs all rules on idle formed controllers");
                 check(!boiler.part().saveRule(0, heat(EQUAL, "1", 16)), "reject invalid output");
                 check(!boiler.part().moveRule(-1, 0) && !boiler.part().moveRule(0, 100), "reject invalid reorder");
                 for (Fixture fixture : List.of(boiler, pressurizer)) {
@@ -190,7 +190,7 @@ public final class RedstoneRuntimeChecks {
             boiler.part().moveRule(0, 1); pressurizer.part().moveRule(0, 1);
         });
         steps.add(() -> {
-            check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "reordering preserves XOR output");
+            check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "reordering preserves OR output");
             for (Direction face : Direction.values()) {
                 check(level.getSignal(boiler.hatch(), face.getOpposite()) == (face == Direction.NORTH ? 15 : 0), "front-only signal " + face);
             }

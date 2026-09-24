@@ -8,7 +8,7 @@ Multiblock-specific operating values cannot currently drive configurable redston
 
 - Add LV, MV, HV, EV, IV, and LuV redstone output hatches, supporting respectively 1, 2, 3, 4, 5, and 6 rules.
 - Provide a controller interface exposing stable value identifiers, display labels, types, and current values: integer, float, string, and boolean.
-- Evaluate every rule and bitwise-XOR matching output strengths 0–15. Ordering is organizational only; matching zero does not stop evaluation. No match or unavailable controller produces zero.
+- Evaluate every rule and bitwise-OR matching output strengths 0–15. Ordering is organizational only; matching zero does not stop evaluation. No match or unavailable controller produces zero.
 - Support six numeric comparisons (<, >, ==, <=, >=, !=), exact float equality, string equality/inequality, and boolean true/false checks.
 - Provide compact independent rule editors with per-row Save/Delete, type-specific controls, and server-side validation, without selecting or reordering rules.
 - Expose recipe progress as a floating-point percentage from 0–100 alongside tick counts, supporting fractional rule thresholds and zero when idle.

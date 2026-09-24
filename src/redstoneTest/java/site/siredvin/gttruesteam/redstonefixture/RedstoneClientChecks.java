@@ -107,12 +107,12 @@ public final class RedstoneClientChecks {
                 }
                 case 3 -> { edit(24, "0"); edit(196, "3"); }
                 case 4 -> save();
-                case 5 -> server(() -> check(part(boilerHatch).rules().size() == 2 && part(boilerHatch).output() == (11 ^ 3), "UI adds rule contributing to XOR"));
+                case 5 -> server(() -> check(part(boilerHatch).rules().size() == 2 && part(boilerHatch).output() == 11, "UI adds rule contributing to OR"));
                 case 6 -> screenshot("rows.png");
                 case 7 -> server(() -> check(part(boilerHatch).rules().get(0).strength() == 11, "editing second row leaves first rule unchanged"));
                 case 8 -> { screenshot("ordered.png"); edit(196, "16"); }
                 case 9 -> save();
-                case 10 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 3 && part(boilerHatch).output() == (11 ^ 3), "UI rejects strength 16 atomically"));
+                case 10 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 3 && part(boilerHatch).output() == 11, "UI rejects strength 16 atomically"));
                 case 11 -> edit(196, "0");
                 case 12 -> save();
                 case 13 -> server(() -> check(part(boilerHatch).output() == 11, "UI matching zero leaves other contributions unchanged"));

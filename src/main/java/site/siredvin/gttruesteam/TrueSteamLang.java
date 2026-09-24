@@ -10,7 +10,7 @@ public class TrueSteamLang {
     static {
         String[][] translations = {
                 { "tooltip", "Up to %s rules; emits redstone from the front. No energy required." },
-                { "priority", "Matching strengths are XORed; order does not matter." },
+                { "priority", "Matching strengths are ORed; order does not matter." },
                 { "connected", "Controller connected" }, { "disconnected", "No formed controller" },
                 { "capacity", "Rules: %s/%s    Output: %s" },
                 { "add", "Add" }, { "up", "Up" }, { "down", "Down" }, { "delete", "Delete" },

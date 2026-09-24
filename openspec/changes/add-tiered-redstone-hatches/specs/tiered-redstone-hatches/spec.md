@@ -47,27 +47,27 @@ Each rule SHALL select one exposed value, a valid comparison, and an integer out
 - **WHEN** a rule has an unparseable operand, nonfinite float, missing value, or incompatible type
 - **THEN** it does not match and the UI identifies the invalid or unavailable rule
 
-### Requirement: Bitwise XOR output
-Every rule within tier capacity SHALL be evaluated against current controller observations, with each distinct value read at most once per evaluation. The output SHALL be the bitwise XOR of all valid matching rule strengths. Nonmatching or invalid rules SHALL contribute zero. When no rule matches, output SHALL be zero. Evaluation SHALL occur on the server at least once per server tick while attached to a loaded formed controller, independently of whether its recipe is active. Reordering SHALL NOT affect output.
+### Requirement: Bitwise OR output
+Every rule within tier capacity SHALL be evaluated against current controller observations, with each distinct value read at most once per evaluation. The output SHALL be the bitwise OR of all valid matching rule strengths. Nonmatching or invalid rules SHALL contribute zero. When no rule matches, output SHALL be zero. Evaluation SHALL occur on the server at least once per server tick while attached to a loaded formed controller, independently of whether its recipe is active. Reordering SHALL NOT affect output.
 
 #### Scenario: Matching strengths combine
 - **WHEN** two matching rules request strengths 15 and 3
-- **THEN** the output is their bitwise XOR, 12
+- **THEN** the output is their bitwise OR, 15
 
 #### Scenario: Zero does not terminate evaluation
 - **WHEN** a matching rule requests strength 0 and another matching rule requests a positive strength
 - **THEN** the output equals the positive strength
 
-#### Scenario: Equal strengths cancel
+#### Scenario: Equal strengths remain set
 - **WHEN** exactly two matching rules request the same strength
-- **THEN** the output is zero
+- **THEN** the output is that same strength
 
 #### Scenario: No match or inactive machine
 - **WHEN** no rule matches
 - **THEN** output is 0, and the hatch continues observing a formed idle machine for future matches
 
 ### Requirement: Independent rule editor UI
-The hatch UI SHALL display connection status, exposed value labels/types/current values when available, rules, capacity, and current output. Each saved rule SHALL have its own compact editor with atomic Save and Delete controls, without selecting a rule first. A blank draft row SHALL be available while capacity remains. The list SHALL scroll so every tier's rules and selector options remain usable. The UI SHALL NOT require ordering controls because XOR is order-independent. Controls SHALL reflect each row's value type. Valid saves SHALL take effect no later than the next server tick. Unattached hatches SHALL show disconnected status and retained configuration without inventing available values.
+The hatch UI SHALL display connection status, exposed value labels/types/current values when available, rules, capacity, and current output. Each saved rule SHALL have its own compact editor with atomic Save and Delete controls, without selecting a rule first. A blank draft row SHALL be available while capacity remains. The list SHALL scroll so every tier's rules and selector options remain usable. The UI SHALL NOT require ordering controls because OR is order-independent. Controls SHALL reflect each row's value type. Valid saves SHALL take effect no later than the next server tick. Unattached hatches SHALL show disconnected status and retained configuration without inventing available values.
 
 #### Scenario: Independent row edits
 - **WHEN** a player changes and saves one rule's controls
