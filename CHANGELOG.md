@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - LV–LuV Redstone Hatches with 1–6 rules, configurable output strengths from 0 to 15, and front-face-only output without energy consumption. All matching strengths are combined with bitwise XOR; order does not matter. No match or disconnected controller outputs zero.
 - Infernal Boilers expose integer `heat_counter`, integer `cycles_until_throttle`, and string `heat_level` (`NONE`, `BASIC`, `ADVANCED`, `PROGRESSIVE`, `SUPREME`). Industrial Gas Pressurizers expose boolean `perfect_condition` with true/false checks.
 - Any accepting recipe-capable multiblock exposes `recipe_progress_ticks`, `recipe_duration_ticks`, and `recipe_id`. Idle progress/duration are zero; an idle recipe ID is unavailable.
+- Recipe progress is also available as `recipe_progress_percent` (0–100%, with fractional thresholds); idle or nonpositive-duration recipes report 0%.
 - Each supported multiblock accepts one optional redstone hatch in a primary casing position (Infernal Alloy Casing or Clean Stainless Steel Casing, including existing casing alternatives). Other blocks and mandatory hatch positions are unchanged.
 - Hatch editors support numeric comparisons and case-sensitive string equality/inequality in independent rule widgets with per-rule Save/Delete, without selecting a rule first. Craft each tier using its machine hull, circuit, and a comparator.
 

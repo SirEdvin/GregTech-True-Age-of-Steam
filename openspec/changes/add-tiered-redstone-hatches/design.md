@@ -29,6 +29,8 @@ A rule stores value identifier, expected type, operator, typed operand where app
 
 ### Shared observations and first-rule editing
 
+Shared `recipe_progress_percent` is FLOAT, calculated from progress and effective duration as a percentage clamped to 0–100. Preserve fractions; idle recipes or nonpositive duration yield zero. Keep existing tick observations unchanged. Escape the literal percent sign in the localized label for Minecraft/LDLib formatting.
+
 Wrap attached formed controllers with `MultiblockRedstoneObservations`. Preserve custom descriptors, then add reserved recipe progress/duration tick counts and current recipe ID for `IRecipeLogicMachine` controllers. Idle progress/duration are zero, and idle recipe ID is unavailable rather than the cached last recipe. Existing controller interfaces remain optional for these defaults. Boiler `cycles_until_throttle` delegates to its existing infernal charges. No additional patterns become eligible.
 
 Give every saved rule its own compact editor and show one blank draft row while capacity remains. No rule selection or Add action is needed before editing. Each row saves atomically through the existing server validation; deletion refreshes shifted rows from their retained rules.

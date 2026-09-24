@@ -260,6 +260,8 @@ public final class RedstoneRuntimeChecks {
             check(unsupported.machine().isFormed() && boiler.part().provider() != null && boiler.part().output() == 0,
                     "generic controller supplies defaults but missing custom values do not match");
             var provider = boiler.part().provider();
+            check(provider.readRedstoneValue("recipe_progress_percent").orElseThrow().value().equals(0.0),
+                    "idle recipe percentage is zero");
             check(provider.readRedstoneValue("recipe_progress_ticks").orElseThrow().value().equals(0L) &&
                     provider.readRedstoneValue("recipe_id").isEmpty(), "idle generic controller exposes zero progress and unavailable recipe ID");
             var logic = ((com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine) unsupported.machine()).getRecipeLogic();
@@ -267,10 +269,25 @@ public final class RedstoneRuntimeChecks {
                     .duration(200).buildRawRecipe();
             logic.setupRecipe(recipe);
             logic.setProgress(12);
+            var percentage = provider.readRedstoneValue("recipe_progress_percent").orElseThrow();
+            check(percentage.type() == Type.FLOAT && percentage.value().equals(1200.0 / logic.getDuration()),
+                    "recipe percentage uses effective duration and floating point");
+            logic.setProgress(1);
+            check(provider.readRedstoneValue("recipe_progress_percent").orElseThrow().value().equals(100.0 / logic.getDuration()),
+                    "recipe percentage preserves fractional progress");
+            check(new RedstoneRule("recipe_progress_percent", Type.FLOAT, GREATER, "0.1", 9)
+                    .matches(provider.readRedstoneValue("recipe_progress_percent").orElseThrow()),
+                    "percentage observation supports fractional rule thresholds");
+            logic.setProgress(logic.getDuration() + 1);
+            check(provider.readRedstoneValue("recipe_progress_percent").orElseThrow().value().equals(100.0),
+                    "recipe percentage is capped at 100");
+            logic.setProgress(12);
             check(provider.readRedstoneValue("recipe_progress_ticks").orElseThrow().value().equals(12L), "generic recipe progress uses ticks");
             check(provider.readRedstoneValue("recipe_duration_ticks").orElseThrow().value().equals((long) logic.getDuration()), "generic duration uses effective recipe duration");
             check(provider.readRedstoneValue("recipe_id").orElseThrow().value().equals(recipe.id.toString()), "generic active recipe ID is namespaced");
             logic.resetRecipeLogic();
+            check(provider.readRedstoneValue("recipe_progress_percent").orElseThrow().value().equals(0.0),
+                    "reset recipe percentage clears cached progress");
             check(provider.readRedstoneValue("recipe_id").isEmpty(), "idle cached recipe is not exposed as active");
             boiler.part().removedFromController(unsupported.machine());
             boiler.form();

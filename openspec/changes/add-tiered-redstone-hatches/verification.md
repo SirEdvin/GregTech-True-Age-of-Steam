@@ -2,13 +2,15 @@
 
 ## Executed results
 
+Percentage follow-up: added FLOAT `recipe_progress_percent` alongside ticks. Runtime checks cover idle/reset zero, fractional progress, effective duration, upper clamp, and decimal comparisons; client checks save `> 12.5` and verify percent-sign localization. Data generation completed all providers and HashCache before the accepted timeout; build and Spotless passed.
+
 - JUnit: 37 tests, zero failures/errors/skips; XML under `build/test-results/test`.
 - Final `./gradlew --no-daemon spotlessApply test build` and subsequent `spotlessCheck build`: passed.
 - `timeout 110s ./gradlew --no-daemon runData`: all providers and HashCache completed, then exit 124 from timeout. This is the project's accepted workflow; no shutdown fix is claimed. The revision regenerated localization for XOR and shared recipe/throttle observations.
 - Appearance follow-up repeated the timeout-bounded data run: all providers and HashCache completed, writing exactly the six hatch model variants for formed/unformed states. Final build/Spotless and all 31 client assertions passed again using the regenerated models; the production JAR contains no fixture classes.
-- Dedicated-server initial fixture: 175 passing assertions covering both multiblocks, zero/one/two hatches, all tiers/capacities, formed casing inheritance and detached tier-hull restoration, XOR output including zero contributions, direction/rotation, a real lamp, unchanged-output notification suppression, hatch break/reform, observation thresholds/readiness, six crafting recipes, actual chunk unload/reload, and generic recipe defaults on an injected association with a formed Electric Blast Furnace without the custom observation interface.
+- Dedicated-server initial fixture: 181 passing assertions covering both multiblocks, zero/one/two hatches, all tiers/capacities, formed casing inheritance and detached tier-hull restoration, XOR output including zero contributions, direction/rotation, a real lamp, unchanged-output notification suppression, hatch break/reform, observation thresholds/readiness, six crafting recipes, actual chunk unload/reload, and generic recipe defaults on an injected association with a formed Electric Blast Furnace without the custom observation interface.
 - Separate world-restart fixture: 3 passing assertions covering saved rules and recomputed output.
-- Final client fixture: 31 passing assertions using real UI clicks/typing for independent rule saves/deletes, zero output, invalid strength rejection, string/boolean selection, disconnect/reconnect, oversized strength-packet rejection, and saving heat_counter > 15 on a fresh hatch. Additional checks cover synchronized formed appearance, editing the sixth row through scrolling/dropdowns, and editing after middle-row deletion. All six item models resolve; screenshots show the compact independent rule widgets.
+- Final client fixture: 33 passing assertions using real UI clicks/typing for independent rule saves/deletes, zero output, invalid strength rejection, string/boolean selection, disconnect/reconnect, oversized strength-packet rejection, and saving heat_counter > 15 on a fresh hatch. Additional checks cover synchronized formed appearance, editing the sixth row through scrolling/dropdowns, and editing after middle-row deletion. All six item models resolve; screenshots show the compact independent rule widgets.
 
 ## Pinned integration audit
 
@@ -39,6 +41,6 @@ Artifact: `build/libs/gttruesteam-forge-1.20.1-0.3.3.jar` (development build, no
 
 ## Coverage scope
 
-The final client fixture renders all six tier items beside the shared LuV editor; the inspected screenshot shows textured casings and front overlays without missing-texture placeholders. Integer/string/boolean screens use the same editor. Float behavior is unit-tested because neither initial controller exposes a float. Pattern exclusions and unchanged recipe/readiness mechanics are additionally checked by source review. These are focused integration checks, not an exhaustive modpack playtest.
+The final client fixture renders all six tier items beside the shared LuV editor; the inspected screenshot shows textured casings and front overlays without missing-texture placeholders. Integer/string/boolean screens use the same editor. Float behavior is unit-tested and the shared percentage observation is also covered by runtime/client checks. Pattern exclusions and unchanged recipe/readiness mechanics are additionally checked by source review. These are focused integration checks, not an exhaustive modpack playtest.
 
 Initial implementation was published in PR #13. Follow-up verification covers the requested XOR/default-observation/save-editor revision.

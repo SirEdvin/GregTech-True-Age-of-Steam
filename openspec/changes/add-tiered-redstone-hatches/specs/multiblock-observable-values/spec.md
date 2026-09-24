@@ -46,6 +46,17 @@ Any formed recipe-capable multiblock accepting the hatch SHALL expose integer `r
 - **WHEN** the hatch is attached to a formed recipe-capable controller without custom observations
 - **THEN** shared recipe observations are available
 
+### Requirement: Recipe progress percentage
+Recipe-capable controllers SHALL additionally expose FLOAT `recipe_progress_percent`, computed as 100 times current progress divided by effective duration and clamped to 0–100. Fractional percentages SHALL be preserved. Idle recipes and nonpositive durations SHALL report 0%, without division by zero. Tick observations SHALL remain available unchanged.
+
+#### Scenario: Fractional progress
+- **WHEN** an active recipe has progressed 1 tick of an effective 200-tick duration
+- **THEN** percentage progress is 0.5 and decimal comparison thresholds are supported
+
+#### Scenario: Idle percentage
+- **WHEN** recipe logic is idle or reset
+- **THEN** percentage progress is 0 rather than cached progress
+
 #### Scenario: Idle recipe
 - **WHEN** the controller has no current recipe
 - **THEN** progress and duration read zero and recipe ID is unavailable

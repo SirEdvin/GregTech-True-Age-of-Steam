@@ -24,6 +24,7 @@ public class TrueSteamLang {
                 { "perfect_condition", "Perfect condition" },
                 { "cycles_until_throttle", "Cycles until throttle" },
                 { "recipe_progress_ticks", "Recipe progress (ticks)" },
+                { "recipe_progress_percent", "Recipe progress (%%)" },
                 { "recipe_duration_ticks", "Recipe duration (ticks)" },
                 { "recipe_id", "Recipe ID" }
         };

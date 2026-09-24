@@ -192,6 +192,19 @@ public final class RedstoneClientChecks {
                 case 58 -> server(() -> check(part(boilerHatch).rules().get(1).strength() == 9 &&
                         part(boilerHatch).rules().get(1).operand().equals("0"), "shifted row refreshes editor before next save"));
                 case 59 -> screenshot("final-rows.png");
+                case 60 -> choose(24, 4);
+                case 61 -> choose(196, 1);
+                case 62 -> { edit(24, "12.5"); edit(196, "8"); }
+                case 63 -> save();
+                case 64 -> server(() -> check(part(boilerHatch).rules().get(1).valueId().equals("recipe_progress_percent") &&
+                        part(boilerHatch).rules().get(1).type() == site.siredvin.gttruesteam.api.RedstoneObservable.Type.FLOAT &&
+                        part(boilerHatch).rules().get(1).operand().equals("12.5"), "percentage UI saves fractional thresholds"));
+                case 65 -> ((com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup) ui().widgets.get(1)).setScrollYOffset(0);
+                case 66 -> {
+                    check(com.lowdragmc.lowdraglib.utils.LocalizationUtils.format("gttruesteam.redstone.recipe_progress_percent")
+                            .equals("Recipe progress (%)"), "percentage label escapes the literal percent sign");
+                    screenshot("percentage.png");
+                }
                 default -> finish(null);
             }
         } catch (Throwable failure) { finish(failure); }

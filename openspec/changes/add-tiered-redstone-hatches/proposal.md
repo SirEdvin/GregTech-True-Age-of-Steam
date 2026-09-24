@@ -11,6 +11,7 @@ Multiblock-specific operating values cannot currently drive configurable redston
 - Evaluate every rule and bitwise-XOR matching output strengths 0–15. Ordering is organizational only; matching zero does not stop evaluation. No match or unavailable controller produces zero.
 - Support six numeric comparisons (<, >, ==, <=, >=, !=), exact float equality, string equality/inequality, and boolean true/false checks.
 - Provide compact independent rule editors with per-row Save/Delete, type-specific controls, and server-side validation, without selecting or reordering rules.
+- Expose recipe progress as a floating-point percentage from 0–100 alongside tick counts, supporting fractional rule thresholds and zero when idle.
 - Inherit the controller's casing appearance when formed and restore the tier hull when detached, preserving the hatch overlay.
 - Emit from the oriented front face only; persist configuration and safely clear output when detached or invalidated.
 - Expose the Infernal Boiler's integer heat counter, string heat level and integer cycles until throttle, and the Industrial Gas Pressurizer's boolean perfect-condition state. Add shared progress/duration in ticks and current recipe ID for any accepting recipe-capable controller.
