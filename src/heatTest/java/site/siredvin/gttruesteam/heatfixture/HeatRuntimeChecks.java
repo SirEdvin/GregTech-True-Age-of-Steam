@@ -277,7 +277,7 @@ public final class HeatRuntimeChecks {
     private static void reverseRegistrations() {
         if (!reversedRegistration) return;
         for (BlockPos pos : List.of(A, B, C)) {
-            HeatNetworkManager.unregisterController(world, pos);
+
             HeatNetworkManager.unregisterHatch(world, pos.east());
             HeatNetworkManager.unregisterHatch(world, pos.east(2));
         }
@@ -286,8 +286,7 @@ public final class HeatRuntimeChecks {
                 if (MetaMachine.getMachine(world, hatch) instanceof HeatHatchMachine)
                     HeatNetworkManager.registerHatch(world, hatch);
             }
-            if (MetaMachine.getMachine(world, pos) instanceof HeatFixture)
-                HeatNetworkManager.registerController(world, pos);
+
         }
     }
 

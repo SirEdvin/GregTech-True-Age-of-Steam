@@ -42,6 +42,13 @@ import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection
 
 public class TrueSteamRecipeTypes {
 
+    public static final GTRecipeType DEBUG_HEAT_PRODUCING = register("debug_heat_producing", GTRecipeTypes.MULTIBLOCK, "Produce Heat")
+            .setMaxIOSize(0, 0, 0, 0).setEUIO(IO.NONE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
+    public static final GTRecipeType DEBUG_HEAT_CONSUMING = register("debug_heat_consuming", GTRecipeTypes.MULTIBLOCK, "Consume Heat")
+            .setMaxIOSize(0, 0, 0, 0).setEUIO(IO.NONE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
+
     public static String INFERNAL_CYCLES_DATA_KEY = "infernal_cycles";
     public static String OVERHEATED_KEY = "overheated";
     public static String COOLING_CONSUMED = "cooling_consumed";

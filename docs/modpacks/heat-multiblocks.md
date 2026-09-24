@@ -107,8 +107,10 @@ not restart it. Cooling to `Q <= C` cancels melting and clears the countdown;
 a later overheating episode starts a fresh interval. Melting does not disable
 otherwise-valid cooling exchange.
 
-The level END-tick coordinator performs all scheduled exchanges before advancing
-controller-owned countdowns. Cooling on the deadline tick can still cancel
+The network manager performs scheduled exchanges at level END. Each controller
+uses its own native server-tick subscription and finalizes that tick through its
+own lower-priority END listener, after exchange. There is no controller registry
+in the network manager. Cooling on the deadline tick can still cancel
 failure. Insufficient cooling expires that tick; no transfer scheduled or no
 connected peer does not delay expiry. A newly started episode is not shortened
 by the same tick's finalization.
@@ -138,6 +140,33 @@ warning/countdown. Unavailable owners and invalid thermal configuration have
 separate localized messages. There are no heat, countdown or direction controls.
 
 ## Development integration fixture
+
+### Shipped debug machines
+
+`gttruesteam:debug_heat_producer` and `gttruesteam:debug_heat_consumer` are included
+in the normal JAR and GTCEu machine creative tab, without crafting recipes.
+Use `/give @s gttruesteam:debug_heat_producer` and
+`/give @s gttruesteam:debug_heat_consumer` to obtain them directly.
+
+Build each as a hollow 3×3×3 iron-block shell, with the controller in the center
+of one side facing outward. The center block is air. Any other shell block may
+be replaced by an HV–LuV heat hatch; point hatch fronts toward the connecting
+computer heat vents. No energy, item or fluid hatches are required.
+
+Each machine has one repeating 20-working-tick recipe. Produce Heat adds 1 J per
+working tick; Consume Heat removes 1 J per working tick and pauses without losing
+recipe progress when less than 1 J is available. Both use a 1000 J safe capacity
+and 310 K safe maximum. The controller UI shows recipe progress and thermal values;
+the hatch UI shows the shared thermal state. Standard work controls apply (GTCEu
+normally finishes the current recipe before disabling). Production is deliberately
+not capped at safe capacity: disconnect cooling to observe melting/destruction.
+
+These two debug machines are shipped; the automated fixtures below are not.
+The real-server debug test is `./gradlew runServer --no-daemon -PheatTest
+-PheatTestDebug=true`, with report `run-heat-test/heat-debug-results.json`.
+It destructively uses x=512..520, y=120..122, z=512..514 in the isolated world.
+Its 11 assertions cover real recipe loading/operation, vent-delivered consumption,
+waiting/resumption, conservation with recipes suspended, and melting without hatches.
 
 `src/heatTest/java/site/siredvin/gttruesteam/heatfixture/HeatFixture.java` is the
 compiled integration example. It uses the production base and ability with a

@@ -14,6 +14,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
@@ -22,6 +25,7 @@ import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.parts.HeatHatchMachine;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public abstract class HeatMultiblockMachine extends WorkableMultiblockMachine implements IHeatMachine, IMachineLife {
 
@@ -45,6 +49,16 @@ public abstract class HeatMultiblockMachine extends WorkableMultiblockMachine im
     private long episodeStart = Long.MIN_VALUE;
     private long lastFinalizedTick = Long.MIN_VALUE;
     private boolean thermalStructureReady;
+    private long thermalTick = Long.MIN_VALUE;
+    private final Consumer<TickEvent.LevelTickEvent> thermalFinalizer = this::finishThermalTick;
+
+    // Only a real controller tick advances time; END preserves last-chance hatch cooling.
+    private void finishThermalTick(TickEvent.LevelTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && event.level == getLevel() &&
+                thermalTick == event.level.getGameTime()) {
+            finalizeHeatTick(thermalTick);
+        }
+    }
 
     protected HeatMultiblockMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -152,7 +166,10 @@ public abstract class HeatMultiblockMachine extends WorkableMultiblockMachine im
                 state.lastController = this;
                 MultiblockWorldSavedData.getOrCreate(level).addMapping(state);
             }
-            HeatNetworkManager.registerController(level, getPos());
+            thermalTick = Long.MIN_VALUE;
+            MinecraftForge.EVENT_BUS.unregister(thermalFinalizer);
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, false, TickEvent.LevelTickEvent.class, thermalFinalizer);
+            subscribeServerTick(() -> thermalTick = level.getGameTime());
         }
         super.onLoad();
         } finally {
@@ -162,7 +179,8 @@ public abstract class HeatMultiblockMachine extends WorkableMultiblockMachine im
 
     @Override
     public void onUnload() {
-        if (getLevel() instanceof ServerLevel level) HeatNetworkManager.unregisterController(level, getPos());
+        MinecraftForge.EVENT_BUS.unregister(thermalFinalizer);
+        thermalTick = Long.MIN_VALUE;
         thermalStructureReady = false;
         super.onUnload();
     }

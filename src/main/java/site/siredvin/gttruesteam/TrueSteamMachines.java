@@ -5,6 +5,9 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
+import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -20,6 +23,7 @@ import com.gregtechceu.gtceu.data.model.builder.MachineModelBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -30,6 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import site.siredvin.gttruesteam.common.BoilerLevel;
 import site.siredvin.gttruesteam.machines.parts.HeatHatchMachine;
+import site.siredvin.gttruesteam.machines.shared.heat.DebugHeatMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamLiquidBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolarBoilerMachine;
 import site.siredvin.gttruesteam.machines.boilers.ExpandedSteamSolidBoilerMachine;
@@ -44,6 +49,30 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.VENT_OVER
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.addWorkableOverlays;
 
 public class TrueSteamMachines {
+
+    public static final MultiblockMachineDefinition DEBUG_HEAT_PRODUCER = debugHeatMachine("debug_heat_producer", true);
+    public static final MultiblockMachineDefinition DEBUG_HEAT_CONSUMER = debugHeatMachine("debug_heat_consumer", false);
+
+    private static MultiblockMachineDefinition debugHeatMachine(String name, boolean producer) {
+        return GTTrueSteam.REGISTRATE.multiblock(name, holder -> new DebugHeatMachine(holder, producer))
+                .langValue(producer ? "Debug Heat Producer" : "Debug Heat Consumer")
+                .rotationState(RotationState.NON_Y_AXIS)
+                .recipeType(producer ? TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING : TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING)
+                .appearanceBlock(() -> Blocks.IRON_BLOCK)
+                .additionalDisplay((controller, text) -> ((DebugHeatMachine) controller).addDisplayText(text))
+                .pattern(def -> FactoryBlockPattern.start()
+                        .aisle("XXX", "XXX", "XXX")
+                        .aisle("XXX", "X X", "XXX")
+                        .aisle("XXX", "XSX", "XXX")
+                        .where("S", Predicates.controller(Predicates.blocks(def.get())))
+                        .where("X", Predicates.blocks(Blocks.IRON_BLOCK).or(Predicates.abilities(TrueSteamPartAbilities.HEAT)))
+                        .where(" ", Predicates.air()).build())
+                .tooltips(Component.translatable(producer ? "gttruesteam.debug_heat.producer" : "gttruesteam.debug_heat.consumer"),
+                        Component.translatable("gttruesteam.debug_heat.structure"))
+                .workableCasingModel(ResourceLocation.fromNamespaceAndPath("minecraft", "block/iron_block"),
+                        GTCEu.id("block/multiblock/electric_blast_furnace"))
+                .register();
+    }
 
     public static final List<MachineDefinition> HEAT_HATCHES = List.of(GTValues.HV, GTValues.EV, GTValues.IV, GTValues.LuV)
             .stream().map(tier -> GTTrueSteam.REGISTRATE
@@ -116,6 +145,8 @@ public class TrueSteamMachines {
         public static void addHatches(BuildCreativeModeTabContentsEvent event) {
             if (event.getTab() == GTCreativeModeTabs.MACHINE.get()) {
                 HEAT_HATCHES.forEach(definition -> event.accept(definition.asStack()));
+                event.accept(DEBUG_HEAT_PRODUCER.asStack());
+                event.accept(DEBUG_HEAT_CONSUMER.asStack());
             }
         }
     }

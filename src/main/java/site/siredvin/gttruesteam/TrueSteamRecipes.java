@@ -356,6 +356,8 @@ public class TrueSteamRecipes {
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
+        TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING.recipeBuilder(GTTrueSteam.id("produce_heat")).duration(20).save(provider);
+        TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING.recipeBuilder(GTTrueSteam.id("consume_heat")).duration(20).save(provider);
         registerInfernalChargingLoop(provider);
         registerBoilerRecipes(provider);
 

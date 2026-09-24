@@ -35,6 +35,7 @@ public final class HeatPersistenceChecks {
     private static String mode;
     private static long start;
     private static int remaining;
+    private static int activeTicks;
     private static boolean finished;
 
     @SubscribeEvent
@@ -59,6 +60,7 @@ public final class HeatPersistenceChecks {
             } else {
                 JsonObject expected = JsonParser.parseString(Files.readString(SNAPSHOT)).getAsJsonObject();
                 HeatFixture machine = controller();
+                machine.subscribeServerTick(() -> activeTicks++);
                 remaining = expected.get("remaining").getAsInt();
                 check(machine.getStoredHeat() == expected.get("energy").getAsDouble(), "restart retains overcapacity energy");
                 check(machine.isMelting() && machine.getMeltingTicksRemaining() == remaining,
@@ -146,14 +148,14 @@ public final class HeatPersistenceChecks {
                     hatch.refreshDisplay();
                     var countdown = HeatHatchMachine.class.getDeclaredField("displayCountdown");
                     countdown.setAccessible(true);
-                    check(hatch.resolveOwner().status() == 1 && countdown.getInt(hatch) == remaining - elapsed,
+                    check(hatch.resolveOwner().status() == 1 && countdown.getInt(hatch) == remaining - activeTicks,
                             "reloaded hatch display receives preserved countdown rather than a fresh interval");
                 }
-                if (elapsed > 0 && elapsed < remaining) {
-                    check(controller().isMelting() && controller().getMeltingTicksRemaining() == remaining - elapsed,
+                if (activeTicks > 0 && activeTicks < remaining) {
+                    check(controller().isMelting() && controller().getMeltingTicksRemaining() == remaining - activeTicks,
                             "loaded countdown resumes once per active tick: " + elapsed);
                 }
-                if (elapsed == remaining) {
+                if (activeTicks == remaining) {
                     check(MetaMachine.getMachine(world, POS) == null && MetaMachine.getMachine(world, POS.east()) == null,
                             "restored episode expires after saved remainder and retains owned targets");
                     check(world.getBlockState(POS.east(2)).is(Blocks.IRON_BLOCK), "restart expiry preserves casing");

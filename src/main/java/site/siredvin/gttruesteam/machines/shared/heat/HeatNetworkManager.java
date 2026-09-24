@@ -27,7 +27,7 @@ public final class HeatNetworkManager {
 
     private static final Map<ServerLevel, HeatNetworkManager> LEVELS = new HashMap<>();
     private final Set<BlockPos> hatches = new HashSet<>();
-    private final Set<BlockPos> controllers = new HashSet<>();
+
     private long lastTick = Long.MIN_VALUE;
 
     private record Pair(BlockPos first, BlockPos second) implements Comparable<Pair> {
@@ -53,14 +53,6 @@ public final class HeatNetworkManager {
         if (manager != null) manager.hatches.remove(pos);
     }
 
-    public static void registerController(ServerLevel level, BlockPos pos) {
-        get(level).controllers.add(pos.immutable());
-    }
-
-    public static void unregisterController(ServerLevel level, BlockPos pos) {
-        var manager = LEVELS.get(level);
-        if (manager != null) manager.controllers.remove(pos);
-    }
 
     @SubscribeEvent
     public static void tick(TickEvent.LevelTickEvent event) {
@@ -70,12 +62,7 @@ public final class HeatNetworkManager {
         if (manager == null || manager.lastTick == level.getGameTime()) return;
         manager.lastTick = level.getGameTime();
         if (manager.lastTick % Constants.HEAT_TRANSFER_INTERVAL == 0) manager.exchange(level);
-        for (BlockPos pos : List.copyOf(manager.controllers)) {
-            if (level.hasChunkAt(pos) && level.isPositionEntityTicking(pos) &&
-                    loadedMachine(level, pos) instanceof HeatMultiblockMachine heat) {
-                heat.finalizeHeatTick(manager.lastTick);
-            }
-        }
+
         for (BlockPos pos : List.copyOf(manager.hatches)) {
             var hatch = hatch(level, pos);
             if (hatch != null) hatch.refreshDisplay();

@@ -204,6 +204,7 @@ extensions.configure<UserDevExtension>("minecraft") {
                     property("gttruesteam.heatTestNetwork", providers.gradleProperty("heatTestNetwork").orElse("false").get())
                     property("gttruesteam.heatTestChunks", providers.gradleProperty("heatTestChunks").orElse("false").get())
                     property("gttruesteam.heatTestClient", providers.gradleProperty("heatTestClient").orElse("false").get())
+                    property("gttruesteam.heatTestDebug", providers.gradleProperty("heatTestDebug").orElse("false").get())
                     mods.create(modBaseName) {
                         source(sourceSets.main.get())
                         source(heatTest)

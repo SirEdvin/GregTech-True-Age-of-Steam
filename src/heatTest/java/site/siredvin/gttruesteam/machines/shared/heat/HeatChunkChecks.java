@@ -86,7 +86,7 @@ public final class HeatChunkChecks {
         if (finished || world == null || event.level != world || event.phase != TickEvent.Phase.END) return;
         long now = world.getGameTime();
         try {
-            if (phase == 3 && world.isPositionEntityTicking(CONTROLLER)) resumedActiveTicks++;
+
             if (now - start == 60) {
                 check(controller().checkPatternWithLock(), "chunk fixture forms");
                 controller().onStructureFormed();
@@ -116,6 +116,7 @@ public final class HeatChunkChecks {
                 check(controller().getStoredHeat() == 1100 && controller().isMelting() &&
                         controller().getMeltingTicksRemaining() == savedRemaining, "real chunk reload preserves exact heat and paused interval");
                 check(controller().heatIdentity().equals(controllerIdentity), "real chunk reload preserves controller identity");
+                controller().subscribeServerTick(() -> resumedActiveTicks++);
                 phase = 3;
                 phaseTick = now;
             }

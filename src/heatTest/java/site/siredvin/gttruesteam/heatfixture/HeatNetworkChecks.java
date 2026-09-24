@@ -138,11 +138,11 @@ public final class HeatNetworkChecks {
                 }
                 if (scenario == 24) {
                     for (BlockPos pos : new BlockPos[] { A, B, C }) {
-                        HeatNetworkManager.unregisterController(world, pos);
+
                         HeatNetworkManager.unregisterHatch(world, pos.east());
                     }
                     for (BlockPos pos : new BlockPos[] { C, B, A }) {
-                        HeatNetworkManager.registerController(world, pos);
+
                         HeatNetworkManager.registerHatch(world, pos.east());
                     }
                 }
