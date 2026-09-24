@@ -17,7 +17,7 @@ public class RedstoneHatchUI extends WidgetGroup {
     private int lastCount = -1;
 
     public RedstoneHatchUI(RedstoneHatchMachine machine) {
-        super(0, 0, 320, 238);
+        super(0, 0, 320, 218);
         this.machine = machine;
         setBackground(GuiTextures.BACKGROUND_INVERSE);
         addWidget(new WidgetGroup(4, 4, 312, 28)
@@ -37,10 +37,6 @@ public class RedstoneHatchUI extends WidgetGroup {
             rows.addWidget(editors[index]);
         }
         addWidget(viewport.addWidget(rows));
-        addWidget(new WidgetGroup(4, 218, 312, 16)
-                .addWidget(new ComponentPanelWidget(4, 4, lines ->
-                        lines.add(Component.translatable("gttruesteam.redstone.priority"))).setMaxWidthLimit(296))
-                .setBackground(GuiTextures.DISPLAY));
         showRows(machine.rules().size());
     }
 
