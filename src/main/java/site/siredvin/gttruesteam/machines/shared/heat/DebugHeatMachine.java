@@ -66,7 +66,10 @@ public final class DebugHeatMachine extends HeatMultiblockMachine {
     }
 
     public void addDisplayText(List<Component> text) {
-        text.add(Component.translatable("gttruesteam.debug_heat.stored", getStoredHeat(), getHeatCapacity(), getTemperature()));
+        text.add(Component.translatable("gttruesteam.heat.temperature", String.format(java.util.Locale.ROOT, "%.6g", getTemperature())));
+        text.add(Component.translatable("gttruesteam.heat.stored", String.format(java.util.Locale.ROOT, "%.6g", getStoredHeat())));
+        text.add(Component.translatable("gttruesteam.heat.capacity", String.format(java.util.Locale.ROOT, "%.6g", getHeatCapacity())));
+        text.add(Component.translatable("gttruesteam.heat.maximum", String.format(java.util.Locale.ROOT, "%.6g", getMaxTemperature())));
         if (isMelting()) text.add(Component.translatable("gttruesteam.heat.melting", getMeltingTicksRemaining()));
     }
 }

@@ -8,9 +8,19 @@
     "side"
   ],
   "variants": {
-    "": {
+    "is_formed=false": {
       "model": {
-        "parent": "gtceu:block/machine/part/data_access_hatch",
+        "parent": "gttruesteam:block/machine/part/heat_hatch",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/iv/bottom",
+          "side": "gtceu:block/casings/voltage/iv/side",
+          "top": "gtceu:block/casings/voltage/iv/top"
+        }
+      }
+    },
+    "is_formed=true": {
+      "model": {
+        "parent": "gttruesteam:block/machine/part/heat_hatch",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/iv/bottom",
           "side": "gtceu:block/casings/voltage/iv/side",

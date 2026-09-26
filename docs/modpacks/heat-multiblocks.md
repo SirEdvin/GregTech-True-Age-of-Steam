@@ -165,8 +165,11 @@ These two debug machines are shipped; the automated fixtures below are not.
 The real-server debug test is `./gradlew runServer --no-daemon -PheatTest
 -PheatTestDebug=true`, with report `run-heat-test/heat-debug-results.json`.
 It destructively uses x=512..520, y=120..122, z=512..514 in the isolated world.
-Its 11 assertions cover real recipe loading/operation, vent-delivered consumption,
+Its 19 assertions cover real recipe loading/operation, vent-delivered consumption,
 waiting/resumption, conservation with recipes suspended, and melting without hatches.
+They also verify both controller thermal readouts, hatch UI creation, and formed
+hatches inheriting the controller's iron casing. Heat hatches retain their central
+vent-grille overlay over the multiblock appearance; unformed hatches use tier hulls.
 
 `src/heatTest/java/site/siredvin/gttruesteam/heatfixture/HeatFixture.java` is the
 compiled integration example. It uses the production base and ability with a

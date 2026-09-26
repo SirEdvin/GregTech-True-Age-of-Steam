@@ -82,10 +82,11 @@ public class TrueSteamMachines {
                     .tier(tier)
                     .rotationState(RotationState.ALL)
                     .abilities(TrueSteamPartAbilities.HEAT)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .tooltips(Component.translatable("gttruesteam.heat.coefficient", HeatHatchMachine.coefficient(tier)),
                             Component.translatable("gttruesteam.heat.tooltip"),
                             Component.translatable("gtceu.part_sharing.disabled"))
-                    .overlayTieredHullModel(GTCEu.id("block/machine/part/data_access_hatch"))
+                    .overlayTieredHullModel(GTTrueSteam.id("block/machine/part/heat_hatch"))
                     .register()).toList();
 
     public static final MachineDefinition[] REDSTONE_HATCHES = registerRedstoneHatches();

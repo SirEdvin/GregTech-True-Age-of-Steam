@@ -70,6 +70,15 @@ public final class DebugHeatChecks {
                 for (BlockPos pos : new BlockPos[] { A, B }) {
                     check(machine(pos).checkPatternWithLock(), "hollow 3x3x3 pattern matches " + pos);
                     machine(pos).onStructureFormed();
+                    var text = new java.util.ArrayList<net.minecraft.network.chat.Component>();
+                    machine(pos).addDisplayText(text);
+                    check(text.size() == 4, "controller exposes all four thermal readouts " + pos);
+                    BlockPos hatchPos = pos.offset(pos.equals(A) ? 1 : -1, 0, 1);
+                    var hatch = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, hatchPos);
+                    check(hatch.replacePartModelWhenFormed(), "formed hatch enables multiblock appearance " + pos);
+                    check(hatch.getFormedAppearance(world.getBlockState(hatchPos), hatchPos, Direction.UP).is(Blocks.IRON_BLOCK),
+                            "formed hatch inherits iron casing " + pos);
+                    check(hatch.createUIWidget() != null, "heat hatch provides thermal UI " + pos);
                 }
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING).size() == 1, "one real producer recipe loaded");
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING).size() == 1, "one real consumer recipe loaded");
