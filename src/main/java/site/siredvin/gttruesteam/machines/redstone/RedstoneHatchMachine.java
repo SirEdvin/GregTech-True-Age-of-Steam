@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import site.siredvin.gttruesteam.api.RedstoneObservable;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 public class RedstoneHatchMachine extends TieredPartMachine implements IFancyUIMachine {
@@ -95,13 +95,6 @@ public class RedstoneHatchMachine extends TieredPartMachine implements IFancyUIM
         return true;
     }
 
-    public boolean moveRule(int index, int destination) {
-        if (isRemote() || index < 0 || index >= rules.size() || destination < 0 || destination >= rules.size()) return false;
-        var updated = new ArrayList<>(rules);
-        Collections.swap(updated, index, destination);
-        replaceRules(updated);
-        return true;
-    }
 
     private void replaceRules(List<RedstoneRule> updated) {
         rules = List.copyOf(updated);

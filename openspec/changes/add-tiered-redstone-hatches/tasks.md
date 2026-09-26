@@ -33,6 +33,6 @@
 ## 5. End-to-end verification and handoff
 
 - [x] 5.1 Run the focused automated suite covering every comparison/type and capacity tier, serialization corruption, unavailable values, and zero-strength OR contribution; inspect actual test results and require nonzero executed test counts.
-- [x] 5.2 Exercise both real multiblocks in a runnable GameTest or documented test world: optional/global-limit attachment, live heat/readiness transitions, front-face strengths 0/1/15, rule reorder/delete, rotation, break/reform, chunk reload, and world restart; record pass/fail evidence and any environment blockers rather than claiming unrun runtime coverage.
+- [x] 5.2 Exercise both real multiblocks in a runnable GameTest or documented test world: optional/global-limit attachment, live heat/readiness transitions, front-face strengths 0/1/15, rule editing/deletion, rotation, break/reform, chunk reload, and world restart; record pass/fail evidence and any environment blockers rather than claiming unrun runtime coverage.
 - [x] 5.3 Run `./gradlew --no-daemon spotlessApply`, `./gradlew --no-daemon runData`, `./gradlew --no-daemon spotlessCheck`, and `./gradlew --no-daemon build`; inspect generated diffs for unrelated churn and report exact outcomes.
 - [x] 5.4 Update player-facing documentation/changelog with capacities, priority, boolean checks, casing eligibility, and exposed values; verify documentation matches the implementation and both capability specs before requesting review.

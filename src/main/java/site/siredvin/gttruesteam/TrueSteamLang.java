@@ -14,7 +14,7 @@ public class TrueSteamLang {
                 { "connected", "Controller connected" }, { "disconnected", "No formed controller" },
                 { "capacity", "Rules: %s/%s    Output: %s" },
                 { "condition", "Condition" }, { "output", "Output" },
-                { "add", "Add" }, { "up", "Up" }, { "down", "Down" }, { "delete", "Delete" },
+                { "add", "Add" }, { "delete", "Delete" },
                 { "save", "Save" }, { "saved", "Rule saved" }, { "invalid", "Invalid rule; previous settings kept" },
                 { "unavailable", "Unavailable" }, { "current", "%s: %s" },
                 { "operand", "Comparison value (strings are case-sensitive)" }, { "strength", "Output strength: 0–15" },

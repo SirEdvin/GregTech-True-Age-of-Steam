@@ -48,7 +48,7 @@ Each rule SHALL select one exposed value, a valid comparison, and an integer out
 - **THEN** it does not match and the UI identifies the invalid or unavailable rule
 
 ### Requirement: Bitwise OR output
-Every rule within tier capacity SHALL be evaluated against current controller observations, with each distinct value read at most once per evaluation. The output SHALL be the bitwise OR of all valid matching rule strengths. Nonmatching or invalid rules SHALL contribute zero. When no rule matches, output SHALL be zero. Evaluation SHALL occur on the server at least once per server tick while attached to a loaded formed controller, independently of whether its recipe is active. Reordering SHALL NOT affect output.
+Every rule within tier capacity SHALL be evaluated against current controller observations, with each distinct value read at most once per evaluation. The output SHALL be the bitwise OR of all valid matching rule strengths. Nonmatching or invalid rules SHALL contribute zero. When no rule matches, output SHALL be zero. Evaluation SHALL occur on the server at least once per server tick while attached to a loaded formed controller, independently of whether its recipe is active. Evaluation SHALL be independent of list order.
 
 #### Scenario: Matching strengths combine
 - **WHEN** two matching rules request strengths 15 and 3
@@ -86,7 +86,7 @@ The hatch UI SHALL display connection status, exposed value labels/types/current
 - **THEN** the first rule is stored without requiring a separate Add or row-selection action
 
 #### Scenario: Invalid client mutation
-- **WHEN** a client submits an out-of-range strength, excess rule, incompatible operator, invalid operand, or out-of-bounds reorder
+- **WHEN** a client submits an out-of-range strength, excess rule, incompatible operator, invalid operand, or out-of-bounds edit/delete
 - **THEN** the server rejects the mutation without corrupting the previous valid configuration
 
 ### Requirement: Front-face output and safe lifecycle

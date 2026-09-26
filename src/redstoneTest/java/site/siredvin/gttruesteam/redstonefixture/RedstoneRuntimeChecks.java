@@ -171,7 +171,7 @@ public final class RedstoneRuntimeChecks {
                 int expected = t == 1 ? t : 15;
                 check(boiler.part().output() == expected && pressurizer.part().output() == expected, "tier " + t + " ORs all rules on idle formed controllers");
                 check(!boiler.part().saveRule(0, heat(EQUAL, "1", 16)), "reject invalid output");
-                check(!boiler.part().moveRule(-1, 0) && !boiler.part().moveRule(0, 100), "reject invalid reorder");
+
                 for (Fixture fixture : List.of(boiler, pressurizer)) {
                     fixture.machine().onStructureInvalid();
                     check(!fixture.part().replacePartModelWhenFormed() && fixture.part().getFormedAppearance(
@@ -187,10 +187,7 @@ public final class RedstoneRuntimeChecks {
         });
         steps.add(() -> {
             check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "matching zero contributes zero without terminating evaluation");
-            boiler.part().moveRule(0, 1); pressurizer.part().moveRule(0, 1);
-        });
-        steps.add(() -> {
-            check(boiler.part().output() == 15 && pressurizer.part().output() == 15, "reordering preserves OR output");
+
             for (Direction face : Direction.values()) {
                 check(level.getSignal(boiler.hatch(), face.getOpposite()) == (face == Direction.NORTH ? 15 : 0), "front-only signal " + face);
             }
