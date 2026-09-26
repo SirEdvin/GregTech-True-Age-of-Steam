@@ -30,6 +30,7 @@ bin/
 
 run/
 run-data/
+run-redstone-test/
 /src/generated/resources/.cache/*
 
 .codex

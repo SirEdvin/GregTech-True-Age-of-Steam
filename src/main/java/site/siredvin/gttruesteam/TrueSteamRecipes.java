@@ -356,6 +356,14 @@ public class TrueSteamRecipes {
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
+        var circuits = java.util.List.of(CustomTags.LV_CIRCUITS, CustomTags.MV_CIRCUITS, CustomTags.HV_CIRCUITS,
+                CustomTags.EV_CIRCUITS, CustomTags.IV_CIRCUITS, CustomTags.LuV_CIRCUITS);
+        for (int tier = LV; tier <= LuV; tier++) {
+            var hatch = TrueSteamMachines.REDSTONE_HATCHES[tier];
+            VanillaRecipeHelper.addShapedRecipe(provider, true, hatch.getId(), hatch.asStack(), "C", "R", "H",
+                    'C', circuits.get(tier - LV), 'R', net.minecraft.world.item.Items.COMPARATOR,
+                    'H', GTMachines.HULL[tier].asStack());
+        }
         registerInfernalChargingLoop(provider);
         registerBoilerRecipes(provider);
 

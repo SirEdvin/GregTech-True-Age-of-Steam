@@ -7,6 +7,31 @@ import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
 
 public class TrueSteamLang {
 
+    static {
+        String[][] translations = {
+                { "tooltip", "Up to %s rules; emits redstone from the front. No energy required." },
+                { "priority", "Matching strengths are ORed; order does not matter." },
+                { "connected", "Controller connected" }, { "disconnected", "No formed controller" },
+                { "capacity", "Rules: %s/%s    Output: %s" },
+                { "condition", "Condition" }, { "output", "Output" },
+                { "add", "Add" }, { "delete", "Delete" },
+                { "save", "Save" }, { "saved", "Rule saved" }, { "invalid", "Invalid rule; previous settings kept" },
+                { "unavailable", "Unavailable" }, { "current", "%s: %s" },
+                { "operand", "Comparison value (strings are case-sensitive)" }, { "strength", "Output strength: 0–15" },
+                { "integer", "Integer" }, { "float", "Float" }, { "string", "String" }, { "boolean", "Boolean" },
+                { "less", "<" }, { "greater", ">" }, { "equal", "=" }, { "not_equal", "≠" },
+                { "less_equal", "≤" }, { "greater_equal", "≥" }, { "is_true", "Is true" }, { "is_false", "Is false" },
+                { "heat_counter", "Heat counter" }, { "heat_level", "Heat level" },
+                { "perfect_condition", "Perfect condition" },
+                { "cycles_until_throttle", "Cycles until throttle" },
+                { "recipe_progress_ticks", "Recipe progress (ticks)" },
+                { "recipe_progress_percent", "Recipe progress (%%)" },
+                { "recipe_duration_ticks", "Recipe duration (ticks)" },
+                { "recipe_id", "Recipe ID" }
+        };
+        for (var entry : translations) GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone." + entry[0], entry[1]);
+    }
+
     public static String COIL_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("cooling_coils"));
     public static String MACHINE_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("machine"));
     public static String BEATING_HUSK_ERROR_KEY = Util.makeDescriptionId("error", GTTrueSteam.id("beating_husk"));

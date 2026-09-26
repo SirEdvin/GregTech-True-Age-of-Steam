@@ -50,6 +50,12 @@ sourceSets.main {
     resources.srcDir("src/generated/resources")
 }
 
+val redstoneTest by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+    runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
+}
+configurations[redstoneTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
+
 forgeShaking {
     commonProjectName.set("")
     useAT.set(false)
@@ -150,6 +156,7 @@ repositories {
 }
 
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     compileOnly("org.jetbrains:annotations:26.0.1")
 
     compileOnly(fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion"))
@@ -187,6 +194,19 @@ mixin {
 
 extensions.configure<UserDevExtension>("minecraft") {
     runs {
+        if (providers.gradleProperty("redstoneTest").isPresent) {
+            listOf("client", "server").forEach { runName ->
+                named(runName) {
+                    workingDirectory(file("run-redstone-test"))
+                    property("gttruesteam.redstoneTest", "true")
+                    property("gttruesteam.redstoneTestPhase", providers.gradleProperty("redstoneTestPhase").orElse("initial").get())
+                    mods.create(modBaseName) {
+                        source(sourceSets.main.get())
+                        source(redstoneTest)
+                    }
+                }
+            }
+        }
         named("client") {
             arg("--refresh-dependencies")
             property("forge.enabledGameTestNamespaces", modBaseName)
@@ -290,6 +310,10 @@ tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(17)
     options.compilerArgs.add("-Aquiet=true")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 modPublishing {

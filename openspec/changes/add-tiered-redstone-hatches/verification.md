@@ -1,0 +1,50 @@
+# Redstone hatch verification
+
+## Executed results
+
+Rule-moving cleanup: removed the unused server method, swap import, Up/Down translations, and obsolete runtime checks. Preserved evaluator order-independence and serialization-order tests. Build/unit tests/Spotless and 174 server assertions passed; language resources regenerated through the accepted timeout-bounded data run.
+
+Compact-row follow-up: reduced row height from 70 to 40 pixels, aligned all editing controls horizontally, added shared localized headings, and removed per-rule panel borders. Build/unit tests/Spotless passed; the client fixture passed 35 assertions, including new panel-bound and single-line-alignment checks plus existing independent editing, dropdown, sixth-row, deletion, and percentage coverage. Data generation completed providers/HashCache before the accepted timeout, updating the two language files. Runtime evaluation is unchanged.
+
+Percentage follow-up: added FLOAT `recipe_progress_percent` alongside ticks. Runtime checks cover idle/reset zero, fractional progress, effective duration, upper clamp, and decimal comparisons; client checks save `> 12.5` and verify percent-sign localization. Data generation completed all providers and HashCache before the accepted timeout; build and Spotless passed.
+
+- JUnit: 37 tests, zero failures/errors/skips; XML under `build/test-results/test`.
+- Final `./gradlew --no-daemon spotlessApply test build` and subsequent `spotlessCheck build`: passed.
+- `timeout 110s ./gradlew --no-daemon runData`: all providers and HashCache completed, then exit 124 from timeout. This is the project's accepted workflow; no shutdown fix is claimed. The revision regenerated localization for OR and shared recipe/throttle observations.
+- Appearance follow-up repeated the timeout-bounded data run: all providers and HashCache completed, writing exactly the six hatch model variants for formed/unformed states. Final build/Spotless and all 31 client assertions passed again using the regenerated models; the production JAR contains no fixture classes.
+- Dedicated-server initial fixture: 174 passing assertions covering both multiblocks, zero/one/two hatches, all tiers/capacities, formed casing inheritance and detached tier-hull restoration, OR output including zero contributions, direction/rotation, a real lamp, unchanged-output notification suppression, hatch break/reform, observation thresholds/readiness, six crafting recipes, actual chunk unload/reload, and generic recipe defaults on an injected association with a formed Electric Blast Furnace without the custom observation interface.
+- Separate world-restart fixture: 3 passing assertions covering saved rules and recomputed output.
+- Final client fixture: 33 passing assertions using real UI clicks/typing for independent rule saves/deletes, zero output, invalid strength rejection, string/boolean selection, disconnect/reconnect, oversized strength-packet rejection, and saving heat_counter > 15 on a fresh hatch. Additional checks cover synchronized formed appearance, editing the sixth row through scrolling/dropdowns, and editing after middle-row deletion. All six item models resolve; screenshots show the compact independent rule widgets.
+
+## Pinned integration audit
+
+Dependencies remain unchanged: GTCEu 7.5.1 and LDLib 1.0.40.b.
+
+UI consistency follow-up: compared `MaintenanceHatchPartMachine.createUIWidget()` (configurable branch) and `IDisplayUIMachine.createUI()`. Retained their native GTCEu display/component panels and background/button textures, but replaced the shared selected-rule editor with independent row widgets. Inspected `rows.png` and `sixth-row.png`; the final client fixture passed 31 assertions. Build/tests and formatting passed. Appearance root cause was the missing `GTMachineModelProperties.IS_FORMED` registration: GTCEu's existing part lifecycle requires it before replacing the tier-hull appearance with the controller casing.
+
+- Lifecycle: `TieredPartMachine`, `controllerPositions`, `removedFromController`, `onLoad`, `onUnload`, `onRotated`, `subscribeServerTick`.
+- Non-loading lookup: `ServerChunkCache.getChunkNow` and `MetaMachine.getMachine(chunk, pos)`.
+- Output: `IRedstoneSignalMachine.updateSignal`, `getOutputSignal`, `getOutputDirectSignal`, `canConnectRedstone`. Minecraft query directions oppose the emitting face. Notify only on output change or rotation.
+- Patterns: shared `PartAbility` and `TraceabilityPredicate.setMaxGlobalLimited(1)` across eligible casing alternatives. Other predicates remain unchanged.
+- Persistence: `saveCustomPersistedData` / `loadCustomPersistedData` store ordered rules, never authoritative output.
+- UI: LDLib selectors, text fields, labels and native widget synchronization. Popup widgets are last for reverse-order input dispatch. Oversized field packets are rejected before LDLib's default truncation.
+- Recipes: existing `IGTAddon.addRecipes` hook registers them at runtime, not as six exported recipe JSON files. Runtime matching and assembly are verified instead.
+
+## Reproduction and evidence
+
+Fixtures are opt-in and excluded from release artifacts. Use only the disposable `run-redstone-test/` world, never production saves; accept its EULA yourself and choose a free server port if needed. Delete the relevant old report before each run and require a fresh `passed: true` report, not merely Gradle exit zero.
+
+1. `./gradlew --no-daemon test spotlessCheck build`
+2. `timeout 180s ./gradlew --no-daemon -PredstoneTest runServer`
+3. `timeout 180s ./gradlew --no-daemon -PredstoneTest -PredstoneTestPhase=reload runServer`
+4. Copy `run-redstone-test/world-extra/` into a fresh `run-redstone-test/saves/redstone-client/`, keeping `run-redstone-test/redstone-positions.json`. Set TMPDIR to an existing scratch directory, then run `timeout 180s xvfb-run -a ./gradlew --no-daemon -PredstoneTest -PredstoneTestPhase=client runClient`.
+
+Server reports: `run-redstone-test/redstone-initial.json` and `redstone-reload.json`. Client report/screenshots: `$TMPDIR/redstone-client/`. This session's TMPDIR is `/home/siredvin/.hermes/profiles/albina/cache/scratch`; logs there include `redstone-runtime.log`, `redstone-client.log`, `redstone-rundata-revision.log`, and `redstone-final-build.log`.
+
+Artifact: `build/libs/gttruesteam-forge-1.20.1-0.3.3.jar` (development build, no version bump).
+
+## Coverage scope
+
+The final client fixture renders all six tier items beside the shared LuV editor; the inspected screenshot shows textured casings and front overlays without missing-texture placeholders. Integer/string/boolean screens use the same editor. Float behavior is unit-tested and the shared percentage observation is also covered by runtime/client checks. Pattern exclusions and unchanged recipe/readiness mechanics are additionally checked by source review. These are focused integration checks, not an exhaustive modpack playtest.
+
+Initial implementation was published in PR #13. Follow-up verification covers the requested OR/default-observation/save-editor revision.

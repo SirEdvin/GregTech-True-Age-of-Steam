@@ -26,7 +26,9 @@ public class IndustrialGasPressurizer {
             .recipeType(TrueSteamRecipeTypes.INDUSTRIAL_GAS_PRESSURIZER)
             .recipeModifiers(GTRecipeModifiers.OC_NON_PERFECT, new IndustrialGasPressurizerRecipeModifier())
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-            .pattern(definition -> FactoryBlockPattern
+            .pattern(definition -> {
+                var redstone = site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.optionalPredicate();
+                return FactoryBlockPattern
                     .start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .aisle(" c c ", " c c ", " ddd ", " eee ", " ddd ", " ddd ", " ddd ", " eee ", " ddd ")
                     .aisle("c   c", "c   c", "ddddd", "efffe", "dfffd", "d   d", "dfffd", "efffe", "dxxxd")
@@ -41,21 +43,22 @@ public class IndustrialGasPressurizer {
                     .where(" ", Predicates.any())
                     .where("c",
                             Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel)))
-                    .where("d", Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
+                    .where("d", Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()).or(redstone))
                     .where("e", Predicates.blocks(GTBlocks.CASING_STAINLESS_TURBINE.get()))
                     .where("f", Predicates.blocks(Blocks.PISTON))
                     .where("g", Predicates.controller(Predicates.blocks(definition.get())))
                     .where("h", Predicates.blocks(GTBlocks.CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
                     .where("x",
                             Predicates.ability(PartAbility.IMPORT_FLUIDS)
-                                    .or(Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())))
+                                    .or(Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())).or(redstone))
                     .where("i",
                             Predicates.ability(PartAbility.EXPORT_FLUIDS)
                                     .or(Predicates.ability(PartAbility.IMPORT_ITEMS))
                                     .or(Predicates.ability(PartAbility.EXPORT_ITEMS))
-                                    .or(Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())))
+                                    .or(Predicates.blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())).or(redstone))
                     .where("p", Predicates.ability(PartAbility.INPUT_ENERGY))
-                    .build())
+                    .build();
+            })
             .additionalDisplay((controller, tooltips) -> {
                 if (controller instanceof IndustrialGasPressurizerMachine pressurizerMachine) {
                     tooltips.add(TrueSteamLang.PERFECT_CONDITION);
