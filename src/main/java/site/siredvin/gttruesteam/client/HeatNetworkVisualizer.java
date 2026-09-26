@@ -105,11 +105,10 @@ public final class HeatNetworkVisualizer {
         };
         sources.forEach((pos, hatch) -> {
             var trace = HeatNetwork.trace(pos, hatch.getFrontFacing(), lookup);
-            if (!trace.hatches().isEmpty()) {
-                HATCHES.add(pos);
-                HATCHES.addAll(trace.hatches());
-                VENTS.addAll(trace.vents());
-            }
+            // Incomplete and misoriented connections must remain visible to a wiring debugger.
+            HATCHES.add(pos);
+            HATCHES.addAll(trace.hatches());
+            VENTS.addAll(trace.vents());
         });
     }
 
