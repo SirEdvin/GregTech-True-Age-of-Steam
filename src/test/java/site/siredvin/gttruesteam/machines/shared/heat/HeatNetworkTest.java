@@ -58,6 +58,33 @@ class HeatNetworkTest {
     }
 
     @Test
+    void visualTraceSharesConnectivityAndCollectsVents() {
+        var world = new World();
+        world.vent(1, 0, 0);
+        world.vent(2, 0, 0);
+        var target = world.hatch(3, 0, 0, Direction.WEST);
+        var trace = HeatNetwork.trace(SOURCE, Direction.EAST, world);
+        assertEquals(world.discover(), trace.hatches());
+        assertEquals(Set.of(target), trace.hatches());
+        assertEquals(Set.of(new BlockPos(1, 0, 0), new BlockPos(2, 0, 0)), trace.vents());
+        world.unloaded.add(new BlockPos(2, 0, 0));
+        trace = HeatNetwork.trace(SOURCE, Direction.EAST, world);
+        assertTrue(trace.hatches().isEmpty());
+        assertEquals(Set.of(new BlockPos(1, 0, 0)), trace.vents());
+    }
+
+    @Test
+    void directVisualConnectionNeedsNoVentAndRejectsBackFace() {
+        var world = new World();
+        var target = world.hatch(1, 0, 0, Direction.WEST);
+        var trace = HeatNetwork.trace(SOURCE, Direction.EAST, world);
+        assertEquals(Set.of(target), trace.hatches());
+        assertTrue(trace.vents().isEmpty());
+        world.hatch(1, 0, 0, Direction.EAST);
+        assertTrue(HeatNetwork.trace(SOURCE, Direction.EAST, world).hatches().isEmpty());
+    }
+
+    @Test
     void everyDesignatedFaceSupportsDirectContact() {
         for (Direction face : Direction.values()) {
             var world = new World();

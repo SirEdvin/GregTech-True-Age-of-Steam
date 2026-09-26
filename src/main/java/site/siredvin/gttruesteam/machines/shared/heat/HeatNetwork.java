@@ -25,7 +25,19 @@ public final class HeatNetwork {
 
     private HeatNetwork() {}
 
+    public record Trace(Set<BlockPos> hatches, Set<BlockPos> vents) {}
+
+    public static Trace trace(BlockPos source, Direction front, Lookup lookup) {
+        Set<BlockPos> vents = new HashSet<>();
+        Set<BlockPos> hatches = discover(source, front, lookup, vents);
+        return new Trace(Set.copyOf(hatches), Set.copyOf(vents));
+    }
+
     public static Set<BlockPos> discover(BlockPos source, Direction front, Lookup lookup) {
+        return discover(source, front, lookup, null);
+    }
+
+    private static Set<BlockPos> discover(BlockPos source, Direction front, Lookup lookup, Set<BlockPos> vents) {
         Set<BlockPos> destinations = new HashSet<>();
         Set<BlockPos> visitedVents = new HashSet<>();
         ArrayDeque<Step> queue = new ArrayDeque<>();
@@ -40,6 +52,7 @@ public final class HeatNetwork {
                 }
             } else if (node.kind() == Kind.VENT && visitedVents.add(step.position()) &&
                     step.distance() < Constants.HEAT_NETWORK_RANGE) {
+                if (vents != null) vents.add(step.position());
                 for (Direction direction : Direction.values()) {
                     queue.addLast(new Step(step.position(), step.position().relative(direction), step.distance() + 1));
                 }

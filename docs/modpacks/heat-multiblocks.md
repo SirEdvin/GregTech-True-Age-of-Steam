@@ -6,6 +6,22 @@ recipe is supplied; packs provide their own recipes. The implementation is still
 awaiting the full loader/world lifecycle and client-menu acceptance pass. Do not
 use the destructive melting behavior in a valuable world before that pass.
 
+## Debug network visualizer
+
+Hold `gttruesteam:debug_heat_network_visualizer` in either hand to outline all
+nearby physical heat networks through blocks. Cyan outlines mark connected heat
+hatches; orange outlines mark their reachable computer heat vents, including
+branches. Nearby means a hatch within 32 blocks of the player; discovery follows
+the same front-face and 32-step rules as heat exchange. Multiple networks are
+shown together, without aiming or clicking. The overlay refreshes every ten
+client ticks and disappears immediately when the item is put away.
+
+This is a wiring diagnostic, not a claim that controllers are formed or currently
+transferring heat. It inspects only client-loaded chunks, never loads missing
+chunks, and requires no server requests. Disconnected single hatches are not
+highlighted. The item ships in the normal mod JAR, has no crafting recipe, and
+can be obtained with `/give @s gttruesteam:debug_heat_network_visualizer`.
+
 ## Controller contract
 
 Extend `site.siredvin.gttruesteam.machines.shared.heat.HeatMultiblockMachine`.
