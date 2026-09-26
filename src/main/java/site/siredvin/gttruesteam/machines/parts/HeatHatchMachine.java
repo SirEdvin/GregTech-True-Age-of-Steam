@@ -1,5 +1,12 @@
 package site.siredvin.gttruesteam.machines.parts;
 
+import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
+import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.ChatFormatting;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
@@ -144,7 +151,7 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
         lines.add(Component.translatable("gttruesteam.heat.tier", GTValues.VN[getTier()]));
         lines.add(Component.translatable("gttruesteam.heat.coefficient", sendingCoefficient()));
         if (ownerStatus != 1) {
-            lines.add(Component.translatable(ownerStatus == 2 ? "gttruesteam.heat.invalid" : "gttruesteam.heat.unavailable"));
+            lines.add(Component.translatable(ownerStatus == 2 ? "gttruesteam.heat.invalid" : "gttruesteam.heat.unavailable").withStyle(ChatFormatting.YELLOW));
             return;
         }
         lines.add(Component.translatable("gttruesteam.heat.temperature", formatValue(displayTemperature)));
@@ -152,6 +159,10 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
         lines.add(Component.translatable("gttruesteam.heat.capacity", formatValue(displayCapacity)));
         lines.add(Component.translatable("gttruesteam.heat.maximum", formatValue(displayMaximum)));
         if (displayMelting) lines.add(Component.translatable("gttruesteam.heat.melting", displayCountdown));
+        for (int i = 0; i < lines.size(); i++) {
+            lines.set(i, lines.get(i).copy().withStyle(i < 2 ? ChatFormatting.GOLD : i < 4 ? ChatFormatting.AQUA : ChatFormatting.GRAY));
+        }
+        if (displayMelting) lines.set(lines.size() - 1, lines.get(lines.size() - 1).copy().withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
     }
 
     private static String formatValue(double value) {
@@ -160,8 +171,19 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
 
     @Override
     public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 220, 150);
-        group.addWidget(new ComponentPanelWidget(4, 4, this::displayText).setMaxWidthLimit(212));
+        var group = new WidgetGroup(0, 0, 190, 125);
+        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117)
+                .setBackground(GuiTextures.DISPLAY)
+                .addWidget(new LabelWidget(4, 5, getBlockState().getBlock().getDescriptionId()))
+                .addWidget(new ComponentPanelWidget(4, 19, this::displayText)
+                        .textSupplier(isRemote() ? null : this::displayText).setMaxWidthLimit(170)));
         return group;
+    }
+
+    @Override
+    public ModularUI createUI(Player player) {
+        return new ModularUI(198, 208, this, player)
+                .widget(new FancyMachineUIWidget(this, 198, 208));
     }
 }

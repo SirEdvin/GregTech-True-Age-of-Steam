@@ -1,5 +1,17 @@
 package site.siredvin.gttruesteam.machines.shared.heat;
 
+import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
+import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
+import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
+import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.widget.Widget;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.ChatFormatting;
+import java.util.Locale;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -12,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /** Creative-only recipe-driven test machine; deliberately permits overheating. */
-public final class DebugHeatMachine extends HeatMultiblockMachine {
+public final class DebugHeatMachine extends HeatMultiblockMachine implements IFancyUIMachine {
     private final boolean producer;
 
     public DebugHeatMachine(IMachineBlockEntity holder, boolean producer) {
@@ -66,10 +78,35 @@ public final class DebugHeatMachine extends HeatMultiblockMachine {
     }
 
     public void addDisplayText(List<Component> text) {
-        text.add(Component.translatable("gttruesteam.heat.temperature", String.format(java.util.Locale.ROOT, "%.6g", getTemperature())));
-        text.add(Component.translatable("gttruesteam.heat.stored", String.format(java.util.Locale.ROOT, "%.6g", getStoredHeat())));
-        text.add(Component.translatable("gttruesteam.heat.capacity", String.format(java.util.Locale.ROOT, "%.6g", getHeatCapacity())));
-        text.add(Component.translatable("gttruesteam.heat.maximum", String.format(java.util.Locale.ROOT, "%.6g", getMaxTemperature())));
+        text.add(Component.translatable(producer ? "gttruesteam.debug_heat.producing" : "gttruesteam.debug_heat.consuming").withStyle(ChatFormatting.GOLD));
+        text.add(Component.translatable("gttruesteam.debug_heat." + (!isFormed() ? "incomplete" : getRecipeLogic().isWorking() ? "working" : getRecipeLogic().isWaiting() ? "waiting" : "idle"))
+                .withStyle(getRecipeLogic().isWorking() ? ChatFormatting.GREEN : ChatFormatting.YELLOW));
+        text.add(Component.translatable("gttruesteam.heat.temperature", String.format(Locale.ROOT, "%.6g", getTemperature())));
+        text.add(Component.translatable("gttruesteam.heat.stored", String.format(Locale.ROOT, "%.6g", getStoredHeat())));
+        text.add(Component.translatable("gttruesteam.heat.capacity", String.format(Locale.ROOT, "%.6g", getHeatCapacity())));
+        text.add(Component.translatable("gttruesteam.heat.maximum", String.format(Locale.ROOT, "%.6g", getMaxTemperature())));
         if (isMelting()) text.add(Component.translatable("gttruesteam.heat.melting", getMeltingTicksRemaining()));
+        for (int i = 2; i < text.size(); i++) {
+            text.set(i, text.get(i).copy().withStyle(i == 2 || i == 3 ? ChatFormatting.AQUA : ChatFormatting.GRAY));
+        }
+        if (isMelting()) text.set(text.size() - 1, text.get(text.size() - 1).copy().withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+    }
+
+    @Override
+    public Widget createUIWidget() {
+        var group = new WidgetGroup(0, 0, 190, 125);
+        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117)
+                .setBackground(GuiTextures.DISPLAY)
+                .addWidget(new LabelWidget(4, 5, getBlockState().getBlock().getDescriptionId()))
+                .addWidget(new ComponentPanelWidget(4, 19, this::addDisplayText)
+                        .textSupplier(isRemote() ? null : this::addDisplayText).setMaxWidthLimit(170)));
+        return group;
+    }
+
+    @Override
+    public ModularUI createUI(Player player) {
+        return new ModularUI(198, 208, this, player)
+                .widget(new FancyMachineUIWidget(this, 198, 208));
     }
 }

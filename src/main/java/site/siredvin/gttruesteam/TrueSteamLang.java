@@ -8,6 +8,12 @@ import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
 public class TrueSteamLang {
 
     static {
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producing", "Produce Heat  +1 J/t");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consuming", "Consume Heat  -1 J/t");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.incomplete", "Structure incomplete");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.working", "Working");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.waiting", "Waiting for heat");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.idle", "Idle / disabled");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producer", "Produce Heat: +1 J per working tick, 20 ticks per recipe. No power or ingredients. Can overheat!");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consumer", "Consume Heat: -1 J per working tick, 20 ticks per recipe. Pauses when heat is insufficient.");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.structure", "Creative debug machine: hollow 3x3x3 iron-block shell. Heat hatches replace casing. Safe capacity: 1000 J / 310 K.");

@@ -72,7 +72,11 @@ public final class DebugHeatChecks {
                     machine(pos).onStructureFormed();
                     var text = new java.util.ArrayList<net.minecraft.network.chat.Component>();
                     machine(pos).addDisplayText(text);
-                    check(text.size() == 4, "controller exposes all four thermal readouts " + pos);
+                    check(text.size() == 6, "controller exposes status and all four thermal readouts " + pos);
+                    check(machine(pos) instanceof com.gregtechceu.gtceu.api.machine.feature.IUIMachine,
+                            "controller participates in native GTCEu right-click UI dispatch " + pos);
+                    check(machine(pos).createUI(net.minecraftforge.common.util.FakePlayerFactory.getMinecraft(world)) != null,
+                            "controller constructs native GTCEu menu " + pos);
                     BlockPos hatchPos = pos.offset(pos.equals(A) ? 1 : -1, 0, 1);
                     var hatch = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, hatchPos);
                     check(hatch.replacePartModelWhenFormed(), "formed hatch enables multiblock appearance " + pos);
