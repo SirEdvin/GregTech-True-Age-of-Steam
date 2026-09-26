@@ -113,7 +113,7 @@ public final class HeatNetworkVisualizer {
 
     @SubscribeEvent
     public static void render(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || !held() || HATCHES.isEmpty()) return;
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL || !held() || HATCHES.isEmpty()) return;
         var pose = event.getPoseStack();
         var camera = event.getCamera().getPosition();
         pose.pushPose();
@@ -123,16 +123,30 @@ public final class HeatNetworkVisualizer {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();
-        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-        RenderSystem.lineWidth(3f);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         try {
             var buffer = Tesselator.getInstance().getBuilder();
-            buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            buffer.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
             for (BlockPos pos : VENTS) {
-                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.005), 1f, 0.55f, 0.1f, 0.85f);
+                LevelRenderer.addChainedFilledBoxVertices(pose, buffer,
+                        pos.getX() - 0.01, pos.getY() - 0.01, pos.getZ() - 0.01,
+                        pos.getX() + 1.01, pos.getY() + 1.01, pos.getZ() + 1.01, 1f, 0.55f, 0.1f, 0.22f);
             }
             for (BlockPos pos : HATCHES) {
-                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.01), 0.1f, 0.9f, 1f, 1f);
+                LevelRenderer.addChainedFilledBoxVertices(pose, buffer,
+                        pos.getX() - 0.01, pos.getY() - 0.01, pos.getZ() - 0.01,
+                        pos.getX() + 1.01, pos.getY() + 1.01, pos.getZ() + 1.01, 0.1f, 0.9f, 1f, 0.3f);
+            }
+            BufferUploader.drawWithShader(buffer.end());
+            RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+            RenderSystem.lineWidth(5f);
+            buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
+            for (BlockPos pos : VENTS) {
+                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.015), 1f, 0.55f, 0.1f, 1f);
+            }
+            for (BlockPos pos : HATCHES) {
+                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.015), 0.1f, 0.9f, 1f, 1f);
             }
             BufferUploader.drawWithShader(buffer.end());
         } finally {
