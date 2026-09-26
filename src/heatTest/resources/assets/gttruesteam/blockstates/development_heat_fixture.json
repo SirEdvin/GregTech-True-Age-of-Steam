@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "gttruesteam:block/machine/development_heat_fixture" }
+  }
+}

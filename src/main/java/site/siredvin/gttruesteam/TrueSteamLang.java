@@ -8,6 +8,27 @@ import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
 public class TrueSteamLang {
 
     static {
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producing", "Produce Heat  +1 J/t");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consuming", "Consume Heat  -1 J/t");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.incomplete", "Structure incomplete");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.working", "Working");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.waiting", "Waiting for heat");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.idle", "Idle / disabled");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producer", "Produce Heat: +1 J per working tick, 20 ticks per recipe. No power or ingredients. Can overheat!");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consumer", "Consume Heat: -1 J per working tick, 20 ticks per recipe. Pauses when heat is insufficient.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.structure", "Creative debug machine: hollow 3x3x3 iron-block shell. Heat hatches replace casing. Safe capacity: 1000 J / 310 K.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.insufficient", "Waiting for at least 1 J of heat");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.stored", "Heat: %s / %s J; Temperature: %s K");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tier", "Heat hatch tier: %s");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.coefficient", "Nominal sending coefficient: %s J/(K × update)");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tooltip", "Bidirectional heat via front-face computer heat vents. Actual transfer is limited by donor energy and equilibrium, not receiving tier.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.temperature", "Temperature: %s K");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.stored", "Stored heat: %s J");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.capacity", "Safe capacity: %s J");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.maximum", "Maximum safe temperature: %s K");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.melting", "DANGER: Melting! Failure in %s game ticks");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.unavailable", "Heat controller unavailable");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.invalid", "Invalid thermal configuration");
         String[][] translations = {
                 { "tooltip", "Up to %s rules; emits redstone from the front. No energy required." },
                 { "priority", "Matching strengths are ORed; order does not matter." },

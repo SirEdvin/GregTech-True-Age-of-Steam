@@ -2,6 +2,14 @@ package site.siredvin.gttruesteam.common;
 
 public class Constants {
 
+    public static final int HEAT_TRANSFER_INTERVAL = 20;
+    public static final int HEAT_MELTING_TICKS = 40;
+    public static final int HEAT_NETWORK_RANGE = 32;
+    public static final double HEAT_HV_COEFFICIENT = 2;
+    public static final double HEAT_EV_COEFFICIENT = 8;
+    public static final double HEAT_IV_COEFFICIENT = 32;
+    public static final double HEAT_LUV_COEFFICIENT = 128;
+
     public static int FLUID_INGOT = 144;
     public static int FLUID_BLOCK = FLUID_INGOT * 9;
     public static int BASE_STEAM_TEMPERATURE = 373;

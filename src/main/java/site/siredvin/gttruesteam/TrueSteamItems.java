@@ -7,6 +7,14 @@ import site.siredvin.gttruesteam.common.GlowingItem;
 
 public class TrueSteamItems {
 
+    public static ItemEntry<Item> DebugHeatNetworkVisualizer = GTTrueSteam.REGISTRATE
+            .item("debug_heat_network_visualizer", Item::new)
+            .lang("Debug Heat Network Visualizer")
+            .initialProperties(() -> new Item.Properties().stacksTo(1))
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), "minecraft:item/generated")
+                    .texture("layer0", GTTrueSteam.id("block/overlay/heat_hatch")))
+            .register();
+
     public static ItemEntry<Item> PurifiedInfernalDust = GTTrueSteam.REGISTRATE
             .item("purified_infernal_dust", Item::new)
             .initialProperties(() -> new Item.Properties().fireResistant())
