@@ -16,7 +16,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
-public class IndustrialGasPressurizerMachine extends WorkableElectricMultiblockMachine {
+public class IndustrialGasPressurizerMachine extends WorkableElectricMultiblockMachine implements site.siredvin.gttruesteam.api.RedstoneObservable {
+
+    @Override
+    public java.util.List<Descriptor> redstoneValues() {
+        return java.util.List.of(new Descriptor("perfect_condition", "gttruesteam.redstone.perfect_condition", Type.BOOLEAN));
+    }
+
+    @Override
+    public java.util.Optional<Value> readRedstoneValue(String id) {
+        return isFormed() && id.equals("perfect_condition") ?
+                java.util.Optional.of(Value.bool(getState() == PerfectConditionState.REACHED)) : java.util.Optional.empty();
+    }
 
     public IndustrialGasPressurizerMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);

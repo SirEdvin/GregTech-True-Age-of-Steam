@@ -57,6 +57,12 @@ val heatTest by sourceSets.creating {
 
 configurations[heatTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
 
+val redstoneTest by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+    runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
+}
+configurations[redstoneTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
+
 forgeShaking {
     commonProjectName.set("")
     useAT.set(false)
@@ -208,6 +214,19 @@ extensions.configure<UserDevExtension>("minecraft") {
                     mods.create(modBaseName) {
                         source(sourceSets.main.get())
                         source(heatTest)
+                    }
+                }
+            }
+        }
+        if (providers.gradleProperty("redstoneTest").isPresent) {
+            listOf("client", "server").forEach { runName ->
+                named(runName) {
+                    workingDirectory(file("run-redstone-test"))
+                    property("gttruesteam.redstoneTest", "true")
+                    property("gttruesteam.redstoneTestPhase", providers.gradleProperty("redstoneTestPhase").orElse("initial").get())
+                    mods.create(modBaseName) {
+                        source(sourceSets.main.get())
+                        source(redstoneTest)
                     }
                 }
             }

@@ -27,7 +27,9 @@ public class InfernalBoiler {
             .recipeTypes(TrueSteamRecipeTypes.METAPHYSICAL_BOILING)
             .appearanceBlock(() -> TrueSteamBlocks.InfernalAlloyCasing.get())
             .recipeModifier(new InfernalBoilerRecipeModifier())
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> {
+                var redstone = site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.optionalPredicate();
+                return FactoryBlockPattern.start()
                     .aisle(" CHC ", "COOOC", "COOOC", "COOOC", " CMC ")
                     .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
                     .aisle(" CCC ", "C#K#C", "CK#KC", "C#K#C", " CCC ")
@@ -36,7 +38,7 @@ public class InfernalBoiler {
                     .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
                     .aisle(" CPC ", "CIIIC", "CIIIC", "CIIIC", " EEE ")
                     .where('P', Predicates.controller(Predicates.blocks(definition.get())))
-                    .where('C', Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get()))
+                    .where('C', Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get()).or(redstone))
                     .where('S', Predicates.heatingCoils())
                     .where('M', Predicates.abilities(PartAbility.MUFFLER))
                     .where('H', Predicates.abilities(PartAbility.MAINTENANCE))
@@ -45,14 +47,15 @@ public class InfernalBoiler {
                     .where(' ', Predicates.any())
                     .where('E',
                             Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get())
-                                    .or(Predicates.abilities(PartAbility.INPUT_ENERGY)))
+                                    .or(redstone).or(Predicates.abilities(PartAbility.INPUT_ENERGY)))
                     .where('I',
                             Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get())
-                                    .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS)))
+                                    .or(redstone).or(Predicates.abilities(PartAbility.IMPORT_FLUIDS)))
                     .where('O',
                             Predicates.blocks(TrueSteamBlocks.InfernalAlloyCasing.get())
-                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS)))
-                    .build())
+                                    .or(redstone).or(Predicates.abilities(PartAbility.EXPORT_FLUIDS)))
+                    .build();
+            })
             .shapeInfo(definition -> MultiblockShapeInfo.builder()
                     .aisle(" CPC ", "CIIIC", "CIIIC", "CIIIC", " EEE ")
                     .aisle(" SSS ", "S#K#S", "SK#KS", "S#K#S", " SSS ")
