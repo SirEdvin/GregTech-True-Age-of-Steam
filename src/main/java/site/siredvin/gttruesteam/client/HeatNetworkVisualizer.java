@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
@@ -38,6 +39,7 @@ public final class HeatNetworkVisualizer {
     private static final Set<BlockPos> VENTS = new HashSet<>();
     private static ClientLevel lastLevel;
     private static int cooldown;
+    private static PoseStack worldPose;
 
     private HeatNetworkVisualizer() {}
 
@@ -113,8 +115,21 @@ public final class HeatNetworkVisualizer {
 
     @SubscribeEvent
     public static void render(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL || !held() || HATCHES.isEmpty()) return;
-        var pose = event.getPoseStack();
+        // Forge 1.20.1 passes its projection-effects stack at AFTER_LEVEL, not the
+        // camera-rotated world stack. Capture the latter before the late overlay pass.
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            worldPose = null;
+            if (held() && !HATCHES.isEmpty()) {
+                worldPose = new PoseStack();
+                worldPose.last().pose().set(event.getPoseStack().last().pose());
+                worldPose.last().normal().set(event.getPoseStack().last().normal());
+            }
+            return;
+        }
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) return;
+        var pose = worldPose;
+        worldPose = null;
+        if (pose == null || !held() || HATCHES.isEmpty()) return;
         var camera = event.getCamera().getPosition();
         pose.pushPose();
         pose.translate(-camera.x, -camera.y, -camera.z);
