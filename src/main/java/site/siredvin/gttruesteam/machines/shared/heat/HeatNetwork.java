@@ -13,7 +13,10 @@ public final class HeatNetwork {
 
     public enum Kind { BLOCKED, VENT, HATCH }
 
-    public record Node(Kind kind, Direction front) {}
+    public record Node(Kind kind, Direction front, int connections) {
+        public Node(Kind kind, Direction front) { this(kind, front, 63); }
+        public boolean connected(Direction direction) { return (connections & (1 << direction.ordinal())) != 0; }
+    }
 
     public interface Lookup {
         boolean loaded(BlockPos pos);
@@ -46,6 +49,9 @@ public final class HeatNetwork {
             Step step = queue.removeFirst();
             if (step.distance() > Constants.HEAT_NETWORK_RANGE || !lookup.loaded(step.position())) continue;
             Node node = lookup.node(step.position());
+            Direction incoming = Direction.fromDelta(step.previous().getX() - step.position().getX(),
+                    step.previous().getY() - step.position().getY(), step.previous().getZ() - step.position().getZ());
+            if (node.kind() == Kind.VENT && !node.connected(incoming)) continue;
             if (node.kind() == Kind.HATCH) {
                 if (!step.position().equals(source) && step.position().relative(node.front()).equals(step.previous())) {
                     destinations.add(step.position());
@@ -54,6 +60,7 @@ public final class HeatNetwork {
                     step.distance() < Constants.HEAT_NETWORK_RANGE) {
                 if (vents != null) vents.add(step.position());
                 for (Direction direction : Direction.values()) {
+                    if (!node.connected(direction)) continue;
                     queue.addLast(new Step(step.position(), step.position().relative(direction), step.distance() + 1));
                 }
             }

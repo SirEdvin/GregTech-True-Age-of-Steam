@@ -74,7 +74,7 @@ public final class HeatRuntimeChecks {
         HeatFixture.Commands.place(world, A, false, 3);
         HeatFixture.Commands.place(world, B, true, 0);
         HeatFixture.Commands.place(world, C, false, 1);
-        for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(1, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+        for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(1, 0, z), HeatPipeChecks.openPipe());
         MetaMachine.getMachine(world, A.east()).setFrontFacing(Direction.SOUTH);
         MetaMachine.getMachine(world, B.east()).setFrontFacing(Direction.NORTH);
         for (BlockPos pos : List.of(A, C)) {
@@ -219,7 +219,7 @@ public final class HeatRuntimeChecks {
             }
             if (rescueTick > 0 && world.getGameTime() == rescueTick + 39) {
                 check(controller(A).getMeltingTicksRemaining() == 1, "deadline rescue reaches last remaining tick");
-                world.setBlockAndUpdate(A.offset(1, 0, 3), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+                world.setBlockAndUpdate(A.offset(1, 0, 3), HeatPipeChecks.openPipe());
             }
             if (rescueTick > 0 && world.getGameTime() == rescueTick + 40) {
                 check(!controller(A).isMelting() && controller(A).getMeltingTicksRemaining() == 0,
@@ -251,7 +251,7 @@ public final class HeatRuntimeChecks {
                         "insufficient cooling does not reset countdown");
             }
             if (insufficientTick > 0 && world.getGameTime() == insufficientTick + 39) {
-                world.setBlockAndUpdate(A.offset(1, 0, 3), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+                world.setBlockAndUpdate(A.offset(1, 0, 3), HeatPipeChecks.openPipe());
             }
             if (insufficientTick > 0 && world.getGameTime() == insufficientTick + 40) {
                 check(MetaMachine.getMachine(world, A) == null && MetaMachine.getMachine(world, A.east()) == null,

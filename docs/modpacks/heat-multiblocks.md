@@ -37,6 +37,19 @@ no block entity, no ticker, and no item/fluid/energy capabilities. Its half-bloc
 diameter and textures follow the normal GregTech pipe. Connections form to other
 heat pipes and the designated front face of heat hatches.
 
+Connections use the default GT6-style placement and wrench behavior, regardless
+of GregTech's `gt6StylePipesCables` setting. Placement connects toward the supporting
+compatible pipe/hatch and picks up neighboring pipe arms already pointing toward
+the new block; it does not join other adjacent closed sides. GregTech's face grid
+selects the side for wrench toggles and pipe placement. Wrench toggles synchronize
+both ends of adjacent heat pipes and use normal tool sounds/durability.
+
+The six block-state properties now store explicit open ports. Neighbor updates
+do not reopen closed sides; an open arm can remain open toward empty space.
+Both heat transfer and the visualizer require matching open pipe ports. Existing
+saved pipe states retain their connections. Command-placed pipes default to all
+sides closed unless explicit state properties are supplied or a wrench is used.
+
 The assembler produces four pipes from two Heating-Infused Cometal Plates and
 two Insertion-Infused Cometal Plates, at 16 EU/t for 100 ticks. Insertion is the
 combined Extraction + Polarization concept and uses the existing combined-concept

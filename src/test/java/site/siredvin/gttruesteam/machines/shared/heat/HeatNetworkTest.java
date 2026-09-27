@@ -58,6 +58,27 @@ class HeatNetworkTest {
     }
 
     @Test
+    void closedSidesBlockTransferAndVisualTrace() {
+        var world = new World();
+        var first = new BlockPos(1, 0, 0);
+        var second = new BlockPos(2, 0, 0);
+        var target = world.hatch(3, 0, 0, Direction.WEST);
+        int west = 1 << Direction.WEST.ordinal();
+        int east = 1 << Direction.EAST.ordinal();
+        world.nodes.put(first, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, west | east));
+        world.nodes.put(second, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, west | east));
+        assertEquals(Set.of(target), world.discover());
+        world.nodes.put(second, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, east));
+        assertTrue(world.discover().isEmpty());
+        assertEquals(Set.of(first), HeatNetwork.trace(SOURCE, Direction.EAST, world).vents());
+        world.nodes.put(second, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, west | east));
+        world.nodes.put(first, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, west));
+        assertTrue(world.discover().isEmpty());
+        world.nodes.put(first, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, east));
+        assertTrue(HeatNetwork.trace(SOURCE, Direction.EAST, world).vents().isEmpty());
+    }
+
+    @Test
     void visualTraceSharesConnectivityAndCollectsVents() {
         var world = new World();
         world.vent(1, 0, 0);

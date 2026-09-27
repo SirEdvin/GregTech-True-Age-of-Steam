@@ -66,7 +66,7 @@ public class TrueSteamBlocks {
                         .allFaces((direction, face) -> face.texture(direction.getAxis() == Direction.Axis.Z ? "#end" : "#side")).end();
             })
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
-            .item(BlockItem::new)
+            .item(site.siredvin.gttruesteam.common.InsulatedHeatPipeItem::new)
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), GTTrueSteam.id("block/insulated_heat_pipe_inventory")))
             .build().register();
 

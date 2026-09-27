@@ -34,6 +34,7 @@ public final class DebugHeatChecks {
     private static final BlockPos B = A.east(6);
     private static final JsonArray checks = new JsonArray();
     private static double before;
+    private static double beforeClosed;
     private static long deadline;
 
     @SubscribeEvent
@@ -43,7 +44,7 @@ public final class DebugHeatChecks {
         world.setChunkForced(32, 32, true);
         place(A, true);
         place(B, false);
-        for (int x = 515; x <= 517; x++) world.setBlockAndUpdate(new BlockPos(x, 121, 513), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+        for (int x = 515; x <= 517; x++) world.setBlockAndUpdate(new BlockPos(x, 121, 513), HeatPipeChecks.openPipe());
         start = world.getGameTime();
     }
 
@@ -71,6 +72,7 @@ public final class DebugHeatChecks {
         long elapsed = world.getGameTime() - start;
         try {
             if (elapsed == 10) {
+                HeatPipeChecks.run(world, DebugHeatChecks::check);
                 for (BlockPos pos : new BlockPos[] { A, B }) {
                     check(machine(pos).checkPatternWithLock(), "hollow 3x3x3 pattern matches " + pos);
                     machine(pos).onStructureFormed();
@@ -128,8 +130,17 @@ public final class DebugHeatChecks {
                 machine(A).getRecipeLogic().setStatus(com.gregtechceu.gtceu.api.machine.trait.RecipeLogic.Status.SUSPEND);
                 machine(B).getRecipeLogic().setStatus(com.gregtechceu.gtceu.api.machine.trait.RecipeLogic.Status.SUSPEND);
                 before = machine(A).getStoredHeat() + machine(B).getStoredHeat();
+                beforeClosed = machine(A).getStoredHeat();
+                site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.setConnection(world, new BlockPos(516, 121, 513), Direction.EAST, false);
+            }
+            if (elapsed == 120) {
+                check(machine(A).getStoredHeat() == beforeClosed, "closed pipe port stops live heat exchange");
+                var sender = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, A.offset(1, 0, 1));
+                check(sender.getExchangeOut() == 0, "closed connection clears exchange telemetry");
+                site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.setConnection(world, new BlockPos(516, 121, 513), Direction.EAST, true);
             }
             if (elapsed == 140) {
+                check(machine(A).getStoredHeat() < beforeClosed, "reopened port resumes live heat exchange");
                 check(Math.abs(machine(A).getStoredHeat() + machine(B).getStoredHeat() - before) < 1e-8, "disabled recipes leave only conservative exchange");
                 world.setBlockAndUpdate(new BlockPos(516, 121, 513), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
                 machine(B).changeHeat(-machine(B).getStoredHeat(), false);

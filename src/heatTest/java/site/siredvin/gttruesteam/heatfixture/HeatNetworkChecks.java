@@ -79,13 +79,13 @@ public final class HeatNetworkChecks {
         }
         hatch(A.east()).setFrontFacing(Direction.SOUTH);
         hatch(B.east()).setFrontFacing(Direction.NORTH);
-        for (int z = 1; z < B.getZ() - A.getZ(); z++) world.setBlockAndUpdate(A.offset(1, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+        for (int z = 1; z < B.getZ() - A.getZ(); z++) world.setBlockAndUpdate(A.offset(1, 0, z), HeatPipeChecks.openPipe());
         if (scenario >= 16 && scenario <= 19) {
             world.setBlockAndUpdate(A.east(2), TrueSteamMachines.HEAT_HATCHES.get(3).defaultBlockState());
             world.setBlockAndUpdate(B.east(2), TrueSteamMachines.HEAT_HATCHES.get(1).defaultBlockState());
             hatch(A.east(2)).setFrontFacing(scenario == 18 ? Direction.EAST : Direction.SOUTH);
             hatch(B.east(2)).setFrontFacing(Direction.NORTH);
-            for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(2, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+            for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(2, 0, z), HeatPipeChecks.openPipe());
         }
         if (scenario == 19) world.removeBlock(A.offset(1, 0, 3), false);
         if (scenario == 20) hatch(A.east()).setFrontFacing(Direction.WEST);
@@ -105,9 +105,9 @@ public final class HeatNetworkChecks {
             hatch(A.east()).setFrontFacing(Direction.SOUTH);
             HeatFixture.Commands.place(world, C, false, 1);
             hatch(C.east()).setFrontFacing(Direction.NORTH);
-            for (int z = 1; z < 12; z++) world.setBlockAndUpdate(A.offset(3, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+            for (int z = 1; z < 12; z++) world.setBlockAndUpdate(A.offset(3, 0, z), HeatPipeChecks.openPipe());
             for (int z : new int[] { 1, 5, 11 }) {
-                for (int x = 1; x <= 3; x++) world.setBlockAndUpdate(A.offset(x, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+                for (int x = 1; x <= 3; x++) world.setBlockAndUpdate(A.offset(x, 0, z), HeatPipeChecks.openPipe());
             }
         }
         placed = world.getGameTime();
@@ -209,7 +209,7 @@ public final class HeatNetworkChecks {
                         hatch(A.east()).setFrontFacing(Direction.SOUTH);
                         world.removeBlock(A.offset(1, 0, 3), false);
                     }
-                    if (topologyStage == 2) world.setBlockAndUpdate(A.offset(1, 0, 3), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
+                    if (topologyStage == 2) world.setBlockAndUpdate(A.offset(1, 0, 3), HeatPipeChecks.openPipe());
                     if (topologyStage++ == 3) {
                         scenario++;
                         setup();

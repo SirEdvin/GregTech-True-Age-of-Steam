@@ -95,7 +95,8 @@ public final class HeatNetworkVisualizer {
                     var chunk = level.getChunkSource().getChunk(key.getX() >> 4, key.getZ() >> 4, ChunkStatus.FULL, false);
                     if (chunk != null) {
                         if (chunk.getBlockState(key).is(TrueSteamBlocks.InsulatedHeatPipe.get())) {
-                            return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null);
+                            return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null,
+                                    site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.connectionMask(chunk.getBlockState(key)));
                         }
                         if (MetaMachine.getMachine(chunk, key) instanceof HeatHatchMachine hatch) {
                             return new HeatNetwork.Node(HeatNetwork.Kind.HATCH, hatch.getFrontFacing());

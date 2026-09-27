@@ -103,7 +103,8 @@ public final class HeatNetworkManager {
                 var chunk = level.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4);
                 if (chunk == null) return new HeatNetwork.Node(HeatNetwork.Kind.BLOCKED, null);
                 if (chunk.getBlockState(pos).is(TrueSteamBlocks.InsulatedHeatPipe.get())) {
-                    return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null);
+                    return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null,
+                            site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.connectionMask(chunk.getBlockState(pos)));
                 }
                 var endpoint = hatch(level, pos);
                 return endpoint == null ? new HeatNetwork.Node(HeatNetwork.Kind.BLOCKED, null) :

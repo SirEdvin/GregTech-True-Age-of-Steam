@@ -1,6 +1,17 @@
 package site.siredvin.gttruesteam.common;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.capability.ICoverable;
+import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -12,7 +23,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import site.siredvin.gttruesteam.machines.parts.HeatHatchMachine;
 
 /** Connections live entirely in block state; this block has no block entity or ticker. */
-public class InsulatedHeatPipeBlock extends PipeBlock {
+public class InsulatedHeatPipeBlock extends PipeBlock implements com.gregtechceu.gtceu.api.item.tool.IToolGridHighlight {
     public InsulatedHeatPipeBlock(Properties properties) {
         super(0.25f, properties);
         BlockState state = stateDefinition.any();
@@ -35,16 +46,76 @@ public class InsulatedHeatPipeBlock extends PipeBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = defaultBlockState();
+        Direction attached = context.getClickedFace().getOpposite();
         for (Direction direction : Direction.values()) {
+            BlockPos neighbor = context.getClickedPos().relative(direction);
+            if (!context.getLevel().hasChunkAt(neighbor)) continue;
+            BlockState other = context.getLevel().getBlockState(neighbor);
             state = state.setValue(PROPERTY_BY_DIRECTION.get(direction),
-                    connects(context.getLevel(), context.getClickedPos().relative(direction), direction));
+                    direction == attached && connects(context.getLevel(), neighbor, direction) ||
+                            other.getBlock() instanceof InsulatedHeatPipeBlock && isConnected(other, direction.getOpposite()));
         }
         return state;
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        return state.setValue(PROPERTY_BY_DIRECTION.get(direction), connects(level, neighborPos, direction));
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (!level.isClientSide) for (Direction direction : Direction.values()) {
+            if (isConnected(state, direction)) setConnection(level, pos, direction, true);
+        }
+    }
+
+    public static boolean isConnected(BlockState state, Direction direction) {
+        return state.getValue(PROPERTY_BY_DIRECTION.get(direction));
+    }
+
+    public static int connectionMask(BlockState state) {
+        int mask = 0;
+        for (Direction direction : Direction.values()) if (isConnected(state, direction)) mask |= 1 << direction.ordinal();
+        return mask;
+    }
+
+    public static void setConnection(Level level, BlockPos pos, Direction direction, boolean open) {
+        if (level.isClientSide || !level.hasChunkAt(pos)) return;
+        BlockState state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof InsulatedHeatPipeBlock)) return;
+        level.setBlockAndUpdate(pos, state.setValue(PROPERTY_BY_DIRECTION.get(direction), open));
+        BlockPos neighbor = pos.relative(direction);
+        if (!level.hasChunkAt(neighbor)) return;
+        BlockState other = level.getBlockState(neighbor);
+        if (other.getBlock() instanceof InsulatedHeatPipeBlock) {
+            level.setBlockAndUpdate(neighbor, other.setValue(PROPERTY_BY_DIRECTION.get(direction.getOpposite()), open));
+        }
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack tool = player.getItemInHand(hand);
+        if (!player.mayBuild() || !ToolHelper.getToolTypes(tool).contains(GTToolType.WRENCH) || !ToolHelper.canUse(tool)) {
+            return InteractionResult.PASS;
+        }
+        Direction side = ICoverable.determineGridSideHit(hit);
+        if (side == null) side = hit.getDirection();
+        if (!level.isClientSide) {
+            setConnection(level, pos, side, !isConnected(state, side));
+            if (player instanceof ServerPlayer serverPlayer) {
+                ToolHelper.playToolSound(GTToolType.WRENCH, serverPlayer);
+                if (!player.isCreative()) ToolHelper.damageItem(tool, serverPlayer, 1);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    public boolean shouldRenderGrid(Player player, BlockPos pos, BlockState state, ItemStack held, java.util.Set<GTToolType> types) {
+        return types.contains(GTToolType.WRENCH);
+    }
+
+    @Override
+    public com.lowdragmc.lowdraglib.gui.texture.ResourceTexture sideTips(Player player, BlockPos pos, BlockState state,
+                                                                        java.util.Set<GTToolType> types, Direction side) {
+        if (!types.contains(GTToolType.WRENCH)) return null;
+        return isConnected(state, side) ? com.gregtechceu.gtceu.api.gui.GuiTextures.TOOL_PIPE_CONNECT :
+                com.gregtechceu.gtceu.api.gui.GuiTextures.TOOL_PIPE_BLOCK;
     }
 }
