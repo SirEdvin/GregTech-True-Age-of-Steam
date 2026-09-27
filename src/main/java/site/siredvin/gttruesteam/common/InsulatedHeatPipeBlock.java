@@ -36,6 +36,29 @@ public class InsulatedHeatPipeBlock extends PipeBlock implements com.gregtechceu
         builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
+    @Override
+    public net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState state, net.minecraft.world.level.BlockGetter level,
+                                                              BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext context) {
+        if (context instanceof net.minecraft.world.phys.shapes.EntityCollisionContext entityContext &&
+                entityContext.getEntity() instanceof Player player) {
+            for (InteractionHand hand : InteractionHand.values()) {
+                ItemStack held = player.getItemInHand(hand);
+                if (ToolHelper.getToolTypes(held).contains(GTToolType.WRENCH) ||
+                        held.getItem() instanceof net.minecraft.world.item.BlockItem item &&
+                                item.getBlock() instanceof InsulatedHeatPipeBlock) {
+                    return net.minecraft.world.phys.shapes.Shapes.block();
+                }
+            }
+        }
+        return super.getShape(state, level, pos, context);
+    }
+
+    @Override
+    public net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(BlockState state, net.minecraft.world.level.BlockGetter level,
+                                                                       BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext context) {
+        return super.getShape(state, level, pos, context);
+    }
+
     private boolean connects(LevelAccessor level, BlockPos neighbor, Direction direction) {
         if (!level.hasChunkAt(neighbor)) return false;
         if (level.getBlockState(neighbor).getBlock() instanceof InsulatedHeatPipeBlock) return true;

@@ -48,6 +48,36 @@ public final class HeatPipeChecks {
         check.accept(world.getBlockEntity(origin.east()) == null, "manual connection pipe remains block-entity-free");
 
         ItemStack wrench = GTMaterialItems.TOOL_ITEMS.get(GTMaterials.Steel, GTToolType.WRENCH).get().get();
+        Vec3 rayStart = Vec3.atLowerCornerOf(origin).add(0.1, 0.5, -1);
+        Vec3 rayEnd = Vec3.atLowerCornerOf(origin).add(0.1, 0.5, 0.5);
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
+        check.accept(world.clip(new net.minecraft.world.level.ClipContext(rayStart, rayEnd,
+                net.minecraft.world.level.ClipContext.Block.OUTLINE, net.minecraft.world.level.ClipContext.Fluid.NONE, player))
+                .getType() == net.minecraft.world.phys.HitResult.Type.MISS, "empty hand ray outside thin pipe misses");
+        for (ItemStack held : new ItemStack[] { wrench, pipes }) {
+            player.setItemInHand(InteractionHand.MAIN_HAND, held);
+            var outerHit = world.clip(new net.minecraft.world.level.ClipContext(rayStart, rayEnd,
+                    net.minecraft.world.level.ClipContext.Block.OUTLINE, net.minecraft.world.level.ClipContext.Fluid.NONE, player));
+            check.accept(outerHit.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK && outerHit.getBlockPos().equals(origin),
+                    "full block targeting outside pipe with " + held.getDescriptionId());
+            check.accept(world.clip(new net.minecraft.world.level.ClipContext(rayStart, rayEnd,
+                    net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, player))
+                    .getType() == net.minecraft.world.phys.HitResult.Type.MISS, "tool targeting does not enlarge physical collision");
+            if (held == wrench) {
+                boolean wasOpen = InsulatedHeatPipeBlock.isConnected(world.getBlockState(origin), Direction.WEST);
+                pipe.use(world.getBlockState(origin), world, origin, player, InteractionHand.MAIN_HAND, outerHit);
+                check.accept(InsulatedHeatPipeBlock.isConnected(world.getBlockState(origin), Direction.WEST) != wasOpen,
+                        "outer grid ray hit toggles adjacent side with wrench");
+                pipe.use(world.getBlockState(origin), world, origin, player, InteractionHand.MAIN_HAND, outerHit);
+            }
+        }
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        player.setItemInHand(InteractionHand.OFF_HAND, wrench);
+        check.accept(world.clip(new net.minecraft.world.level.ClipContext(rayStart, rayEnd,
+                net.minecraft.world.level.ClipContext.Block.OUTLINE, net.minecraft.world.level.ClipContext.Fluid.NONE, player))
+                .getType() == net.minecraft.world.phys.HitResult.Type.BLOCK, "offhand wrench also retains full block target");
+        player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
         player.setItemInHand(InteractionHand.MAIN_HAND, wrench);
         int damage = wrench.getDamageValue();
         check.accept(pipe.use(world.getBlockState(origin), world, origin, player, InteractionHand.MAIN_HAND, hit).consumesAction(), "real GregTech wrench accepted");
