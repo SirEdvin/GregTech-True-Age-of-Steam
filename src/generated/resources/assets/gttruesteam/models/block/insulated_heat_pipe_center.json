@@ -3,22 +3,28 @@
     {
       "faces": {
         "down": {
-          "texture": "#side"
+          "texture": "#side",
+          "tintindex": 0
         },
         "east": {
-          "texture": "#side"
+          "texture": "#side",
+          "tintindex": 0
         },
         "north": {
-          "texture": "#side"
+          "texture": "#side",
+          "tintindex": 0
         },
         "south": {
-          "texture": "#side"
+          "texture": "#side",
+          "tintindex": 0
         },
         "up": {
-          "texture": "#side"
+          "texture": "#side",
+          "tintindex": 0
         },
         "west": {
-          "texture": "#side"
+          "texture": "#side",
+          "tintindex": 0
         }
       },
       "from": [

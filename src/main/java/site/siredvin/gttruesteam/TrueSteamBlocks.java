@@ -44,12 +44,13 @@ public class TrueSteamBlocks {
                         .texture("particle", GTCEu.id("block/pipe/pipe_side"))
                         .texture("side", GTCEu.id("block/pipe/pipe_side"))
                         .element().from(4, 4, 4).to(12, 12, 12)
-                        .allFaces((direction, face) -> face.texture("#side")).end();
+                        .allFaces((direction, face) -> face.texture("#side").tintindex(0)).end();
                 var arm = prov.models().getBuilder(ctx.getName() + "_arm")
                         .texture("side", GTCEu.id("block/pipe/pipe_side"))
                         .texture("end", GTCEu.id("block/pipe/pipe_normal_in"))
                         .element().from(4, 4, 0).to(12, 12, 4)
-                        .allFaces((direction, face) -> face.texture(direction == Direction.NORTH ? "#end" : "#side")).end();
+                        .allFaces((direction, face) -> face.texture(direction == Direction.NORTH ? "#end" : "#side")
+                                .tintindex(direction == Direction.NORTH ? 1 : 0)).end();
                 var multipart = prov.getMultipartBuilder(ctx.get());
                 multipart.part().modelFile(center).addModel().end();
                 for (Direction direction : Direction.values()) {
@@ -63,10 +64,13 @@ public class TrueSteamBlocks {
                         .texture("side", GTCEu.id("block/pipe/pipe_side"))
                         .texture("end", GTCEu.id("block/pipe/pipe_normal_in"))
                         .element().from(4, 4, 0).to(12, 12, 16)
-                        .allFaces((direction, face) -> face.texture(direction.getAxis() == Direction.Axis.Z ? "#end" : "#side")).end();
+                        .allFaces((direction, face) -> face.texture(direction.getAxis() == Direction.Axis.Z ? "#end" : "#side")
+                                .tintindex(direction.getAxis() == Direction.Axis.Z ? 1 : 0)).end();
             })
+            .color(() -> () -> (state, level, pos, index) -> InsulatedHeatPipeBlock.tintColor(index))
             .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
             .item(site.siredvin.gttruesteam.common.InsulatedHeatPipeItem::new)
+            .color(() -> () -> (stack, index) -> InsulatedHeatPipeBlock.tintColor(index))
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), GTTrueSteam.id("block/insulated_heat_pipe_inventory")))
             .build().register();
 

@@ -31,6 +31,14 @@ public class InsulatedHeatPipeBlock extends PipeBlock implements com.gregtechceu
         registerDefaultState(state);
     }
 
+    public static int tintColor(int index) {
+        return switch (index) {
+            case 0 -> 0xff000000 | site.siredvin.gttruesteam.TrueSteamConcepts.HeatingConcept.getMaterial().getMaterialRGB();
+            case 1 -> 0xff000000 | site.siredvin.gttruesteam.TrueSteamConcepts.InsertionConcept.getMaterial().getMaterialRGB();
+            default -> -1;
+        };
+    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);

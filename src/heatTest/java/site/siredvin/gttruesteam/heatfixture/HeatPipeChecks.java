@@ -35,6 +35,11 @@ public final class HeatPipeChecks {
             world.setBlockAndUpdate(origin.offset(x, 0, z), Blocks.AIR.defaultBlockState());
         }
         var pipe = TrueSteamBlocks.InsulatedHeatPipe.get();
+        check.accept((InsulatedHeatPipeBlock.tintColor(0) & 0xffffff) ==
+                site.siredvin.gttruesteam.TrueSteamConcepts.HeatingConcept.getMaterial().getMaterialRGB(), "pipe body matches heating ingredient color");
+        check.accept((InsulatedHeatPipeBlock.tintColor(1) & 0xffffff) ==
+                site.siredvin.gttruesteam.TrueSteamConcepts.InsertionConcept.getMaterial().getMaterialRGB(), "pipe ends match insertion ingredient color");
+        check.accept(InsulatedHeatPipeBlock.tintColor(-1) == -1, "untinted pipe layers remain unchanged");
         world.setBlockAndUpdate(origin, pipe.defaultBlockState());
         world.setBlockAndUpdate(origin.east().south(), pipe.defaultBlockState());
         ItemStack pipes = new ItemStack(pipe.asItem(), 16);
