@@ -147,7 +147,7 @@ public final class HeatFixture extends HeatMultiblockMachine {
         public static void place(ServerLevel level, BlockPos pos, boolean gold, int hatchIndex) {
             level.setBlockAndUpdate(pos, definition.defaultBlockState());
             MetaMachine.getMachine(level, pos).setFrontFacing(Direction.NORTH);
-            level.setBlockAndUpdate(pos.east(), TrueSteamMachines.HEAT_HATCHES.get(hatchIndex).defaultBlockState());
+            level.setBlockAndUpdate(pos.east(), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             level.setBlockAndUpdate(pos.east(2), (gold ? Blocks.GOLD_BLOCK : Blocks.IRON_BLOCK).defaultBlockState());
         }
 
@@ -156,7 +156,7 @@ public final class HeatFixture extends HeatMultiblockMachine {
             level.setBlockAndUpdate(pos, remoteDefinition.defaultBlockState());
             MetaMachine.getMachine(level, pos).setFrontFacing(Direction.NORTH);
             for (int x = 1; x < REMOTE_HATCH_DISTANCE; x++) level.setBlockAndUpdate(pos.east(x), Blocks.IRON_BLOCK.defaultBlockState());
-            level.setBlockAndUpdate(pos.east(REMOTE_HATCH_DISTANCE), TrueSteamMachines.HEAT_HATCHES.get(0).defaultBlockState());
+            level.setBlockAndUpdate(pos.east(REMOTE_HATCH_DISTANCE), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
         }
     }
 }

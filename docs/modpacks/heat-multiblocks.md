@@ -1,18 +1,16 @@
 # Heat multiblock integration (development)
 
-This infrastructure is opt-in. Existing boilers, cooling machines, recipes and
-patterns are unchanged. No production heat generator/consumer or hatch crafting
-recipe is supplied; packs provide their own recipes. The implementation is still
-awaiting the full loader/world lifecycle and client-menu acceptance pass. Do not
-use the destructive melting behavior in a valuable world before that pass.
+This infrastructure is opt-in. Existing boilers and cooling machines are unchanged.
+Debug heat producers/consumers, a craftable heat hatch, and insulated heat pipes
+are provided. Melting can destroy machines; test pack integrations in disposable worlds.
 
 ## Debug network visualizer
 
 Hold `gttruesteam:debug_heat_network_visualizer` in either hand to outline all
-nearby physical heat networks through blocks. Cyan outlines mark all nearby heat
-hatches; orange outlines mark their reachable insulated heat pipes, including
-branches. Nearby means a hatch within 32 blocks of the player; discovery follows
-the same front-face and 32-step rules as heat exchange. Multiple networks are
+nearby physical heat networks through blocks. Each connected network has its own
+color, shared by all its hatches and pipes, including dead-end branches. Nearby
+means a hatch within 32 blocks of the player; the entire loaded component is
+highlighted, even beyond the pairwise exchange range. Multiple networks are
 shown together, without aiming or clicking. The overlay refreshes every ten
 client ticks and disappears immediately when the item is put away.
 
@@ -24,8 +22,9 @@ wiring remains diagnosable. The item ships in the normal mod JAR, has no craftin
 can be obtained with `/give @s gttruesteam:debug_heat_network_visualizer`.
 
 Each hatch also has a through-wall floating label: controller temperature in K,
-green incoming J/exchange, and gold outgoing J/exchange. These are server-synced
-actual totals for the last scheduled exchange, not nominal capacity or J/t.
+green incoming J/exchange, gold outgoing J/exchange, and the calculated network
+coefficient in J/(K × exchange). All values are server-synced. Incoming and
+outgoing amounts are actual totals for the last scheduled exchange, not J/t.
 Only the hatches chosen for a controller-pair transfer receive credit; fan-out
 totals accumulate. A subsequent exchange without transfer resets totals to zero.
 Unavailable controllers show an explicit unavailable label, not a fake temperature.
@@ -70,7 +69,7 @@ any iron casing block. Configure its normal rule editor using these numeric read
 Capacity fill is stored heat divided by safe capacity, multiplied by 100; it is
 not clamped at 100%, so overheating thresholds work. All three support fractional
 values and the existing numeric comparison operators. For example, select Heat
-capacity filled (%), greater than or equal to 90, and signal strength 15.
+capacity filled (percent), greater than or equal to 90, and signal strength 15.
 Invalid/unformed controllers provide no thermal reading and cannot trigger these
 rules. The shared heat controller base supplies these readings to future heat
 machines too; their patterns must explicitly accept a redstone output hatch.
@@ -122,25 +121,20 @@ Use `TrueSteamPartAbilities.HEAT` explicitly in future patterns:
 
 The shared `HeatHatchMachine` extends GTCEu's `TieredPartMachine`, prohibits shared
 ownership and has neither an electrical nor an independent thermal buffer.
-Registration exposes exactly these block/item variants:
+Only `gttruesteam:heat_hatch` is registered. Its HV hull is structural, not a
+transfer coefficient. Legacy HV/EV/IV/LuV block, item and block-entity IDs remap
+to this hatch when loading existing worlds.
 
-| Registry path (namespace `gttruesteam`) | Nominal sending J/(K × update) |
-| --- | ---: |
-| `hv_heat_hatch` | 2 |
-| `ev_heat_hatch` | 8 |
-| `iv_heat_hatch` | 32 |
-| `luv_heat_hatch` | 128 |
-
-They are available through the addon's creative registration. Unsupported tiers
-are rejected. The UI identifies the tier and sending coefficient independently
-of owner capacity, including when no owner is available. Coefficients do not
-promise actual throughput and do not throttle incoming heat.
+Assembler, circuit 6: two Insertion-Infused Cometal Plates, two Extraction-Infused
+Cometal Plates, four Heating-Infused Cometal Plates, one HV Machine Hull and one
+Infernal Circuit produce two Heat Hatches (100 ticks, HV recipe power).
 
 ## Routing and exchange
 
 Only `gttruesteam:insulated_heat_pipe` conducts between hatch endpoints. Paths leave and
 enter the designated front faces and may bend, branch, loop or run vertically.
-Direct front-to-front hatch adjacency works. Hatches terminate paths; they are
+Direct front-to-front adjacency has no pipe coefficient and transfers no heat.
+Hatches terminate paths; they are
 not pass-through pipes. Air, computer heat vents, other blocks and diagonals do not conduct.
 
 The inclusive limit is 32 face-adjacent hatch-to-hatch steps, counting the first
@@ -152,15 +146,17 @@ Pipes store no heat, lose no heat and perform no ambient exchange.
 
 Every distinct controller pair gets one package per scheduled update. Multiple
 hatches or routes between the same pair do not stack. The currently hotter side
-is the sender; only its highest-coefficient **actually connected, valid** sending
-hatch determines the package. LuV sending to HV uses 128; reversing temperatures
-makes the HV sender use 2. Receiver tier is not an incoming limit. Pairs are
+is the sender. The slowest pipe anywhere in the connected loaded network sets
+its coefficient, including dead-end branches beyond the 32-step pair range.
+Insulated heat pipes provide 16 J/(K × exchange), independent of hatch tier or
+flow direction. If a pair has connections through separate networks, the highest
+available network coefficient is used once; rates do not stack. Pairs are
 processed in stable controller-position order, using current energy after each
 previous pair, rather than simultaneously or with a shared fan-out allowance.
 
 For slopes `s = (M - 300) / C`, exchange requests:
 
-    q = min(senderCoefficient * (Thot - Tcold),
+    q = min(networkCoefficient * (Thot - Tcold),
             (Thot - Tcold) / (sHot + sCold), Qhot)
 
 Receiver safe capacity does not cap admission. The same representable amount is
@@ -219,8 +215,9 @@ Use `/give @s gttruesteam:debug_heat_producer` and
 
 Build each as a hollow 3×3×3 iron-block shell, with the controller in the center
 of one side facing outward. The center block is air. Any other shell block may
-be replaced by an HV–LuV heat hatch; point hatch fronts toward the connecting
-computer heat vents. No energy, item or fluid hatches are required.
+be replaced by a heat hatch; point hatch fronts toward the connecting insulated
+heat pipes. One optional redstone output hatch is supported. No energy, item or
+fluid hatches are required.
 
 Each machine has one repeating 20-working-tick recipe. Produce Heat adds 1 J per
 working tick; Consume Heat removes 1 J per working tick and pauses without losing

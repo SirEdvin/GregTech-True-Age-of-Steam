@@ -55,7 +55,7 @@ public final class HeatPersistenceChecks {
                 for (int tier = 0; tier < 4; tier++) {
                     BlockPos pos = POS.offset(3 + tier * 3, 0, 4);
                     world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                    world.setBlockAndUpdate(pos, TrueSteamMachines.HEAT_HATCHES.get(tier).defaultBlockState());
+                    world.setBlockAndUpdate(pos, TrueSteamMachines.HEAT_HATCH.defaultBlockState());
                 }
             } else {
                 JsonObject expected = JsonParser.parseString(Files.readString(SNAPSHOT)).getAsJsonObject();
@@ -70,9 +70,9 @@ public final class HeatPersistenceChecks {
                         .equals(expected.get("hatchIdentity").getAsString()), "owned hatch identity survives restart");
                 for (int tier = 0; tier < 4; tier++) {
                     HeatHatchMachine hatch = (HeatHatchMachine) MetaMachine.getMachine(world, POS.offset(3 + tier * 3, 0, 4));
-                    check(hatch.getTier() == tier + 3 && hatch.sendingCoefficient() == new double[] { 2, 8, 32, 128 }[tier] &&
+                    check(hatch.getTier() == com.gregtechceu.gtceu.api.GTValues.HV &&
                             hatch.heatIdentity().equals(expected.getAsJsonArray("tiers").get(tier).getAsString()),
-                            "tier variant preserves registration, coefficient and identity across restart: " + tier);
+                            "heat hatch preserves registration and identity across restart: " + tier);
                 }
             }
         } catch (Throwable failure) {
@@ -133,7 +133,7 @@ public final class HeatPersistenceChecks {
                     JsonArray tiers = new JsonArray();
                     for (int tier = 0; tier < 4; tier++) {
                         HeatHatchMachine hatch = (HeatHatchMachine) MetaMachine.getMachine(world, POS.offset(3 + tier * 3, 0, 4));
-                        check(hatch.getTier() == tier + 3, "snapshot includes tier variant " + tier);
+                        check(hatch.getTier() == com.gregtechceu.gtceu.api.GTValues.HV, "snapshot includes simple heat hatch " + tier);
                         tiers.add(hatch.heatIdentity());
                     }
                     snapshot.add("tiers", tiers);

@@ -13,8 +13,9 @@ public final class HeatNetwork {
 
     public enum Kind { BLOCKED, VENT, HATCH }
 
-    public record Node(Kind kind, Direction front, int connections) {
-        public Node(Kind kind, Direction front) { this(kind, front, 63); }
+    public record Node(Kind kind, Direction front, int connections, double coefficient) {
+        public Node(Kind kind, Direction front) { this(kind, front, 63, 16); }
+        public Node(Kind kind, Direction front, int connections) { this(kind, front, connections, 16); }
         public boolean connected(Direction direction) { return (connections & (1 << direction.ordinal())) != 0; }
     }
 
@@ -29,6 +30,34 @@ public final class HeatNetwork {
     private HeatNetwork() {}
 
     public record Trace(Set<BlockPos> hatches, Set<BlockPos> vents) {}
+
+    public record Component(Set<BlockPos> hatches, Set<BlockPos> pipes, double coefficient) {}
+
+    /** Whole loaded component, including branches beyond the pairwise transfer range. */
+    public static Component component(BlockPos source, Direction front, Lookup lookup) {
+        Set<BlockPos> hatches = new HashSet<>();
+        Set<BlockPos> pipes = new HashSet<>();
+        hatches.add(source);
+        double coefficient = Double.POSITIVE_INFINITY;
+        ArrayDeque<Step> queue = new ArrayDeque<>();
+        queue.add(new Step(source, source.relative(front), 1));
+        while (!queue.isEmpty()) {
+            Step step = queue.removeFirst();
+            if (!lookup.loaded(step.position())) continue;
+            Node node = lookup.node(step.position());
+            Direction incoming = Direction.fromDelta(step.previous().getX() - step.position().getX(),
+                    step.previous().getY() - step.position().getY(), step.previous().getZ() - step.position().getZ());
+            if (node.kind() == Kind.HATCH) {
+                if (node.front() == incoming) hatches.add(step.position());
+            } else if (node.kind() == Kind.VENT && node.connected(incoming) && pipes.add(step.position())) {
+                coefficient = Math.min(coefficient, Double.isFinite(node.coefficient()) && node.coefficient() > 0 ? node.coefficient() : 0);
+                for (Direction direction : Direction.values()) if (node.connected(direction)) {
+                    queue.addLast(new Step(step.position(), step.position().relative(direction), 0));
+                }
+            }
+        }
+        return new Component(Set.copyOf(hatches), Set.copyOf(pipes), pipes.isEmpty() ? 0 : coefficient);
+    }
 
     public static Trace trace(BlockPos source, Direction front, Lookup lookup) {
         Set<BlockPos> vents = new HashSet<>();

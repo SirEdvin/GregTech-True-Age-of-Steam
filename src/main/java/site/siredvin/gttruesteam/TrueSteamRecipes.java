@@ -356,6 +356,15 @@ public class TrueSteamRecipes {
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
+        ASSEMBLER_RECIPES.recipeBuilder(GTTrueSteam.id("heat_hatch"))
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.InsertionConcept.getMaterial(), 2)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.ExtractionConcept.getMaterial(), 2)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial(), 4)
+                .inputItems(GTMachines.HULL[HV].asStack())
+                .inputItems(TrueSteamItems.InfernalCircuit)
+                .circuitMeta(6)
+                .outputItems(TrueSteamMachines.HEAT_HATCH.asStack(2))
+                .duration(100).EUt(VA[HV]).save(provider);
         ASSEMBLER_RECIPES.recipeBuilder(GTTrueSteam.id("insulated_heat_pipe"))
                 .inputItems(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial(), 2)
                 .inputItems(TagPrefix.plate, TrueSteamConcepts.InsertionConcept.getMaterial(), 2)

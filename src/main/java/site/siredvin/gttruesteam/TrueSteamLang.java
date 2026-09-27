@@ -10,7 +10,7 @@ public class TrueSteamLang {
     static {
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.heat_joules", "Stored heat (J)");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.temperature_kelvin", "Temperature (K)");
-        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.heat_capacity_percent", "Heat capacity filled (%)");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.heat_capacity_percent", "Heat capacity filled (percent)");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producing", "Produce Heat  +1 J/t");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consuming", "Consume Heat  -1 J/t");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.incomplete", "Structure incomplete");
@@ -22,9 +22,8 @@ public class TrueSteamLang {
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.structure", "Creative debug machine: hollow 3x3x3 iron-block shell. Heat hatches and one optional redstone output hatch replace casing. Safe capacity: 1000 J / 310 K.");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.insufficient", "Waiting for at least 1 J of heat");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.stored", "Heat: %s / %s J; Temperature: %s K");
-        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tier", "Heat hatch tier: %s");
-        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.coefficient", "Nominal sending coefficient: %s J/(K × update)");
-        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tooltip", "Bidirectional heat via front-face insulated heat pipes. Actual transfer is limited by donor energy and equilibrium, not receiving tier.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.coefficient", "Network rate: %s J/(K × exchange)");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tooltip", "Bidirectional heat via front-face insulated heat pipes. The slowest pipe in the network sets the rate; actual transfer is limited by donor energy and equilibrium.");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat_hatch.exchange_in", "In: %s J/exchange");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat_hatch.exchange_out", "Out: %s J/exchange");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.temperature", "Temperature: %s K");

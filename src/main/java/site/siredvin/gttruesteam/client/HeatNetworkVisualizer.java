@@ -1,7 +1,6 @@
 package site.siredvin.gttruesteam.client;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import site.siredvin.gttruesteam.TrueSteamBlocks;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -39,6 +38,7 @@ public final class HeatNetworkVisualizer {
     private static final int RADIUS = 32;
     private static final Set<BlockPos> HATCHES = new HashSet<>();
     private static final Set<BlockPos> VENTS = new HashSet<>();
+    private static final Map<BlockPos, float[]> COLORS = new HashMap<>();
     private static ClientLevel lastLevel;
     private static int cooldown;
     private static PoseStack worldPose;
@@ -59,6 +59,7 @@ public final class HeatNetworkVisualizer {
         if (level != lastLevel || !held()) {
             HATCHES.clear();
             VENTS.clear();
+            COLORS.clear();
             cooldown = 0;
             lastLevel = level;
         }
@@ -66,6 +67,7 @@ public final class HeatNetworkVisualizer {
         cooldown = 9;
         HATCHES.clear();
         VENTS.clear();
+        COLORS.clear();
         BlockPos center = minecraft.player.blockPosition();
         Map<BlockPos, HeatHatchMachine> sources = new HashMap<>();
         for (int x = (center.getX() - RADIUS) >> 4; x <= (center.getX() + RADIUS) >> 4; x++) {
@@ -94,9 +96,9 @@ public final class HeatNetworkVisualizer {
                 return nodes.computeIfAbsent(pos, key -> {
                     var chunk = level.getChunkSource().getChunk(key.getX() >> 4, key.getZ() >> 4, ChunkStatus.FULL, false);
                     if (chunk != null) {
-                        if (chunk.getBlockState(key).is(TrueSteamBlocks.InsulatedHeatPipe.get())) {
+                        if (chunk.getBlockState(key).getBlock() instanceof site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock pipe) {
                             return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null,
-                                    site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.connectionMask(chunk.getBlockState(key)));
+                                    site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.connectionMask(chunk.getBlockState(key)), pipe.transferCoefficient());
                         }
                         if (MetaMachine.getMachine(chunk, key) instanceof HeatHatchMachine hatch) {
                             return new HeatNetwork.Node(HeatNetwork.Kind.HATCH, hatch.getFrontFacing());
@@ -106,13 +108,17 @@ public final class HeatNetworkVisualizer {
                 });
             }
         };
-        sources.forEach((pos, hatch) -> {
-            var trace = HeatNetwork.trace(pos, hatch.getFrontFacing(), lookup);
-            // Incomplete and misoriented connections must remain visible to a wiring debugger.
-            HATCHES.add(pos);
-            HATCHES.addAll(trace.hatches());
-            VENTS.addAll(trace.vents());
-        });
+        int network = 0;
+        for (BlockPos pos : sources.keySet().stream().sorted().toList()) {
+            if (COLORS.containsKey(pos)) continue;
+            var component = HeatNetwork.component(pos, sources.get(pos).getFrontFacing(), lookup);
+            int rgb = net.minecraft.util.Mth.hsvToRgb((float) ((network++ * 0.618033988749895) % 1), 0.7f, 1f);
+            float[] color = { ((rgb >> 16) & 255) / 255f, ((rgb >> 8) & 255) / 255f, (rgb & 255) / 255f };
+            HATCHES.addAll(component.hatches());
+            VENTS.addAll(component.pipes());
+            component.hatches().forEach(member -> COLORS.put(member, color));
+            component.pipes().forEach(member -> COLORS.put(member, color));
+        }
     }
 
     @SubscribeEvent
@@ -146,24 +152,28 @@ public final class HeatNetworkVisualizer {
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             buffer.begin(VertexFormat.Mode.TRIANGLE_STRIP, DefaultVertexFormat.POSITION_COLOR);
             for (BlockPos pos : VENTS) {
+                var color = COLORS.get(pos);
                 LevelRenderer.addChainedFilledBoxVertices(pose, buffer,
                         pos.getX() - 0.01, pos.getY() - 0.01, pos.getZ() - 0.01,
-                        pos.getX() + 1.01, pos.getY() + 1.01, pos.getZ() + 1.01, 1f, 0.55f, 0.1f, 0.22f);
+                        pos.getX() + 1.01, pos.getY() + 1.01, pos.getZ() + 1.01, color[0], color[1], color[2], 0.22f);
             }
             for (BlockPos pos : HATCHES) {
+                var color = COLORS.get(pos);
                 LevelRenderer.addChainedFilledBoxVertices(pose, buffer,
                         pos.getX() - 0.01, pos.getY() - 0.01, pos.getZ() - 0.01,
-                        pos.getX() + 1.01, pos.getY() + 1.01, pos.getZ() + 1.01, 0.1f, 0.9f, 1f, 0.3f);
+                        pos.getX() + 1.01, pos.getY() + 1.01, pos.getZ() + 1.01, color[0], color[1], color[2], 0.3f);
             }
             BufferUploader.drawWithShader(buffer.end());
             RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
             RenderSystem.lineWidth(5f);
             buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
             for (BlockPos pos : VENTS) {
-                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.015), 1f, 0.55f, 0.1f, 1f);
+                var color = COLORS.get(pos);
+                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.015), color[0], color[1], color[2], 1f);
             }
             for (BlockPos pos : HATCHES) {
-                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.015), 0.1f, 0.9f, 1f, 1f);
+                var color = COLORS.get(pos);
+                LevelRenderer.renderLineBox(pose, buffer, new AABB(pos).inflate(0.015), color[0], color[1], color[2], 1f);
             }
             BufferUploader.drawWithShader(buffer.end());
         } finally {

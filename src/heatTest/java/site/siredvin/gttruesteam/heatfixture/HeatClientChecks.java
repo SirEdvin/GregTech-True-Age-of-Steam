@@ -54,6 +54,8 @@ public final class HeatClientChecks {
             operation.join();
             if (++ticks > 600) throw new AssertionError("Client phase " + phase + " timed out");
             if (phase == 0) {
+                String fillLabel = net.minecraft.client.resources.language.I18n.get("gttruesteam.redstone.heat_capacity_percent");
+                check(!fillLabel.contains("Format error") && fillLabel.contains("percent"), "capacity-fill selector translation formats correctly");
                 server(() -> {
                     ServerLevel level = mc.getSingleplayerServer().overworld();
                     for (int x = OWNER.getX() >> 4; x <= HATCH.getX() >> 4; x++) level.setChunkForced(x, OWNER.getZ() >> 4, true);

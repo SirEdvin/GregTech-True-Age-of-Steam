@@ -1,7 +1,6 @@
 package site.siredvin.gttruesteam.machines.shared.heat;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import site.siredvin.gttruesteam.TrueSteamBlocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +37,7 @@ public final class HeatNetworkManager {
         }
     }
 
-    private record Connection(BlockPos first, BlockPos second) {}
+    private record Connection(BlockPos first, BlockPos second, double coefficient) {}
 
     private static HeatNetworkManager get(ServerLevel level) {
         return LEVELS.computeIfAbsent(level, ignored -> new HeatNetworkManager());
@@ -102,9 +101,9 @@ public final class HeatNetworkManager {
             public HeatNetwork.Node node(BlockPos pos) {
                 var chunk = level.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4);
                 if (chunk == null) return new HeatNetwork.Node(HeatNetwork.Kind.BLOCKED, null);
-                if (chunk.getBlockState(pos).is(TrueSteamBlocks.InsulatedHeatPipe.get())) {
+                if (chunk.getBlockState(pos).getBlock() instanceof site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock pipe) {
                     return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null,
-                            site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.connectionMask(chunk.getBlockState(pos)));
+                            site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock.connectionMask(chunk.getBlockState(pos)), pipe.transferCoefficient());
                 }
                 var endpoint = hatch(level, pos);
                 return endpoint == null ? new HeatNetwork.Node(HeatNetwork.Kind.BLOCKED, null) :
@@ -119,10 +118,17 @@ public final class HeatNetworkManager {
             if (hatch != null) hatch.resetExchange();
         }
         var lookup = lookup(level);
+        Map<BlockPos, HeatNetwork.Component> components = new HashMap<>();
         Map<Pair, List<Connection>> pairs = new TreeMap<>();
         for (BlockPos pos : hatches.stream().sorted().toList()) {
             var source = hatch(level, pos);
             if (source == null) continue;
+            var component = components.get(pos);
+            if (component == null) {
+                component = HeatNetwork.component(pos, source.getFrontFacing(), lookup);
+                for (BlockPos member : component.hatches()) components.put(member, component);
+            }
+            source.setNetworkCoefficient(component.coefficient());
             var first = source.resolveOwner().machine();
             if (first == null) continue;
             for (BlockPos destination : HeatNetwork.discover(pos, source.getFrontFacing(), lookup)) {
@@ -130,7 +136,7 @@ public final class HeatNetworkManager {
                 var second = endpoint == null ? null : endpoint.resolveOwner().machine();
                 if (second == null || second == first || first.getPos().compareTo(second.getPos()) >= 0) continue;
                 pairs.computeIfAbsent(new Pair(first.getPos(), second.getPos()), ignored -> new ArrayList<>())
-                        .add(new Connection(pos, destination));
+                        .add(new Connection(pos, destination, component.coefficient()));
             }
         }
         for (var entry : pairs.entrySet()) {
@@ -148,7 +154,7 @@ public final class HeatNetworkManager {
                 if (first == null || second == null || first == second ||
                         !first.getPos().equals(entry.getKey().first()) || !second.getPos().equals(entry.getKey().second())) continue;
                 boolean sendsFirst = first.getTemperature() > second.getTemperature();
-                double candidate = sendsFirst ? a.sendingCoefficient() : b.sendingCoefficient();
+                double candidate = connection.coefficient();
                 if (candidate > coefficient && HeatNetwork.discover(a.getPos(), a.getFrontFacing(), lookup).contains(b.getPos())) {
                     coefficient = candidate;
                     donor = sendsFirst ? first : second;

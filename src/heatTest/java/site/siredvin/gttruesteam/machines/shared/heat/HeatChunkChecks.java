@@ -60,7 +60,7 @@ public final class HeatChunkChecks {
             for (int x = 0; x < 3; x++) world.setBlockAndUpdate(CONTROLLER.east(x), Blocks.AIR.defaultBlockState());
             world.setBlockAndUpdate(TARGET, Blocks.AIR.defaultBlockState());
             HeatFixture.Commands.place(world, CONTROLLER, false, 0);
-            world.setBlockAndUpdate(TARGET, TrueSteamMachines.HEAT_HATCHES.get(2).defaultBlockState());
+            world.setBlockAndUpdate(TARGET, TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             controllerIdentity = controller().heatIdentity();
             targetIdentity = ((HeatHatchMachine) MetaMachine.getMachine(world, TARGET)).heatIdentity();
             start = world.getGameTime();
@@ -134,7 +134,7 @@ public final class HeatChunkChecks {
             }
             if (phase == 4 && now - phaseTick == 2) {
                 check(MetaMachine.getMachine(world, TARGET) == null, "matching deferred hatch is removed after actual chunk reload");
-                world.setBlockAndUpdate(TARGET, TrueSteamMachines.HEAT_HATCHES.get(2).defaultBlockState());
+                world.setBlockAndUpdate(TARGET, TrueSteamMachines.HEAT_HATCH.defaultBlockState());
                 CompoundTag stale = new CompoundTag();
                 stale.putString(Long.toString(TARGET.asLong()), targetIdentity);
                 HeatDestruction.get(world).destroy(world, stale, null);

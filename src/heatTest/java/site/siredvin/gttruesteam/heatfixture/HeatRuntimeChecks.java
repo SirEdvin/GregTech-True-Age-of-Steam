@@ -128,8 +128,8 @@ public final class HeatRuntimeChecks {
             if (elapsed == 81) {
                 HeatFixture a = controller(A);
                 HeatFixture b = controller(B);
-                check(Math.abs(a.getStoredHeat() - 550) < 1e-8 && Math.abs(b.getStoredHeat() - 550) < 1e-8,
-                        "real vent exchange conserves energy and reaches equilibrium");
+                check(Math.abs(a.getStoredHeat() + b.getStoredHeat() - 1100) < 1e-8 && b.getStoredHeat() > 0 && a.getStoredHeat() > b.getStoredHeat(),
+                        "real pipe exchange conserves energy without exceeding equilibrium");
                 check(!a.isMelting() && a.getMeltingTicksRemaining() == 0, "scheduled cooling rescues and resets countdown");
                 checkSounds(0, "cooling recovery emits no failure sound");
                 world.removeBlock(A.offset(1, 0, 3), false);
@@ -171,7 +171,7 @@ public final class HeatRuntimeChecks {
                 HeatFixture.Commands.place(world, A, false, 3);
                 MetaMachine.getMachine(world, A.east()).setFrontFacing(Direction.SOUTH);
                 HeatFixture.Commands.place(world, C, false, 1);
-                world.setBlockAndUpdate(C.east(2), TrueSteamMachines.HEAT_HATCHES.get(2).defaultBlockState());
+                world.setBlockAndUpdate(C.east(2), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             }
             if (elapsed == 130) {
                 form(C);
@@ -181,7 +181,7 @@ public final class HeatRuntimeChecks {
                         "controller break retains and removes both hatch targets");
                 checkSounds(7, "controller break sounds include broken controller and both hatches once");
                 HeatFixture.Commands.place(world, C, false, 1);
-                world.setBlockAndUpdate(C.east(2), TrueSteamMachines.HEAT_HATCHES.get(2).defaultBlockState());
+                world.setBlockAndUpdate(C.east(2), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             }
             if (elapsed == 138) {
                 form(C);
@@ -231,20 +231,20 @@ public final class HeatRuntimeChecks {
                 world.removeBlock(A.offset(1, 0, 3), false);
                 controller(A).changeHeat(-controller(A).getStoredHeat(), false);
                 controller(B).changeHeat(-controller(B).getStoredHeat(), false);
-                world.setBlockAndUpdate(A.east(), TrueSteamMachines.HEAT_HATCHES.get(0).defaultBlockState());
+                world.setBlockAndUpdate(A.east(), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
                 MetaMachine.getMachine(world, A.east()).setFrontFacing(Direction.SOUTH);
             }
             if (rescueTick > 0 && world.getGameTime() >= rescueTick + 60 && insufficientTick == 0 && world.getGameTime() % 20 == 0) {
                 form(A);
                 reverseRegistrations();
-                controller(A).changeHeat(1100, false);
+                controller(A).changeHeat(1500, false);
                 insufficientTick = world.getGameTime();
             }
             if (insufficientTick > 0 && world.getGameTime() == insufficientTick + 10) {
                 controller(A).changeHeat(100, false);
                 check(controller(A).getMeltingTicksRemaining() == 30, "additional heating does not restart countdown");
                 controller(A).changeHeat(-100, true);
-                check(controller(A).getMeltingTicksRemaining() == 30 && controller(A).getStoredHeat() == 1200,
+                check(controller(A).getMeltingTicksRemaining() == 30 && controller(A).getStoredHeat() == 1600,
                         "cooling simulation preserves an active episode");
                 controller(A).changeHeat(-100, false);
                 check(controller(A).isMelting() && controller(A).getMeltingTicksRemaining() == 30,
@@ -256,7 +256,7 @@ public final class HeatRuntimeChecks {
             if (insufficientTick > 0 && world.getGameTime() == insufficientTick + 40) {
                 check(MetaMachine.getMachine(world, A) == null && MetaMachine.getMachine(world, A.east()) == null,
                         "insufficient final-tick cooling still destroys owned targets without extra grace tick");
-                check(controller(B).getStoredHeat() == 22, "scheduled cooling happened before insufficient-rescue expiry");
+                check(controller(B).getStoredHeat() == 240, "scheduled cooling happened before insufficient-rescue expiry");
                 checkSounds(12, "insufficient rescue emits exactly one sound per destroyed target");
                 finish(null);
             }

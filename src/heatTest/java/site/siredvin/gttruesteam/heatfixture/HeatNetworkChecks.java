@@ -81,8 +81,8 @@ public final class HeatNetworkChecks {
         hatch(B.east()).setFrontFacing(Direction.NORTH);
         for (int z = 1; z < B.getZ() - A.getZ(); z++) world.setBlockAndUpdate(A.offset(1, 0, z), HeatPipeChecks.openPipe());
         if (scenario >= 16 && scenario <= 19) {
-            world.setBlockAndUpdate(A.east(2), TrueSteamMachines.HEAT_HATCHES.get(3).defaultBlockState());
-            world.setBlockAndUpdate(B.east(2), TrueSteamMachines.HEAT_HATCHES.get(1).defaultBlockState());
+            world.setBlockAndUpdate(A.east(2), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
+            world.setBlockAndUpdate(B.east(2), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             hatch(A.east(2)).setFrontFacing(scenario == 18 ? Direction.EAST : Direction.SOUTH);
             hatch(B.east(2)).setFrontFacing(Direction.NORTH);
             for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(2, 0, z), HeatPipeChecks.openPipe());
@@ -91,17 +91,17 @@ public final class HeatNetworkChecks {
         if (scenario == 20) hatch(A.east()).setFrontFacing(Direction.WEST);
         if (scenario == 21) world.removeBlock(A.offset(1, 0, 3), false);
         if (scenario == 22) {
-            world.setBlockAndUpdate(A.east(), TrueSteamMachines.HEAT_HATCHES.get(3).defaultBlockState());
+            world.setBlockAndUpdate(A.east(), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             hatch(A.east()).setFrontFacing(Direction.SOUTH);
             world.setBlockAndUpdate(A.east(2), Blocks.DIAMOND_BLOCK.defaultBlockState());
         }
         if (scenario == 28) {
-            world.setBlockAndUpdate(A.east(2), TrueSteamMachines.HEAT_HATCHES.get(3).defaultBlockState());
+            world.setBlockAndUpdate(A.east(2), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             hatch(A.east()).setFrontFacing(Direction.EAST);
             hatch(A.east(2)).setFrontFacing(Direction.WEST);
         }
         if (scenario == 23 || scenario == 24) {
-            world.setBlockAndUpdate(A.east(), TrueSteamMachines.HEAT_HATCHES.get(3).defaultBlockState());
+            world.setBlockAndUpdate(A.east(), TrueSteamMachines.HEAT_HATCH.defaultBlockState());
             hatch(A.east()).setFrontFacing(Direction.SOUTH);
             HeatFixture.Commands.place(world, C, false, 1);
             hatch(C.east()).setFrontFacing(Direction.NORTH);
@@ -155,14 +155,14 @@ public final class HeatNetworkChecks {
                         if (topologyStage < 10) {
                             check(world.getChunkSource().getChunkNow(16, 18) == null,
                                     "receiver endpoint unavailable without discovery reloading it");
-                            check(Math.abs(controller(A).getStoredHeat() - 480.4) < 1e-8,
+                            check(Math.abs(controller(A).getStoredHeat() - 365.6) < 1e-8,
                                     "source retains energy while receiver endpoint unavailable");
                             if (topologyStage == 9) {
                                 world.getChunkSource().addRegionTicket(ENDPOINT_TICKET, new ChunkPos(B), 0, B);
                                 world.getChunk(16, 18);
                             }
                         } else {
-                            double expected = 19.6 + (480.4 - 19.6) / 100 * 2;
+                            double expected = 134.4 + (365.6 - 134.4) / 100 * 16;
                             check(Math.abs(controller(B).getStoredHeat() - expected) < 1e-8,
                                     "restored endpoint receives one scheduled package without catch-up");
                             check(Math.abs(controller(A).getStoredHeat() + controller(B).getStoredHeat() - 500) < 1e-8,
@@ -172,7 +172,7 @@ public final class HeatNetworkChecks {
                         topologyStage++;
                         return;
                     }
-                    double expected = topologyStage == 5 ? 19.6 : 10;
+                    double expected = topologyStage == 5 ? 134.4 : 80;
                     check(Math.abs(controller(B).getStoredHeat() - expected) < 1e-8,
                             "intermediate chunk availability stage " + topologyStage + " has no unavailable or catch-up transfers");
                     if (topologyStage == 0) {
@@ -199,7 +199,7 @@ public final class HeatNetworkChecks {
                     return;
                 }
                 if (scenario == 25) {
-                    double expected = topologyStage == 3 ? 19.6 : 10;
+                    double expected = topologyStage == 3 ? 134.4 : 80;
                     check(Math.abs(controller(B).getStoredHeat() - expected) < 1e-8,
                             "live topology stage " + topologyStage + " uses fresh connections without catch-up");
                     check(Math.abs(controller(A).getStoredHeat() + controller(B).getStoredHeat() - 500) < 1e-8,
@@ -217,14 +217,14 @@ public final class HeatNetworkChecks {
                     return;
                 }
                 if (scenario == 23 || scenario == 24) {
-                    double ab = (1000 - 490) / 2.0;
-                    double ac = (1000 - ab - 500) / 2.0;
-                    double bc = ((490 + ab) - (500 + ac)) * 0.01 * 2;
+                    double ab = (1000 - 490) * 0.01 * 16;
+                    double ac = (1000 - ab - 500) * 0.01 * 16;
+                    double bc = ((490 + ab) - (500 + ac)) * 0.01 * 16;
                     check(Math.abs(controller(A).getStoredHeat() - (1000 - ab - ac)) < 1e-8,
                             "distinct fan-out peers receive independent pair allowances");
                     check(Math.abs(controller(B).getStoredHeat() - (490 + ab - bc)) < 1e-8 &&
                             Math.abs(controller(C).getStoredHeat() - (500 + ac + bc)) < 1e-8,
-                            "earlier pairs reverse the later donor and select its current sending tier");
+                            "later pairs use updated temperatures and the network coefficient");
                     check(Math.abs(controller(A).getStoredHeat() + controller(B).getStoredHeat() + controller(C).getStoredHeat() - 1990) < 1e-8,
                             "sequential fan-out conserves energy without stale simultaneous packages");
                     if (scenario == 24) {
@@ -234,14 +234,12 @@ public final class HeatNetworkChecks {
                     setup();
                     return;
                 }
-                double amount = scenario < 16 ? new double[] { 2, 8, 32, 128 }[scenario / 4] * 5 :
+                double amount = scenario < 16 ? 16 * 5 :
                         switch (scenario) {
-                            case 16, 19 -> 250;
-                            case 17 -> 40;
-                            case 18 -> 10;
+                            case 16, 17, 18, 19 -> 80;
                             case 20, 21, 27, 28 -> 0;
-                            case 26 -> 10;
-                            case 22 -> 50000;
+                            case 26 -> 80;
+                            case 22 -> 16000;
                             default -> throw new AssertionError("Unknown scenario");
                         };
                 HeatFixture receiver = controller(scenario == 17 ? A : B);
@@ -264,14 +262,7 @@ public final class HeatNetworkChecks {
                             "non-heat multiblock owner is unavailable without invalid casts");
                     owned.removedFromController(unsupported);
                     owned.addedToController(controller(B));
-                    for (int tier : new int[] { -1, 0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14 }) {
-                        try {
-                            HeatHatchMachine.coefficient(tier);
-                            throw new AssertionError("Unsupported tier accepted: " + tier);
-                        } catch (IllegalArgumentException expected) {
-                            check(true, "unsupported hatch tier rejected: " + tier);
-                        }
-                    }
+                    check(TrueSteamMachines.HEAT_HATCH.getId().getPath().equals("heat_hatch"), "single untiered heat hatch registered");
                     scenario++;
                     setup();
                     return;
@@ -309,14 +300,8 @@ public final class HeatNetworkChecks {
                     check(owned.resolveOwner().status() == 2 && receiver.changeHeat(1, false) == 0,
                             "invalid thermal definition disables mutation and has distinct owner status");
                     var unavailable = display(owned);
-                    check(unavailable.size() == 3 && ((TranslatableContents) unavailable.get(2).getContents()).getKey().equals("gttruesteam.heat.invalid"),
-                            "invalid UI keeps tier and sending coefficient without nonfinite owner values");
-                    try {
-                        HeatHatchMachine.coefficient(0);
-                        throw new AssertionError("Unsupported tier accepted");
-                    } catch (IllegalArgumentException expected) {
-                        check(true, "unsupported tier mapping rejected");
-                    }
+                    check(unavailable.size() == 2 && ((TranslatableContents) unavailable.get(1).getContents()).getKey().equals("gttruesteam.heat.invalid"),
+                            "invalid UI keeps network rate without nonfinite owner values");
                     scenario++;
                     setup();
                 } else {
@@ -340,10 +325,10 @@ public final class HeatNetworkChecks {
                 (int) field(hatch, "displayCountdown") == owner.getMeltingTicksRemaining(), "server display snapshot matches owner at " + pos);
         double before = owner.getStoredHeat();
         var lines = display(hatch);
-        check(lines.size() == (owner.isMelting() ? 7 : 6) && owner.getStoredHeat() == before,
+        check(lines.size() == (owner.isMelting() ? 6 : 5) && owner.getStoredHeat() == before,
                 "read-only presentation includes thermal values and only an active warning");
         if (owner.isMelting()) {
-            double shown = Double.parseDouble((String) ((TranslatableContents) lines.get(2).getContents()).getArgs()[0]);
+            double shown = Double.parseDouble((String) ((TranslatableContents) lines.get(1).getContents()).getArgs()[0]);
             check(shown > owner.getMaxTemperature(), "rounded temperature is not clamped to safe maximum");
         }
     }

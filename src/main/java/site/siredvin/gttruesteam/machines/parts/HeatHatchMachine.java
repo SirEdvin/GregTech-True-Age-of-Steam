@@ -24,7 +24,6 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.shared.heat.HeatMultiblockMachine;
 import site.siredvin.gttruesteam.machines.shared.heat.HeatNetworkManager;
 
@@ -56,6 +55,14 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
     private double exchangeIn;
     @DescSynced
     private double exchangeOut;
+    @DescSynced
+    private double networkCoefficient;
+
+    public void setNetworkCoefficient(double coefficient) {
+        if (getLevel() instanceof ServerLevel) networkCoefficient = coefficient;
+    }
+
+    public double getNetworkCoefficient() { return networkCoefficient; }
 
     public void resetExchange() {
         if (!(getLevel() instanceof ServerLevel)) return;
@@ -78,26 +85,12 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
                 ownerStatus == 1 ? Component.literal(String.format(Locale.ROOT, "%.3f K", displayTemperature)) :
                         Component.translatable("gttruesteam.heat.unavailable"),
                 Component.translatable("gttruesteam.heat_hatch.exchange_in", String.format(Locale.ROOT, "%.3f", exchangeIn)).withStyle(ChatFormatting.GREEN),
-                Component.translatable("gttruesteam.heat_hatch.exchange_out", String.format(Locale.ROOT, "%.3f", exchangeOut)).withStyle(ChatFormatting.GOLD));
+                Component.translatable("gttruesteam.heat_hatch.exchange_out", String.format(Locale.ROOT, "%.3f", exchangeOut)).withStyle(ChatFormatting.GOLD),
+                Component.translatable("gttruesteam.heat.coefficient", formatValue(networkCoefficient)).withStyle(ChatFormatting.AQUA));
     }
 
-    public HeatHatchMachine(IMachineBlockEntity holder, int tier) {
-        super(holder, tier);
-        coefficient(tier);
-    }
-
-    public static double coefficient(int tier) {
-        return switch (tier) {
-            case GTValues.HV -> Constants.HEAT_HV_COEFFICIENT;
-            case GTValues.EV -> Constants.HEAT_EV_COEFFICIENT;
-            case GTValues.IV -> Constants.HEAT_IV_COEFFICIENT;
-            case GTValues.LuV -> Constants.HEAT_LUV_COEFFICIENT;
-            default -> throw new IllegalArgumentException("Unsupported heat hatch tier: " + tier);
-        };
-    }
-
-    public double sendingCoefficient() {
-        return coefficient(getTier());
+    public HeatHatchMachine(IMachineBlockEntity holder) {
+        super(holder, GTValues.HV);
     }
 
     public String heatIdentity() {
@@ -176,8 +169,7 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
     }
 
     private void displayText(List<Component> lines) {
-        lines.add(Component.translatable("gttruesteam.heat.tier", GTValues.VN[getTier()]));
-        lines.add(Component.translatable("gttruesteam.heat.coefficient", sendingCoefficient()));
+        lines.add(Component.translatable("gttruesteam.heat.coefficient", formatValue(networkCoefficient)));
         if (ownerStatus != 1) {
             lines.add(Component.translatable(ownerStatus == 2 ? "gttruesteam.heat.invalid" : "gttruesteam.heat.unavailable").withStyle(ChatFormatting.YELLOW));
             return;

@@ -55,7 +55,7 @@ public final class DebugHeatChecks {
         world.setBlockAndUpdate(pos, (producer ? TrueSteamMachines.DEBUG_HEAT_PRODUCER : TrueSteamMachines.DEBUG_HEAT_CONSUMER).defaultBlockState());
         MetaMachine.getMachine(world, pos).setFrontFacing(Direction.NORTH);
         BlockPos hatch = pos.offset(producer ? 1 : -1, 0, 1);
-        world.setBlockAndUpdate(hatch, TrueSteamMachines.HEAT_HATCHES.get(0).defaultBlockState());
+        world.setBlockAndUpdate(hatch, TrueSteamMachines.HEAT_HATCH.defaultBlockState());
         MetaMachine.getMachine(world, hatch).setFrontFacing(producer ? Direction.EAST : Direction.WEST);
         world.setBlockAndUpdate(pos.above(), TrueSteamMachines.REDSTONE_HATCHES[com.gregtechceu.gtceu.api.GTValues.HV].defaultBlockState());
     }
@@ -114,6 +114,13 @@ public final class DebugHeatChecks {
                         "insertion combines extraction and polarization catalysts");
                 check(world.getRecipeManager().byKey(site.siredvin.gttruesteam.GTTrueSteam.id("assembler/insulated_heat_pipe")).isPresent(),
                         "insulated heat pipe assembler recipe registered");
+                var recipe = (com.gregtechceu.gtceu.api.recipe.GTRecipe) world.getRecipeManager()
+                        .byKey(site.siredvin.gttruesteam.GTTrueSteam.id("assembler/heat_hatch")).orElseThrow();
+                var cap = com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability.CAP;
+                check(recipe.getInputContents(cap).size() == 6, "hatch recipe has five ingredients and configured circuit");
+                var output = cap.of(recipe.getOutputContents(cap).get(0).content).getItems()[0];
+                check(output.is(TrueSteamMachines.HEAT_HATCH.asStack().getItem()) && output.getCount() == 2,
+                        "assembler recipe outputs two simple heat hatches");
             }
             if (elapsed == 100) {
                 check(machine(A).getStoredHeat() > 0, "producer generates heat through real recipe ticks");
@@ -123,6 +130,8 @@ public final class DebugHeatChecks {
                 var sender = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, A.offset(1, 0, 1));
                 var receiver = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, B.offset(-1, 0, 1));
                 check(sender.getExchangeOut() > 0 && sender.getExchangeIn() == 0, "sender reports actual outgoing joules");
+                check(sender.getNetworkCoefficient() == 16 && receiver.getNetworkCoefficient() == 16,
+                        "both hatches report pipe-derived network coefficient");
                 check(receiver.getExchangeIn() == sender.getExchangeOut() && receiver.getExchangeOut() == 0,
                         "receiver telemetry matches sender without double counting");
                 machine(A).getRecipeLogic().setWorkingEnabled(false);

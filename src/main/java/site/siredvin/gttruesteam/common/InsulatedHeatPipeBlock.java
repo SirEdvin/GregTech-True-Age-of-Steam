@@ -31,6 +31,8 @@ public class InsulatedHeatPipeBlock extends PipeBlock implements com.gregtechceu
         registerDefaultState(state);
     }
 
+    public double transferCoefficient() { return 16; }
+
     public static int tintColor(int index) {
         return switch (index) {
             case 0 -> 0xff000000 | site.siredvin.gttruesteam.TrueSteamConcepts.HeatingConcept.getMaterial().getMaterialRGB();

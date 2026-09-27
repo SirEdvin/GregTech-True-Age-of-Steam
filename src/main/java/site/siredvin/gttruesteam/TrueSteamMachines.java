@@ -75,20 +75,17 @@ public class TrueSteamMachines {
                 .register();
     }
 
-    public static final List<MachineDefinition> HEAT_HATCHES = List.of(GTValues.HV, GTValues.EV, GTValues.IV, GTValues.LuV)
-            .stream().map(tier -> GTTrueSteam.REGISTRATE
-                    .machine(GTValues.VN[tier].toLowerCase(java.util.Locale.ROOT) + "_heat_hatch",
-                            holder -> new HeatHatchMachine(holder, tier))
-                    .langValue(GTValues.VN[tier] + " Heat Hatch")
-                    .tier(tier)
+    public static final MachineDefinition HEAT_HATCH = GTTrueSteam.REGISTRATE
+                    .machine("heat_hatch", HeatHatchMachine::new)
+                    .langValue("Heat Hatch")
+                    .tier(GTValues.HV)
                     .rotationState(RotationState.ALL)
                     .abilities(TrueSteamPartAbilities.HEAT)
                     .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-                    .tooltips(Component.translatable("gttruesteam.heat.coefficient", HeatHatchMachine.coefficient(tier)),
-                            Component.translatable("gttruesteam.heat.tooltip"),
+                    .tooltips(Component.translatable("gttruesteam.heat.tooltip"),
                             Component.translatable("gtceu.part_sharing.disabled"))
                     .overlayTieredHullModel(GTTrueSteam.id("block/machine/part/heat_hatch"))
-                    .register()).toList();
+                    .register();
 
     public static final MachineDefinition[] REDSTONE_HATCHES = registerRedstoneHatches();
 
@@ -168,7 +165,7 @@ public class TrueSteamMachines {
         @SubscribeEvent
         public static void addHatches(BuildCreativeModeTabContentsEvent event) {
             if (event.getTab() == GTCreativeModeTabs.MACHINE.get()) {
-                HEAT_HATCHES.forEach(definition -> event.accept(definition.asStack()));
+                event.accept(HEAT_HATCH.asStack());
                 event.accept(DEBUG_HEAT_PRODUCER.asStack());
                 event.accept(DEBUG_HEAT_CONSUMER.asStack());
             }

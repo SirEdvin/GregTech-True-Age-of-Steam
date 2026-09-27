@@ -16,6 +16,37 @@ class HeatNetworkTest {
 
     private static final BlockPos SOURCE = BlockPos.ZERO;
 
+    @Test
+    void wholeComponentUsesSlowestPipeIncludingRemoteDeadEnd() {
+        var world = new World();
+        world.hatch(0, 0, 0, Direction.EAST);
+        world.vent(1, 0, 0);
+        var target = world.hatch(2, 0, 0, Direction.WEST);
+        for (int z = 1; z <= 40; z++) world.vent(1, 0, z);
+        var slow = new BlockPos(1, 0, 40);
+        world.nodes.put(slow, new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, 63, 4));
+        var component = HeatNetwork.component(SOURCE, Direction.EAST, world);
+        assertEquals(Set.of(SOURCE, target), component.hatches());
+        assertEquals(4, component.coefficient());
+        assertEquals(component, HeatNetwork.component(target, Direction.WEST, world));
+        world.nodes.put(new BlockPos(1, 0, 1), new HeatNetwork.Node(HeatNetwork.Kind.VENT, null, 0, 16));
+        assertEquals(16, HeatNetwork.component(SOURCE, Direction.EAST, world).coefficient());
+        world.unloaded.add(new BlockPos(1, 0, 0));
+        assertEquals(0, HeatNetwork.component(SOURCE, Direction.EAST, world).coefficient());
+    }
+
+    @Test
+    void directHatchesHaveNoPipeCoefficientAndSeparateComponentsStaySeparate() {
+        var world = new World();
+        world.hatch(1, 0, 0, Direction.WEST);
+        assertEquals(0, HeatNetwork.component(SOURCE, Direction.EAST, world).coefficient());
+        world.vent(0, 0, 2);
+        var separate = world.hatch(0, 0, 3, Direction.NORTH);
+        var component = HeatNetwork.component(separate, Direction.NORTH, world);
+        assertEquals(Set.of(separate), component.hatches());
+        assertEquals(16, component.coefficient());
+    }
+
     private static class World implements HeatNetwork.Lookup {
         final Map<BlockPos, HeatNetwork.Node> nodes = new HashMap<>();
         final Set<BlockPos> unloaded = new HashSet<>();
