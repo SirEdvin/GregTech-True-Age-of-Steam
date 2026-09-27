@@ -65,7 +65,8 @@ public class TrueSteamMachines {
                         .aisle("XXX", "X X", "XXX")
                         .aisle("XXX", "XSX", "XXX")
                         .where("S", Predicates.controller(Predicates.blocks(def.get())))
-                        .where("X", Predicates.blocks(Blocks.IRON_BLOCK).or(Predicates.abilities(TrueSteamPartAbilities.HEAT)))
+                        .where("X", Predicates.blocks(Blocks.IRON_BLOCK).or(Predicates.abilities(TrueSteamPartAbilities.HEAT))
+                                .or(site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine.optionalPredicate()))
                         .where(" ", Predicates.air()).build())
                 .tooltips(Component.translatable(producer ? "gttruesteam.debug_heat.producer" : "gttruesteam.debug_heat.consumer"),
                         Component.translatable("gttruesteam.debug_heat.structure"))

@@ -21,13 +21,36 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 import site.siredvin.gttruesteam.api.IHeatMachine;
+import site.siredvin.gttruesteam.api.RedstoneObservable;
 import site.siredvin.gttruesteam.common.Constants;
 import site.siredvin.gttruesteam.machines.parts.HeatHatchMachine;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public abstract class HeatMultiblockMachine extends WorkableMultiblockMachine implements IHeatMachine, IMachineLife {
+public abstract class HeatMultiblockMachine extends WorkableMultiblockMachine implements IHeatMachine, IMachineLife, RedstoneObservable {
+
+    @Override
+    public List<Descriptor> redstoneValues() {
+        return List.of(
+                new Descriptor("heat_joules", "gttruesteam.redstone.heat_joules", Type.FLOAT),
+                new Descriptor("temperature_kelvin", "gttruesteam.redstone.temperature_kelvin", Type.FLOAT),
+                new Descriptor("heat_capacity_percent", "gttruesteam.redstone.heat_capacity_percent", Type.FLOAT));
+    }
+
+    @Override
+    public Optional<Value> readRedstoneValue(String id) {
+        if (!hasValidThermalStructure()) return Optional.empty();
+        double value = switch (id) {
+            case "heat_joules" -> getStoredHeat();
+            case "temperature_kelvin" -> getTemperature();
+            case "heat_capacity_percent" -> (getStoredHeat() / getHeatCapacity()) * 100.0;
+            default -> Double.NaN;
+        };
+        return Double.isFinite(value) ? Optional.of(Value.floating(value)) : Optional.empty();
+    }
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             HeatMultiblockMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);

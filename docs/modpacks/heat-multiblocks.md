@@ -43,6 +43,25 @@ combined Extraction + Polarization concept and uses the existing combined-concep
 infusion progression. Computer Heat Vents no longer conduct heat; existing
 networks must replace them with these pipes.
 
+## Thermal redstone readings
+
+Both debug heat structures accept one optional Redstone Output Hatch in place of
+any iron casing block. Configure its normal rule editor using these numeric readings:
+
+| Reading | Stable identifier | Unit |
+| --- | --- | --- |
+| Stored heat | `heat_joules` | J |
+| Temperature | `temperature_kelvin` | K |
+| Heat capacity filled | `heat_capacity_percent` | % |
+
+Capacity fill is stored heat divided by safe capacity, multiplied by 100; it is
+not clamped at 100%, so overheating thresholds work. All three support fractional
+values and the existing numeric comparison operators. For example, select Heat
+capacity filled (%), greater than or equal to 90, and signal strength 15.
+Invalid/unformed controllers provide no thermal reading and cannot trigger these
+rules. The shared heat controller base supplies these readings to future heat
+machines too; their patterns must explicitly accept a redstone output hatch.
+
 ## Controller contract
 
 Extend `site.siredvin.gttruesteam.machines.shared.heat.HeatMultiblockMachine`.

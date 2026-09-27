@@ -8,6 +8,9 @@ import site.siredvin.gttruesteam.machines.spawner_extraction.MobType;
 public class TrueSteamLang {
 
     static {
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.heat_joules", "Stored heat (J)");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.temperature_kelvin", "Temperature (K)");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.redstone.heat_capacity_percent", "Heat capacity filled (%)");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producing", "Produce Heat  +1 J/t");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consuming", "Consume Heat  -1 J/t");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.incomplete", "Structure incomplete");
@@ -16,7 +19,7 @@ public class TrueSteamLang {
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.idle", "Idle / disabled");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.producer", "Produce Heat: +1 J per working tick, 20 ticks per recipe. No power or ingredients. Can overheat!");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.consumer", "Consume Heat: -1 J per working tick, 20 ticks per recipe. Pauses when heat is insufficient.");
-        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.structure", "Creative debug machine: hollow 3x3x3 iron-block shell. Heat hatches replace casing. Safe capacity: 1000 J / 310 K.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.structure", "Creative debug machine: hollow 3x3x3 iron-block shell. Heat hatches and one optional redstone output hatch replace casing. Safe capacity: 1000 J / 310 K.");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.insufficient", "Waiting for at least 1 J of heat");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.stored", "Heat: %s / %s J; Temperature: %s K");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tier", "Heat hatch tier: %s");

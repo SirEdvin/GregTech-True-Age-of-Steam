@@ -19,6 +19,9 @@ import net.minecraftforge.fml.common.Mod;
 import site.siredvin.gttruesteam.TrueSteamMachines;
 import site.siredvin.gttruesteam.TrueSteamRecipeTypes;
 import site.siredvin.gttruesteam.machines.shared.heat.DebugHeatMachine;
+import site.siredvin.gttruesteam.machines.redstone.RedstoneHatchMachine;
+import site.siredvin.gttruesteam.machines.redstone.RedstoneRule;
+import site.siredvin.gttruesteam.api.RedstoneObservable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,6 +56,7 @@ public final class DebugHeatChecks {
         BlockPos hatch = pos.offset(producer ? 1 : -1, 0, 1);
         world.setBlockAndUpdate(hatch, TrueSteamMachines.HEAT_HATCHES.get(0).defaultBlockState());
         MetaMachine.getMachine(world, hatch).setFrontFacing(producer ? Direction.EAST : Direction.WEST);
+        world.setBlockAndUpdate(pos.above(), TrueSteamMachines.REDSTONE_HATCHES[com.gregtechceu.gtceu.api.GTValues.HV].defaultBlockState());
     }
 
     private static DebugHeatMachine machine(BlockPos pos) { return (DebugHeatMachine) MetaMachine.getMachine(world, pos); }
@@ -83,6 +87,21 @@ public final class DebugHeatChecks {
                     check(hatch.getFormedAppearance(world.getBlockState(hatchPos), hatchPos, Direction.UP).is(Blocks.IRON_BLOCK),
                             "formed hatch inherits iron casing " + pos);
                     check(hatch.createUIWidget() != null, "heat hatch provides thermal UI " + pos);
+                    var redstone = (RedstoneHatchMachine) MetaMachine.getMachine(world, pos.above());
+                    var provider = redstone.provider();
+                    check(provider != null, "debug structure owns redstone hatch " + pos);
+                    check(provider.redstoneValues().stream().filter(value -> value.type() == RedstoneObservable.Type.FLOAT).count() >= 3,
+                            "redstone editor exposes thermal float readings " + pos);
+                    machine(pos).changeHeat(500 - machine(pos).getStoredHeat(), false);
+                    check(provider.readRedstoneValue("heat_joules").orElseThrow().value().equals(500.0), "stored joules reading " + pos);
+                    check(provider.readRedstoneValue("temperature_kelvin").orElseThrow().value().equals(machine(pos).getTemperature()), "temperature reading " + pos);
+                    check(provider.readRedstoneValue("heat_capacity_percent").orElseThrow().value().equals(50.0), "half-filled capacity reading " + pos);
+                    check(provider.readRedstoneValue("unknown_heat_value").isEmpty(), "unknown reading unavailable " + pos);
+                    for (String id : new String[] { "heat_joules", "temperature_kelvin", "heat_capacity_percent" }) {
+                        check(redstone.saveRule(redstone.rules().size(), new RedstoneRule(id, RedstoneObservable.Type.FLOAT,
+                                RedstoneRule.Operator.GREATER, "0", 1 << redstone.rules().size())), "thermal threshold rule accepted " + id);
+                    }
+                    machine(pos).changeHeat(-machine(pos).getStoredHeat(), false);
                 }
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING).size() == 1, "one real producer recipe loaded");
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING).size() == 1, "one real consumer recipe loaded");
@@ -97,6 +116,8 @@ public final class DebugHeatChecks {
             if (elapsed == 100) {
                 check(machine(A).getStoredHeat() > 0, "producer generates heat through real recipe ticks");
                 check(machine(B).getRecipeLogic().getProgress() > 0, "consumer operates using pipe-delivered heat");
+                check(((RedstoneHatchMachine) MetaMachine.getMachine(world, A.above())).output() == 7,
+                        "live hatch emits combined thermal threshold signal");
                 var sender = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, A.offset(1, 0, 1));
                 var receiver = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, B.offset(-1, 0, 1));
                 check(sender.getExchangeOut() > 0 && sender.getExchangeIn() == 0, "sender reports actual outgoing joules");
@@ -128,6 +149,14 @@ public final class DebugHeatChecks {
                 check(machine(A).checkPatternWithLock(), "producer forms without any heat hatch");
                 machine(A).onStructureFormed();
                 machine(A).changeHeat(1100 - machine(A).getStoredHeat(), false);
+                check(Math.abs((Double) machine(A).readRedstoneValue("heat_capacity_percent").orElseThrow().value() - 110.0) < 1e-8,
+                        "capacity percentage preserves overheat above 100 percent");
+                machine(B).onStructureInvalid();
+                check(machine(B).readRedstoneValue("heat_joules").isEmpty() &&
+                        machine(B).readRedstoneValue("temperature_kelvin").isEmpty() &&
+                        machine(B).readRedstoneValue("heat_capacity_percent").isEmpty(), "invalid structure exposes no thermal readings");
+                check(((RedstoneHatchMachine) MetaMachine.getMachine(world, B.above())).output() == 0,
+                        "invalid structure clears redstone output");
                 deadline = world.getGameTime() + 40;
             }
             if (deadline != 0 && world.getGameTime() == deadline) {
