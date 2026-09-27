@@ -28,10 +28,47 @@ import site.siredvin.gttruesteam.common.BeatingBoilerHuskBlock;
 import site.siredvin.gttruesteam.common.CoolingCoilBlock;
 import site.siredvin.gttruesteam.common.TSCoilType;
 import site.siredvin.gttruesteam.common.TooltipBlockItem;
+import site.siredvin.gttruesteam.common.InsulatedHeatPipeBlock;
+import net.minecraft.core.Direction;
 
 import java.util.function.Supplier;
 
 public class TrueSteamBlocks {
+
+    public static BlockEntry<InsulatedHeatPipeBlock> InsulatedHeatPipe = GTTrueSteam.REGISTRATE
+            .block("insulated_heat_pipe", InsulatedHeatPipeBlock::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.noOcclusion().isValidSpawn((state, level, pos, entity) -> false))
+            .blockstate((ctx, prov) -> {
+                var center = prov.models().getBuilder(ctx.getName() + "_center")
+                        .texture("particle", GTCEu.id("block/pipe/pipe_side"))
+                        .texture("side", GTCEu.id("block/pipe/pipe_side"))
+                        .element().from(4, 4, 4).to(12, 12, 12)
+                        .allFaces((direction, face) -> face.texture("#side")).end();
+                var arm = prov.models().getBuilder(ctx.getName() + "_arm")
+                        .texture("side", GTCEu.id("block/pipe/pipe_side"))
+                        .texture("end", GTCEu.id("block/pipe/pipe_normal_in"))
+                        .element().from(4, 4, 0).to(12, 12, 4)
+                        .allFaces((direction, face) -> face.texture(direction == Direction.NORTH ? "#end" : "#side")).end();
+                var multipart = prov.getMultipartBuilder(ctx.get());
+                multipart.part().modelFile(center).addModel().end();
+                for (Direction direction : Direction.values()) {
+                    int x = direction == Direction.UP ? 270 : direction == Direction.DOWN ? 90 : 0;
+                    int y = direction.getAxis().isVertical() ? 0 : ((int) direction.toYRot() + 180) % 360;
+                    multipart.part().modelFile(arm).rotationX(x).rotationY(y).addModel()
+                            .condition(InsulatedHeatPipeBlock.PROPERTY_BY_DIRECTION.get(direction), true).end();
+                }
+                prov.models().getBuilder(ctx.getName() + "_inventory")
+                        .parent(new ModelFile.UncheckedModelFile("minecraft:block/block"))
+                        .texture("side", GTCEu.id("block/pipe/pipe_side"))
+                        .texture("end", GTCEu.id("block/pipe/pipe_normal_in"))
+                        .element().from(4, 4, 0).to(12, 12, 16)
+                        .allFaces((direction, face) -> face.texture(direction.getAxis() == Direction.Axis.Z ? "#end" : "#side")).end();
+            })
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .item(BlockItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), GTTrueSteam.id("block/insulated_heat_pipe_inventory")))
+            .build().register();
 
     public static NonNullBiConsumer<DataGenContext<Block, ? extends Block>, GTBlockstateProvider> createActiveModel(ResourceLocation texture) {
         return (ctx, prov) -> {

@@ -1,7 +1,9 @@
 package site.siredvin.gttruesteam.client;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
+import site.siredvin.gttruesteam.TrueSteamBlocks;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LightTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -92,7 +94,7 @@ public final class HeatNetworkVisualizer {
                 return nodes.computeIfAbsent(pos, key -> {
                     var chunk = level.getChunkSource().getChunk(key.getX() >> 4, key.getZ() >> 4, ChunkStatus.FULL, false);
                     if (chunk != null) {
-                        if (chunk.getBlockState(key).is(GTBlocks.COMPUTER_HEAT_VENT.get())) {
+                        if (chunk.getBlockState(key).is(TrueSteamBlocks.InsulatedHeatPipe.get())) {
                             return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null);
                         }
                         if (MetaMachine.getMachine(chunk, key) instanceof HeatHatchMachine hatch) {
@@ -169,6 +171,39 @@ public final class HeatNetworkVisualizer {
             RenderSystem.depthMask(true);
             RenderSystem.enableDepthTest();
             RenderSystem.disableBlend();
+            pose.popPose();
+        }
+        renderLabels(event, pose);
+    }
+
+    private static void renderLabels(RenderLevelStageEvent event, PoseStack pose) {
+        var minecraft = Minecraft.getInstance();
+        var camera = event.getCamera();
+        var buffers = minecraft.renderBuffers().bufferSource();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        pose.pushPose();
+        pose.translate(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
+        try {
+            for (BlockPos pos : HATCHES) {
+                var chunk = minecraft.level.getChunkSource().getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.FULL, false);
+                if (chunk == null || !(MetaMachine.getMachine(chunk, pos) instanceof HeatHatchMachine hatch)) continue;
+                pose.pushPose();
+                pose.translate(pos.getX() + 0.5, pos.getY() + 1.65, pos.getZ() + 0.5);
+                pose.mulPose(camera.rotation());
+                pose.scale(-0.025f, -0.025f, 0.025f);
+                int y = 0;
+                for (var line : hatch.debugHeatText()) {
+                    minecraft.font.drawInBatch(line, -minecraft.font.width(line) / 2f, y, 0xffffff, false,
+                            pose.last().pose(), buffers, Font.DisplayMode.SEE_THROUGH, 0x99000000, LightTexture.FULL_BRIGHT);
+                    y += 10;
+                }
+                pose.popPose();
+            }
+            buffers.endBatch();
+        } finally {
+            RenderSystem.depthMask(true);
+            RenderSystem.enableDepthTest();
             pose.popPose();
         }
     }

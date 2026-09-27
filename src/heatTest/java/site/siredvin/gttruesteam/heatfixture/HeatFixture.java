@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.core.BlockPos;
@@ -114,7 +113,7 @@ public final class HeatFixture extends HeatMultiblockMachine {
                         BlockPos origin = BlockPos.containing(context.getSource().getPosition()).offset(0, 1, 3);
                         place(level, origin, false, 3);
                         place(level, origin.offset(0, 0, 6), true, 0);
-                        for (int z = 1; z < 6; z++) level.setBlockAndUpdate(origin.offset(1, 0, z), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
+                        for (int z = 1; z < 6; z++) level.setBlockAndUpdate(origin.offset(1, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
                         var first = MetaMachine.getMachine(level, origin.offset(1, 0, 0));
                         var second = MetaMachine.getMachine(level, origin.offset(1, 0, 6));
                         first.setFrontFacing(Direction.SOUTH);

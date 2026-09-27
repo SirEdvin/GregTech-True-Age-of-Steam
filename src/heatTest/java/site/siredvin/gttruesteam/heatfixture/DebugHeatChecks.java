@@ -40,7 +40,7 @@ public final class DebugHeatChecks {
         world.setChunkForced(32, 32, true);
         place(A, true);
         place(B, false);
-        for (int x = 515; x <= 517; x++) world.setBlockAndUpdate(new BlockPos(x, 121, 513), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
+        for (int x = 515; x <= 517; x++) world.setBlockAndUpdate(new BlockPos(x, 121, 513), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
         start = world.getGameTime();
     }
 
@@ -86,10 +86,22 @@ public final class DebugHeatChecks {
                 }
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING).size() == 1, "one real producer recipe loaded");
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING).size() == 1, "one real consumer recipe loaded");
+                check(world.getBlockEntity(new BlockPos(516, 121, 513)) == null, "heat pipe has no block entity");
+                check(site.siredvin.gttruesteam.TrueSteamConcepts.InsertionConcept.getCatalysts().size() ==
+                        site.siredvin.gttruesteam.TrueSteamConcepts.ExtractionConcept.getCatalysts().size() +
+                                site.siredvin.gttruesteam.TrueSteamConcepts.PolarizationConcept.getCatalysts().size(),
+                        "insertion combines extraction and polarization catalysts");
+                check(world.getRecipeManager().byKey(site.siredvin.gttruesteam.GTTrueSteam.id("assembler/insulated_heat_pipe")).isPresent(),
+                        "insulated heat pipe assembler recipe registered");
             }
             if (elapsed == 100) {
                 check(machine(A).getStoredHeat() > 0, "producer generates heat through real recipe ticks");
-                check(machine(B).getRecipeLogic().getProgress() > 0, "consumer operates using vent-delivered heat");
+                check(machine(B).getRecipeLogic().getProgress() > 0, "consumer operates using pipe-delivered heat");
+                var sender = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, A.offset(1, 0, 1));
+                var receiver = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, B.offset(-1, 0, 1));
+                check(sender.getExchangeOut() > 0 && sender.getExchangeIn() == 0, "sender reports actual outgoing joules");
+                check(receiver.getExchangeIn() == sender.getExchangeOut() && receiver.getExchangeOut() == 0,
+                        "receiver telemetry matches sender without double counting");
                 machine(A).getRecipeLogic().setWorkingEnabled(false);
                 machine(B).getRecipeLogic().setWorkingEnabled(false);
                 machine(A).getRecipeLogic().setStatus(com.gregtechceu.gtceu.api.machine.trait.RecipeLogic.Status.SUSPEND);
@@ -98,12 +110,16 @@ public final class DebugHeatChecks {
             }
             if (elapsed == 140) {
                 check(Math.abs(machine(A).getStoredHeat() + machine(B).getStoredHeat() - before) < 1e-8, "disabled recipes leave only conservative exchange");
-                world.removeBlock(new BlockPos(516, 121, 513), false);
+                world.setBlockAndUpdate(new BlockPos(516, 121, 513), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
                 machine(B).changeHeat(-machine(B).getStoredHeat(), false);
                 machine(B).getRecipeLogic().setWorkingEnabled(true);
             }
             if (elapsed == 180) {
                 check(machine(B).getStoredHeat() == 0 && machine(B).getRecipeLogic().isWaiting(), "consumer waits without negative energy");
+                var sender = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, A.offset(1, 0, 1));
+                var receiver = (site.siredvin.gttruesteam.machines.parts.HeatHatchMachine) MetaMachine.getMachine(world, B.offset(-1, 0, 1));
+                check(sender.getExchangeOut() == 0 && receiver.getExchangeIn() == 0,
+                        "computer heat vent no longer conducts and next exchange clears stale telemetry");
                 machine(B).changeHeat(20, false);
             }
             if (elapsed == 200) {

@@ -1,0 +1,40 @@
+{
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#end"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        4,
+        4,
+        0
+      ],
+      "to": [
+        12,
+        12,
+        4
+      ]
+    }
+  ],
+  "textures": {
+    "end": "gtceu:block/pipe/pipe_normal_in",
+    "side": "gtceu:block/pipe/pipe_side"
+  }
+}

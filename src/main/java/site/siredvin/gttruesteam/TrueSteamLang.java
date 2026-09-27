@@ -21,7 +21,9 @@ public class TrueSteamLang {
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.debug_heat.stored", "Heat: %s / %s J; Temperature: %s K");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tier", "Heat hatch tier: %s");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.coefficient", "Nominal sending coefficient: %s J/(K × update)");
-        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tooltip", "Bidirectional heat via front-face computer heat vents. Actual transfer is limited by donor energy and equilibrium, not receiving tier.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.tooltip", "Bidirectional heat via front-face insulated heat pipes. Actual transfer is limited by donor energy and equilibrium, not receiving tier.");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat_hatch.exchange_in", "In: %s J/exchange");
+        GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat_hatch.exchange_out", "Out: %s J/exchange");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.temperature", "Temperature: %s K");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.stored", "Stored heat: %s J");
         GTTrueSteam.REGISTRATE.addRawLang("gttruesteam.heat.capacity", "Safe capacity: %s J");

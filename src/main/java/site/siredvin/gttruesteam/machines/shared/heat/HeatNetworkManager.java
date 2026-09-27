@@ -1,7 +1,7 @@
 package site.siredvin.gttruesteam.machines.shared.heat;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
+import site.siredvin.gttruesteam.TrueSteamBlocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -102,7 +102,7 @@ public final class HeatNetworkManager {
             public HeatNetwork.Node node(BlockPos pos) {
                 var chunk = level.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4);
                 if (chunk == null) return new HeatNetwork.Node(HeatNetwork.Kind.BLOCKED, null);
-                if (chunk.getBlockState(pos).is(GTBlocks.COMPUTER_HEAT_VENT.get())) {
+                if (chunk.getBlockState(pos).is(TrueSteamBlocks.InsulatedHeatPipe.get())) {
                     return new HeatNetwork.Node(HeatNetwork.Kind.VENT, null);
                 }
                 var endpoint = hatch(level, pos);
@@ -113,6 +113,10 @@ public final class HeatNetworkManager {
     }
 
     private void exchange(ServerLevel level) {
+        for (BlockPos pos : hatches) {
+            var hatch = hatch(level, pos);
+            if (hatch != null) hatch.resetExchange();
+        }
         var lookup = lookup(level);
         Map<Pair, List<Connection>> pairs = new TreeMap<>();
         for (BlockPos pos : hatches.stream().sorted().toList()) {
@@ -131,6 +135,8 @@ public final class HeatNetworkManager {
         for (var entry : pairs.entrySet()) {
             HeatMultiblockMachine donor = null;
             HeatMultiblockMachine receiver = null;
+            HeatHatchMachine sendingHatch = null;
+            HeatHatchMachine receivingHatch = null;
             double coefficient = 0;
             for (Connection connection : entry.getValue()) {
                 var a = hatch(level, connection.first());
@@ -146,6 +152,8 @@ public final class HeatNetworkManager {
                     coefficient = candidate;
                     donor = sendsFirst ? first : second;
                     receiver = sendsFirst ? second : first;
+                    sendingHatch = sendsFirst ? a : b;
+                    receivingHatch = sendsFirst ? b : a;
                 }
             }
             if (donor == null) continue;
@@ -156,6 +164,8 @@ public final class HeatNetworkManager {
             double removed = donor.changeHeat(-amount, false);
             double added = receiver.changeHeat(amount, false);
             if (removed != -amount || added != amount) throw new IllegalStateException("Heat transfer acceptance changed");
+            sendingHatch.recordExchange(0, amount);
+            receivingHatch.recordExchange(amount, 0);
         }
     }
 }

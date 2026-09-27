@@ -2,7 +2,6 @@ package site.siredvin.gttruesteam.heatfixture;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.pattern.MultiblockWorldSavedData;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -75,7 +74,7 @@ public final class HeatRuntimeChecks {
         HeatFixture.Commands.place(world, A, false, 3);
         HeatFixture.Commands.place(world, B, true, 0);
         HeatFixture.Commands.place(world, C, false, 1);
-        for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(1, 0, z), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
+        for (int z = 1; z < 6; z++) world.setBlockAndUpdate(A.offset(1, 0, z), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
         MetaMachine.getMachine(world, A.east()).setFrontFacing(Direction.SOUTH);
         MetaMachine.getMachine(world, B.east()).setFrontFacing(Direction.NORTH);
         for (BlockPos pos : List.of(A, C)) {
@@ -164,7 +163,7 @@ public final class HeatRuntimeChecks {
                 check(MetaMachine.getMachine(world, A) == null && MetaMachine.getMachine(world, A.east()) == null,
                         "continuous overheating expires at the full interval");
                 check(world.getBlockState(A.east(2)).is(Blocks.IRON_BLOCK) &&
-                        world.getBlockState(A.offset(1, 0, 1)).is(GTBlocks.COMPUTER_HEAT_VENT.get()),
+                        world.getBlockState(A.offset(1, 0, 1)).is(site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.get()),
                         "expiry preserves surrounding casing and vents");
                 checkSounds(4, "expiry emits one sound per owned target without repeating dismantling");
             }
@@ -220,7 +219,7 @@ public final class HeatRuntimeChecks {
             }
             if (rescueTick > 0 && world.getGameTime() == rescueTick + 39) {
                 check(controller(A).getMeltingTicksRemaining() == 1, "deadline rescue reaches last remaining tick");
-                world.setBlockAndUpdate(A.offset(1, 0, 3), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
+                world.setBlockAndUpdate(A.offset(1, 0, 3), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
             }
             if (rescueTick > 0 && world.getGameTime() == rescueTick + 40) {
                 check(!controller(A).isMelting() && controller(A).getMeltingTicksRemaining() == 0,
@@ -252,7 +251,7 @@ public final class HeatRuntimeChecks {
                         "insufficient cooling does not reset countdown");
             }
             if (insufficientTick > 0 && world.getGameTime() == insufficientTick + 39) {
-                world.setBlockAndUpdate(A.offset(1, 0, 3), GTBlocks.COMPUTER_HEAT_VENT.getDefaultState());
+                world.setBlockAndUpdate(A.offset(1, 0, 3), site.siredvin.gttruesteam.TrueSteamBlocks.InsulatedHeatPipe.getDefaultState());
             }
             if (insufficientTick > 0 && world.getGameTime() == insufficientTick + 40) {
                 check(MetaMachine.getMachine(world, A) == null && MetaMachine.getMachine(world, A.east()) == null,

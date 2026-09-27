@@ -10,7 +10,7 @@ use the destructive melting behavior in a valuable world before that pass.
 
 Hold `gttruesteam:debug_heat_network_visualizer` in either hand to outline all
 nearby physical heat networks through blocks. Cyan outlines mark all nearby heat
-hatches; orange outlines mark their reachable computer heat vents, including
+hatches; orange outlines mark their reachable insulated heat pipes, including
 branches. Nearby means a hatch within 32 blocks of the player; discovery follows
 the same front-face and 32-step rules as heat exchange. Multiple networks are
 shown together, without aiming or clicking. The overlay refreshes every ten
@@ -19,9 +19,29 @@ client ticks and disappears immediately when the item is put away.
 This is a wiring diagnostic, not a claim that controllers are formed or currently
 transferring heat. It inspects only client-loaded chunks, never loads missing
 chunks, and requires no server requests. Disconnected or misoriented hatches are
-also highlighted, with any vents reachable from their front face, so incomplete
+also highlighted, with any pipes reachable from their front face, so incomplete
 wiring remains diagnosable. The item ships in the normal mod JAR, has no crafting recipe, and
 can be obtained with `/give @s gttruesteam:debug_heat_network_visualizer`.
+
+Each hatch also has a through-wall floating label: controller temperature in K,
+green incoming J/exchange, and gold outgoing J/exchange. These are server-synced
+actual totals for the last scheduled exchange, not nominal capacity or J/t.
+Only the hatches chosen for a controller-pair transfer receive credit; fan-out
+totals accumulate. A subsequent exchange without transfer resets totals to zero.
+Unavailable controllers show an explicit unavailable label, not a fake temperature.
+
+## Insulated heat pipes
+
+`gttruesteam:insulated_heat_pipe` is a plain block with six connection-state bits,
+no block entity, no ticker, and no item/fluid/energy capabilities. Its half-block
+diameter and textures follow the normal GregTech pipe. Connections form to other
+heat pipes and the designated front face of heat hatches.
+
+The assembler produces four pipes from two Heating-Infused Cometal Plates and
+two Insertion-Infused Cometal Plates, at 16 EU/t for 100 ticks. Insertion is the
+combined Extraction + Polarization concept and uses the existing combined-concept
+infusion progression. Computer Heat Vents no longer conduct heat; existing
+networks must replace them with these pipes.
 
 ## Controller contract
 
@@ -86,17 +106,17 @@ promise actual throughput and do not throttle incoming heat.
 
 ## Routing and exchange
 
-Only `gtceu:computer_heat_vent` conducts between hatch endpoints. Paths leave and
+Only `gttruesteam:insulated_heat_pipe` conducts between hatch endpoints. Paths leave and
 enter the designated front faces and may bend, branch, loop or run vertically.
 Direct front-to-front hatch adjacency works. Hatches terminate paths; they are
-not pass-through vents. Air, other blocks and diagonals do not conduct.
+not pass-through pipes. Air, computer heat vents, other blocks and diagonals do not conduct.
 
 The inclusive limit is 32 face-adjacent hatch-to-hatch steps, counting the first
-and last boundary steps: at most 31 intermediate vents on the shortest path.
+and last boundary steps: at most 31 intermediate pipes on the shortest path.
 A geometrically nearby endpoint with a longer required detour is not connected.
 Discovery is fresh every 20 game ticks and never requests unavailable chunks.
-Rotation, vent removal/reconnection and chunk availability affect the next update.
-Vents store no heat, lose no heat and perform no ambient exchange.
+Rotation, pipe removal/reconnection and chunk availability affect the next update.
+Pipes store no heat, lose no heat and perform no ambient exchange.
 
 Every distinct controller pair gets one package per scheduled update. Multiple
 hatches or routes between the same pair do not stack. The currently hotter side

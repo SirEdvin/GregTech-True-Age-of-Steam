@@ -52,6 +52,34 @@ public class HeatHatchMachine extends TieredPartMachine implements IFancyUIMachi
     private boolean displayMelting;
     @DescSynced
     private int displayCountdown;
+    @DescSynced
+    private double exchangeIn;
+    @DescSynced
+    private double exchangeOut;
+
+    public void resetExchange() {
+        if (!(getLevel() instanceof ServerLevel)) return;
+        exchangeIn = 0;
+        exchangeOut = 0;
+    }
+
+    public void recordExchange(double incoming, double outgoing) {
+        if (!(getLevel() instanceof ServerLevel)) return;
+        exchangeIn += incoming;
+        exchangeOut += outgoing;
+    }
+
+    public double getExchangeIn() { return exchangeIn; }
+
+    public double getExchangeOut() { return exchangeOut; }
+
+    public List<Component> debugHeatText() {
+        return List.of(
+                ownerStatus == 1 ? Component.literal(String.format(Locale.ROOT, "%.3f K", displayTemperature)) :
+                        Component.translatable("gttruesteam.heat.unavailable"),
+                Component.translatable("gttruesteam.heat_hatch.exchange_in", String.format(Locale.ROOT, "%.3f", exchangeIn)).withStyle(ChatFormatting.GREEN),
+                Component.translatable("gttruesteam.heat_hatch.exchange_out", String.format(Locale.ROOT, "%.3f", exchangeOut)).withStyle(ChatFormatting.GOLD));
+    }
 
     public HeatHatchMachine(IMachineBlockEntity holder, int tier) {
         super(holder, tier);
