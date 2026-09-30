@@ -8,6 +8,9 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
+import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.ChatFormatting;
@@ -25,7 +28,24 @@ import java.util.List;
 
 /** Creative-only recipe-driven test machine; deliberately permits overheating. */
 public final class DebugHeatMachine extends HeatMultiblockMachine implements IFancyUIMachine {
+    private static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            DebugHeatMachine.class, HeatMultiblockMachine.MANAGED_FIELD_HOLDER);
+    @Persisted
+    private double heatPerTick = 1;
     private final boolean producer;
+
+    @Override
+    public ManagedFieldHolder getFieldHolder() { return MANAGED_FIELD_HOLDER; }
+
+    public double getHeatPerTick() {
+        return Double.isFinite(heatPerTick) && heatPerTick >= 0 ? heatPerTick : 1;
+    }
+
+    public void setHeatPerTick(double value) {
+        if (isRemote() || !Double.isFinite(value) || value < 0) return;
+        heatPerTick = value;
+        markDirty();
+    }
 
     public DebugHeatMachine(IMachineBlockEntity holder, boolean producer) {
         super(holder);
@@ -61,7 +81,7 @@ public final class DebugHeatMachine extends HeatMultiblockMachine implements IFa
 
             @Override
             public void handleRecipeWorking() {
-                if (!producer && changeHeat(-1, true) != -1) {
+                if (!producer && changeHeat(-getHeatPerTick(), true) != -getHeatPerTick()) {
                     setWaiting(Component.translatable("gttruesteam.debug_heat.insufficient"));
                     return;
                 }
@@ -73,12 +93,13 @@ public final class DebugHeatMachine extends HeatMultiblockMachine implements IFa
     @Override
     public boolean onWorking() {
         if (!super.onWorking()) return false;
-        double delta = producer ? 1 : -1;
+        double delta = producer ? getHeatPerTick() : -getHeatPerTick();
         return changeHeat(delta, false) == delta;
     }
 
     public void addDisplayText(List<Component> text) {
-        text.add(Component.translatable(producer ? "gttruesteam.debug_heat.producing" : "gttruesteam.debug_heat.consuming").withStyle(ChatFormatting.GOLD));
+        text.add(Component.translatable(producer ? "gttruesteam.debug_heat.producing" : "gttruesteam.debug_heat.consuming",
+                String.format(Locale.ROOT, "%.6g", getHeatPerTick())).withStyle(ChatFormatting.GOLD));
         text.add(Component.translatable("gttruesteam.debug_heat." + (!isFormed() ? "incomplete" : getRecipeLogic().isWorking() ? "working" : getRecipeLogic().isWaiting() ? "waiting" : "idle"))
                 .withStyle(getRecipeLogic().isWorking() ? ChatFormatting.GREEN : ChatFormatting.YELLOW));
         text.add(Component.translatable("gttruesteam.heat.temperature", String.format(Locale.ROOT, "%.6g", getTemperature())));
@@ -96,11 +117,19 @@ public final class DebugHeatMachine extends HeatMultiblockMachine implements IFa
     public Widget createUIWidget() {
         var group = new WidgetGroup(0, 0, 190, 125);
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117)
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 91)
                 .setBackground(GuiTextures.DISPLAY)
                 .addWidget(new LabelWidget(4, 5, getBlockState().getBlock().getDescriptionId()))
                 .addWidget(new ComponentPanelWidget(4, 19, this::addDisplayText)
                         .textSupplier(isRemote() ? null : this::addDisplayText).setMaxWidthLimit(170)));
+        group.addWidget(new LabelWidget(6, 103, "gttruesteam.debug_heat.rate"));
+        group.addWidget(new TextFieldWidget(80, 99, 104, 18,
+                () -> Double.toString(getHeatPerTick()), value -> {
+                    if (isRemote()) return;
+                    try {
+                        setHeatPerTick(Double.parseDouble(value));
+                    } catch (NumberFormatException ignored) {}
+                }).setMaxStringLength(24));
         return group;
     }
 

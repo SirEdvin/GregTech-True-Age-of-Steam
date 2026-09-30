@@ -104,6 +104,20 @@ public final class DebugHeatChecks {
                                 RedstoneRule.Operator.GREATER, "0", 1 << redstone.rules().size())), "thermal threshold rule accepted " + id);
                     }
                     machine(pos).changeHeat(-machine(pos).getStoredHeat(), false);
+                    machine(pos).changeHeat(100, false);
+                    machine(pos).setHeatPerTick(2.5);
+                    check(machine(pos).onWorking(), "fractional configured heat tick succeeds " + pos);
+                    check(machine(pos).getStoredHeat() == (pos.equals(A) ? 102.5 : 97.5),
+                            "configured rate controls production and consumption " + pos);
+                    machine(pos).setHeatPerTick(Double.NaN);
+                    machine(pos).setHeatPerTick(Double.POSITIVE_INFINITY);
+                    machine(pos).setHeatPerTick(-1);
+                    check(machine(pos).getHeatPerTick() == 2.5, "invalid rates rejected " + pos);
+                    machine(pos).setHeatPerTick(0);
+                    double unchanged = machine(pos).getStoredHeat();
+                    check(machine(pos).onWorking() && machine(pos).getStoredHeat() == unchanged, "zero rate produces no heat change " + pos);
+                    machine(pos).setHeatPerTick(1);
+                    machine(pos).changeHeat(-machine(pos).getStoredHeat(), false);
                 }
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING).size() == 1, "one real producer recipe loaded");
                 check(world.getRecipeManager().getAllRecipesFor(TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING).size() == 1, "one real consumer recipe loaded");

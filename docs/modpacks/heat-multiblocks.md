@@ -219,9 +219,12 @@ be replaced by a heat hatch; point hatch fronts toward the connecting insulated
 heat pipes. One optional redstone output hatch is supported. No energy, item or
 fluid hatches are required.
 
-Each machine has one repeating 20-working-tick recipe. Produce Heat adds 1 J per
-working tick; Consume Heat removes 1 J per working tick and pauses without losing
-recipe progress when less than 1 J is available. Both use a 1000 J safe capacity
+Each machine has one repeating 20-working-tick recipe. The controller menu's
+Rate (J/t) field selects heat added by the producer or removed by the consumer
+per working tick. It defaults to 1, accepts non-negative fractional values
+(zero disables heat change), and is saved with the controller. The consumer
+pauses without losing recipe progress when the configured amount is unavailable.
+Both use a 1000 J safe capacity
 and 310 K safe maximum. The controller UI shows recipe progress and thermal values;
 the hatch UI shows the shared thermal state. Standard work controls apply (GTCEu
 normally finishes the current recipe before disabling). Production is deliberately
