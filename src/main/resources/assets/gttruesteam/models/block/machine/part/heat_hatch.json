@@ -1,0 +1,6 @@
+{
+  "parent": "gtceu:block/overlay/front",
+  "textures": {
+    "overlay": "gttruesteam:block/overlay/heat_hatch"
+  }
+}

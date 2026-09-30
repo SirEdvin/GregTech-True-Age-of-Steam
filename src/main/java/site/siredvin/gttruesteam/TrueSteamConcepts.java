@@ -52,6 +52,10 @@ public class TrueSteamConcepts {
     public static Concept DecompressionConcept = register(
             CombinedConcept.create("decompression", 0xbcb2eb, List.of(CompressionConcept, PolarizationConcept)));
 
+    public static Concept InsertionConcept = register(
+            CombinedConcept.create("insertion", 0x3bafa2, List.of(ExtractionConcept, PolarizationConcept),
+                    List.of(MaterialFlags.GENERATE_PLATE)));
+
     public static Concept register(Concept concept) {
         CONCEPTS.add(concept);
         return concept;
