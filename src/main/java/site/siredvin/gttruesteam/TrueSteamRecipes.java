@@ -356,6 +356,22 @@ public class TrueSteamRecipes {
     }
 
     public static void registerRecipes(Consumer<FinishedRecipe> provider) {
+        ASSEMBLER_RECIPES.recipeBuilder(GTTrueSteam.id("heat_hatch"))
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.InsertionConcept.getMaterial(), 2)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.ExtractionConcept.getMaterial(), 2)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial(), 4)
+                .inputItems(GTMachines.HULL[HV].asStack())
+                .inputItems(TrueSteamItems.InfernalCircuit)
+                .circuitMeta(6)
+                .outputItems(TrueSteamMachines.HEAT_HATCH.asStack(2))
+                .duration(100).EUt(VA[HV]).save(provider);
+        ASSEMBLER_RECIPES.recipeBuilder(GTTrueSteam.id("insulated_heat_pipe"))
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.HeatingConcept.getMaterial(), 2)
+                .inputItems(TagPrefix.plate, TrueSteamConcepts.InsertionConcept.getMaterial(), 2)
+                .outputItems(TrueSteamBlocks.InsulatedHeatPipe, 4)
+                .duration(100).EUt(16).save(provider);
+        TrueSteamRecipeTypes.DEBUG_HEAT_PRODUCING.recipeBuilder(GTTrueSteam.id("produce_heat")).duration(20).save(provider);
+        TrueSteamRecipeTypes.DEBUG_HEAT_CONSUMING.recipeBuilder(GTTrueSteam.id("consume_heat")).duration(20).save(provider);
         var circuits = java.util.List.of(CustomTags.LV_CIRCUITS, CustomTags.MV_CIRCUITS, CustomTags.HV_CIRCUITS,
                 CustomTags.EV_CIRCUITS, CustomTags.IV_CIRCUITS, CustomTags.LuV_CIRCUITS);
         for (int tier = LV; tier <= LuV; tier++) {

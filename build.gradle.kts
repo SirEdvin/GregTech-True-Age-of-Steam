@@ -50,6 +50,13 @@ sourceSets.main {
     resources.srcDir("src/generated/resources")
 }
 
+val heatTest by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+    runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
+}
+
+configurations[heatTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
+
 val redstoneTest by sourceSets.creating {
     compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
     runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
@@ -156,7 +163,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     compileOnly("org.jetbrains:annotations:26.0.1")
 
     compileOnly(fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion"))
@@ -194,6 +201,23 @@ mixin {
 
 extensions.configure<UserDevExtension>("minecraft") {
     runs {
+        if (providers.gradleProperty("heatTest").isPresent) {
+            listOf("client", "server").forEach { runName ->
+                named(runName) {
+                    workingDirectory(file("run-heat-test"))
+                    property("gttruesteam.heatTestAuto", providers.gradleProperty("heatTestAuto").orElse("false").get())
+                    property("gttruesteam.heatTestPersistence", providers.gradleProperty("heatTestPersistence").orElse("").get())
+                    property("gttruesteam.heatTestNetwork", providers.gradleProperty("heatTestNetwork").orElse("false").get())
+                    property("gttruesteam.heatTestChunks", providers.gradleProperty("heatTestChunks").orElse("false").get())
+                    property("gttruesteam.heatTestClient", providers.gradleProperty("heatTestClient").orElse("false").get())
+                    property("gttruesteam.heatTestDebug", providers.gradleProperty("heatTestDebug").orElse("false").get())
+                    mods.create(modBaseName) {
+                        source(sourceSets.main.get())
+                        source(heatTest)
+                    }
+                }
+            }
+        }
         if (providers.gradleProperty("redstoneTest").isPresent) {
             listOf("client", "server").forEach { runName ->
                 named(runName) {

@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "gttruesteam:development_remote_heat_fixture",
+  "texture_overrides": {
+    "all": "minecraft:block/iron_block"
+  },
+  "variants": {
+    "": {
+      "model": {
+        "parent": "minecraft:block/cube_all",
+        "textures": {
+          "all": "minecraft:block/iron_block"
+        }
+      }
+    }
+  }
+}

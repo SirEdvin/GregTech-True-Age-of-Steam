@@ -30,6 +30,8 @@ bin/
 
 run/
 run-data/
+run-heat-test/
+/logs/
 run-redstone-test/
 /src/generated/resources/.cache/*
 
