@@ -205,8 +205,9 @@ public final class HeatNetworkVisualizer {
                 pose.scale(-0.025f, -0.025f, 0.025f);
                 int y = 0;
                 for (var line : hatch.debugHeatText()) {
+                    // See-through backgrounds can be flushed over glyphs from other labels.
                     minecraft.font.drawInBatch(line, -minecraft.font.width(line) / 2f, y, 0xffffff, false,
-                            pose.last().pose(), buffers, Font.DisplayMode.SEE_THROUGH, 0x99000000, LightTexture.FULL_BRIGHT);
+                            pose.last().pose(), buffers, Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT);
                     y += 10;
                 }
                 pose.popPose();
