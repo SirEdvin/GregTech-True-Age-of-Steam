@@ -6,7 +6,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public record SteamConfiguration(
                                  double density, Material water, int waterConversionRate, int waterOutput,
-                                 int compressionEUt, int compressionDuration) {
+                                 int compressionEUt, int compressionDuration, double crackingYieldCoefficient) {
 
     public FluidStack waterOutputStack() {
         return water.getFluid(waterOutput);

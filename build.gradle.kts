@@ -56,6 +56,12 @@ val redstoneTest by sourceSets.creating {
 }
 configurations[redstoneTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
 
+val crackingTest by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+    runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
+}
+configurations[crackingTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
+
 forgeShaking {
     commonProjectName.set("")
     useAT.set(false)
@@ -194,6 +200,18 @@ mixin {
 
 extensions.configure<UserDevExtension>("minecraft") {
     runs {
+        if (providers.gradleProperty("crackingTest").isPresent) {
+            listOf("client", "server").forEach { runName ->
+                named(runName) {
+                    workingDirectory(file("build/cracking-test"))
+                    property("gttruesteam.crackingTest", "true")
+                    mods.create(modBaseName) {
+                        source(sourceSets.main.get())
+                        source(crackingTest)
+                    }
+                }
+            }
+        }
         if (providers.gradleProperty("redstoneTest").isPresent) {
             listOf("client", "server").forEach { runName ->
                 named(runName) {

@@ -1,13 +1,12 @@
 package site.siredvin.gttruesteam.common;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
-import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
+
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
+
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 
 import net.minecraft.client.renderer.RenderType;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 
 import lombok.Getter;
 import site.siredvin.gttruesteam.*;
+import site.siredvin.gttruesteam.recipe.CriticalSteamCrackingRecipes;
 import site.siredvin.gttruesteam.recipe.condition.BeatingHuskCondition;
 
 import java.util.function.Consumer;
@@ -41,6 +41,9 @@ public class SteamRecord {
     private final Material denseCriticalSteam;
 
     @Getter
+    private final Material crackingResidue;
+
+    @Getter
     private final SteamConfiguration configuration;
 
     @Getter
@@ -50,13 +53,15 @@ public class SteamRecord {
     private final Supplier<Block> solidifiedDenseCriticalSteam;
 
     public SteamRecord(SteamConfiguration configuration, Material basicSteam, Material denseSteam,
-                       Material criticalSteam, Material denseCriticalSteam, Supplier<Block> solidifiedDenseSteam,
+                       Material criticalSteam, Material denseCriticalSteam, Material crackingResidue,
+                       Supplier<Block> solidifiedDenseSteam,
                        Supplier<Block> solidifiedDenseCriticalSteam) {
         this.configuration = configuration;
         this.basicSteam = basicSteam;
         this.denseSteam = denseSteam;
         this.criticalSteam = criticalSteam;
         this.denseCriticalSteam = denseCriticalSteam;
+        this.crackingResidue = crackingResidue;
         this.solidifiedDenseSteam = solidifiedDenseSteam;
         this.solidifiedDenseCriticalSteam = solidifiedDenseCriticalSteam;
     }
@@ -116,6 +121,7 @@ public class SteamRecord {
                 .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
         registerPressurizeRecipe(provider, denseSteam, basicSteam);
         registerPressurizeRecipe(provider, denseCriticalSteam, criticalSteam);
+        CriticalSteamCrackingRecipes.register(provider, this);
     }
 
     public static int calculateTemperature(double density) {
@@ -133,6 +139,9 @@ public class SteamRecord {
         private double density = Constants.BASE_STEAM_DENSITY;
         private int compressionEUt = 0;
         private int compressionDuration = 0;
+        private double crackingYieldCoefficient;
+        private int residueColor;
+        private String residueDisplayName;
 
         public Builder baseName(String baseName) {
             this.baseName = baseName;
@@ -170,28 +179,15 @@ public class SteamRecord {
             return this;
         }
 
-        protected int mixColors(int a, int b, double t) {
-            t = Math.max(0.0, Math.min(1.0, t));
-            int r = (int) Math.round(((a >> 16) & 0xFF) * (1 - t) + ((b >> 16) & 0xFF) * t);
-            int g = (int) Math.round(((a >> 8) & 0xFF) * (1 - t) + ((b >> 8) & 0xFF) * t);
-            int blue = (int) Math.round((a & 0xFF) * (1 - t) + (b & 0xFF) * t);
-            return (r << 16) | (g << 8) | blue;
-        }
-
-        protected void registerCrackedPair(String criticalName, Material criticalSteam, String name, Material crackingMaterial) {
-            var lightlyCracked= new Material.Builder(GTTrueSteam.id("lightly_" + criticalName + "steam_cracked_" + name))
-                .color(mixColors(criticalSteam.getMaterialRGB(), crackingMaterial.getMaterialRGB(), 0.7))
-                .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(775)).flags(MaterialFlags.FLAMMABLE).buildAndRegister();
-            var severelyCracked = new Material.Builder(GTTrueSteam.id("severely_" + criticalName + "steam_cracked_" + name))
-                .color(mixColors(criticalSteam.getMaterialRGB(), crackingMaterial.getMaterialRGB(), 0.3))
-                .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(775)).flags(MaterialFlags.FLAMMABLE).buildAndRegister();
-        }
-
-        protected void registerOilCracking(String criticalName, Material criticalSteam) {
-            registerCrackedPair(criticalName, criticalSteam, "light_fuel", GTMaterials.LightFuel);
-            registerCrackedPair(criticalName, criticalSteam, "heavy_fuel", GTMaterials.LightFuel);
-            registerCrackedPair(criticalName, criticalSteam, "naphtha", GTMaterials.Naphtha);
-            registerCrackedPair(criticalName, criticalSteam, "gas", GTMaterials.RefineryGas);
+        public Builder cracking(double yieldCoefficient, int color, String displayName) {
+            if (!Double.isFinite(yieldCoefficient) || yieldCoefficient <= 1 || color < 0 || color > 0xFFFFFF ||
+                    displayName == null || displayName.isBlank()) {
+                throw new IllegalArgumentException("Invalid cracking residue configuration");
+            }
+            this.crackingYieldCoefficient = yieldCoefficient;
+            this.residueColor = color;
+            this.residueDisplayName = displayName;
+            return this;
         }
 
         public SteamRecord build() {
@@ -201,8 +197,11 @@ public class SteamRecord {
             assert density != Constants.BASE_STEAM_DENSITY;
             assert compressionDuration != 0;
             assert compressionEUt != 0;
+            if (residueDisplayName == null) {
+                throw new IllegalStateException("Steam must define its cracking residue");
+            }
             var configuration = new SteamConfiguration(density, water, waterConversionRate, waterOutput, compressionEUt,
-                    compressionDuration);
+                    compressionDuration, crackingYieldCoefficient);
             var baseSteam = new Material.Builder(GTTrueSteam.id(baseName + "_steam"))
                     .gas(new FluidBuilder()
                             .state(FluidState.GAS)
@@ -245,9 +244,13 @@ public class SteamRecord {
                     .item(BlockItem::new)
                     .build()
                     .register();
-            registerOilCracking(criticalName, criticalSteam);
+            var crackingResidue = new Material.Builder(GTTrueSteam.id(criticalName + "_steam_cracking_residue"))
+                    .langValue(residueDisplayName)
+                    .color(residueColor)
+                    .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().state(FluidState.LIQUID).temperature(373))
+                    .buildAndRegister();
             return new SteamRecord(
-                    configuration, baseSteam, denseSteam, criticalSteam, denseCriticalSteam, solidifiedDenseSteam,
+                    configuration, baseSteam, denseSteam, criticalSteam, denseCriticalSteam, crackingResidue, solidifiedDenseSteam,
                     solidifiedDenseCriticalSteam);
         }
     }
