@@ -1,9 +1,13 @@
 package site.siredvin.gttruesteam.common;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlag;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 
 import net.minecraft.client.renderer.RenderType;
@@ -166,6 +170,30 @@ public class SteamRecord {
             return this;
         }
 
+        protected int mixColors(int a, int b, double t) {
+            t = Math.max(0.0, Math.min(1.0, t));
+            int r = (int) Math.round(((a >> 16) & 0xFF) * (1 - t) + ((b >> 16) & 0xFF) * t);
+            int g = (int) Math.round(((a >> 8) & 0xFF) * (1 - t) + ((b >> 8) & 0xFF) * t);
+            int blue = (int) Math.round((a & 0xFF) * (1 - t) + (b & 0xFF) * t);
+            return (r << 16) | (g << 8) | blue;
+        }
+
+        protected void registerCrackedPair(String criticalName, Material criticalSteam, String name, Material crackingMaterial) {
+            var lightlyCracked= new Material.Builder(GTTrueSteam.id("lightly_" + criticalName + "steam_cracked_" + name))
+                .color(mixColors(criticalSteam.getMaterialRGB(), crackingMaterial.getMaterialRGB(), 0.7))
+                .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(775)).flags(MaterialFlags.FLAMMABLE).buildAndRegister();
+            var severelyCracked = new Material.Builder(GTTrueSteam.id("severely_" + criticalName + "steam_cracked_" + name))
+                .color(mixColors(criticalSteam.getMaterialRGB(), crackingMaterial.getMaterialRGB(), 0.3))
+                .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(775)).flags(MaterialFlags.FLAMMABLE).buildAndRegister();
+        }
+
+        protected void registerOilCracking(String criticalName, Material criticalSteam) {
+            registerCrackedPair(criticalName, criticalSteam, "light_fuel", GTMaterials.LightFuel);
+            registerCrackedPair(criticalName, criticalSteam, "heavy_fuel", GTMaterials.LightFuel);
+            registerCrackedPair(criticalName, criticalSteam, "naphtha", GTMaterials.Naphtha);
+            registerCrackedPair(criticalName, criticalSteam, "gas", GTMaterials.RefineryGas);
+        }
+
         public SteamRecord build() {
             assert baseName != null;
             assert criticalName != null;
@@ -217,6 +245,7 @@ public class SteamRecord {
                     .item(BlockItem::new)
                     .build()
                     .register();
+            registerOilCracking(criticalName, criticalSteam);
             return new SteamRecord(
                     configuration, baseSteam, denseSteam, criticalSteam, denseCriticalSteam, solidifiedDenseSteam,
                     solidifiedDenseCriticalSteam);
