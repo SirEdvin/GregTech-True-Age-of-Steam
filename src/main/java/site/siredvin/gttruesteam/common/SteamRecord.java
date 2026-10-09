@@ -18,10 +18,16 @@ import net.minecraft.world.level.block.Blocks;
 import lombok.Getter;
 import site.siredvin.gttruesteam.*;
 import site.siredvin.gttruesteam.recipe.CriticalSteamCrackingRecipes;
+import site.siredvin.gttruesteam.recipe.CrackingFeedstock;
 import site.siredvin.gttruesteam.recipe.condition.BeatingHuskCondition;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.FLAMMABLE;
+import static com.gregtechceu.gtceu.common.data.GTMaterials.RefineryGas;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.STEAM_TURBINE_FUELS;
 import static site.siredvin.gttruesteam.TrueSteamRecipeTypes.METAPHYSICAL_BOILING;
@@ -44,6 +50,9 @@ public class SteamRecord {
     private final Material crackingResidue;
 
     @Getter
+    private final Map<Material, Material> crackedFluids;
+
+    @Getter
     private final SteamConfiguration configuration;
 
     @Getter
@@ -55,13 +64,14 @@ public class SteamRecord {
     public SteamRecord(SteamConfiguration configuration, Material basicSteam, Material denseSteam,
                        Material criticalSteam, Material denseCriticalSteam, Material crackingResidue,
                        Supplier<Block> solidifiedDenseSteam,
-                       Supplier<Block> solidifiedDenseCriticalSteam) {
+                       Supplier<Block> solidifiedDenseCriticalSteam, Map<Material, Material> crackedFluids) {
         this.configuration = configuration;
         this.basicSteam = basicSteam;
         this.denseSteam = denseSteam;
         this.criticalSteam = criticalSteam;
         this.denseCriticalSteam = denseCriticalSteam;
         this.crackingResidue = crackingResidue;
+        this.crackedFluids = Map.copyOf(crackedFluids);
         this.solidifiedDenseSteam = solidifiedDenseSteam;
         this.solidifiedDenseCriticalSteam = solidifiedDenseCriticalSteam;
     }
@@ -249,9 +259,31 @@ public class SteamRecord {
                     .color(residueColor)
                     .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().state(FluidState.LIQUID).temperature(373))
                     .buildAndRegister();
+            var crackedFluids = new LinkedHashMap<Material, Material>();
+            for (var feed : CrackingFeedstock.all()) {
+                for (boolean severe : new boolean[] {false, true}) {
+                    var regular = feed.regular(severe);
+                    String severity = severe ? "severely" : "lightly";
+                    String name = severity + "_" + criticalName + "_steam_cracked_" + feed.raw().getName();
+                    String displayName = java.util.Arrays.stream(name.split("_"))
+                            .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                            .collect(java.util.stream.Collectors.joining(" "));
+                    int color = 0;
+                    for (int shift : new int[] {0, 8, 16}) {
+                        color |= (((regular.getMaterialRGB() >> shift & 255) +
+                                (criticalSteam.getMaterialRGB() >> shift & 255) + 1) / 2) << shift;
+                    }
+                    var builder = new Material.Builder(GTTrueSteam.id(name)).langValue(displayName).color(color).flags(FLAMMABLE);
+                    // All eight pinned regular cracked fluids are 775 K; only cracked Gas is gaseous.
+                    var fluid = new FluidBuilder().temperature(775);
+                    if (feed.raw() == RefineryGas) builder.gas(fluid.state(FluidState.GAS));
+                    else builder.liquid(fluid.state(FluidState.LIQUID));
+                    crackedFluids.put(regular, builder.buildAndRegister());
+                }
+            }
             return new SteamRecord(
                     configuration, baseSteam, denseSteam, criticalSteam, denseCriticalSteam, crackingResidue, solidifiedDenseSteam,
-                    solidifiedDenseCriticalSteam);
+                    solidifiedDenseCriticalSteam, crackedFluids);
         }
     }
 }

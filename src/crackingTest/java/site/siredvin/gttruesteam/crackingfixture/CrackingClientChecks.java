@@ -14,6 +14,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import site.siredvin.gttruesteam.TrueSteamSteams;
+import site.siredvin.gttruesteam.recipe.CrackingFeedstock;
+import site.siredvin.gttruesteam.GTTrueSteam;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +45,30 @@ public final class CrackingClientChecks {
                 require(ForgeRegistries.FLUIDS.getKey(residue.getFluid()).equals(residue.getResourceLocation()), "registered fluid ID " + key);
                 require(residue.getMaterialRGB() == colors[i], "fluid color " + key);
                 checks.add(names[i] + ": material/fluid names, registry ID, and color verified");
+                var steam = variants.get(i);
+                require(steam.getCrackedFluids().size() == 8, "eight custom materials per variant");
+                for (var feed : CrackingFeedstock.all()) for (boolean severe : List.of(false,true)) {
+                    var regular = feed.regular(severe);
+                    var custom = steam.getCrackedFluids().get(regular);
+                    String id = (severe ? "severely_" : "lightly_") + steam.getCriticalSteam().getName() + "_cracked_" + feed.raw().getName();
+                    String display = java.util.Arrays.stream(id.split("_"))
+                            .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                            .collect(java.util.stream.Collectors.joining(" "));
+                    require(custom.getResourceLocation().equals(GTTrueSteam.id(id)) &&
+                            ForgeRegistries.FLUIDS.getKey(custom.getFluid()).equals(custom.getResourceLocation()), "custom fluid ID " + id);
+                    require(I18n.get("material.gttruesteam." + id).equals(display) &&
+                            I18n.get(custom.getFluid().getFluidType().getDescriptionId()).equals(display), "custom fluid names " + id);
+                    require(custom.getFluid().getFluidType().getTemperature() == regular.getFluid().getFluidType().getTemperature() &&
+                            custom.getFluid().getFluidType().isLighterThanAir() == regular.getFluid().getFluidType().isLighterThanAir(),
+                            "custom state/temperature " + id);
+                    int blended = 0;
+                    for (int shift : new int[] {0,8,16}) {
+                        blended |= (((regular.getMaterialRGB() >> shift & 255) +
+                                (steam.getCriticalSteam().getMaterialRGB() >> shift & 255) + 1)/2) << shift;
+                    }
+                    require(custom.getMaterialRGB() == blended, "custom blended color " + id);
+                    checks.add(display + ": identity, localized names, state, temperature and color verified");
+                }
             }
             report.addProperty("passed", true);
         } catch (Throwable failure) {

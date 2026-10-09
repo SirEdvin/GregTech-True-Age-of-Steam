@@ -9,7 +9,8 @@ public final class CrackingYield {
 
     private CrackingYield() {}
 
-    public static int initialOutput(int regularOutput) {
+    /** Ordinary-distillation-equivalent yield, not the custom cracked fluid volume. */
+    public static int initialDistillationEquivalent(int regularOutput) {
         if (regularOutput <= 0 || regularOutput % 2 != 0) {
             throw new IllegalArgumentException("Regular cracking output must be positive and divisible by two");
         }
@@ -17,7 +18,7 @@ public final class CrackingYield {
     }
 
     public static int residueOutput(int regularOutput, double coefficient) {
-        int initial = initialOutput(regularOutput);
+        int initial = initialDistillationEquivalent(regularOutput);
         if (!Double.isFinite(coefficient) || coefficient <= 1) {
             throw new IllegalArgumentException("Cracking yield coefficient must be finite and greater than one");
         }

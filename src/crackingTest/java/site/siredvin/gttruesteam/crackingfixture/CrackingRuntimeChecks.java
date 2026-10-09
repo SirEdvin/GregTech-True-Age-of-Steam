@@ -3,7 +3,7 @@ package site.siredvin.gttruesteam.crackingfixture;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.DistillationTowerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.MultiblockWorldSavedData;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -42,6 +42,8 @@ import com.mojang.serialization.JsonOps;
 import site.siredvin.gttruesteam.GTTrueSteam;
 import site.siredvin.gttruesteam.TrueSteamSteams;
 import site.siredvin.gttruesteam.recipe.CriticalSteamCrackingRecipes;
+import site.siredvin.gttruesteam.recipe.CrackingFeedstock;
+import site.siredvin.gttruesteam.common.SteamRecord;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,7 +63,10 @@ public final class CrackingRuntimeChecks {
     private static final Map<ResourceLocation, GTRecipe> upstream = new LinkedHashMap<>();
     private static ServerLevel level;
     private static Fixture cracker;
-    private static final BlockPos DISTILLERY = new BlockPos(1040, 100, 1024);
+    private static final BlockPos TOWER = new BlockPos(1041, 100, 1024);
+    private static final BlockPos TOWER_INPUT = new BlockPos(1042, 100, 1024);
+    private static final BlockPos TOWER_ENERGY = new BlockPos(1041, 100, 1026);
+    private static final BlockPos TOWER_ITEMS = new BlockPos(1040, 100, 1024);
     private static int ticks;
     private static boolean finished;
 
@@ -92,8 +97,8 @@ public final class CrackingRuntimeChecks {
                 for (int x = 64; x <= 66; x++) for (int z = 64; z <= 65; z++) level.setChunkForced(x, z, true);
                 validateRecipes();
                 cracker = buildCracker(new BlockPos(1024, 100, 1024));
-                level.setBlockAndUpdate(DISTILLERY, GTMachines.DISTILLERY[HV].defaultBlockState());
-                steps.add(() -> { cracker.form(); queueProcessing(); });
+                buildTower();
+                steps.add(() -> { cracker.form(); formTower(); queueProcessing(); });
             } else if (ticks > 40 && ticks % 5 == 0) {
                 if (steps.isEmpty()) finish(event, null);
                 else steps.removeFirst().run();
@@ -148,11 +153,18 @@ public final class CrackingRuntimeChecks {
             }, steam);
         }
         check(ForgeRegistries.FLUIDS.getKeys().stream().noneMatch(id -> id.getNamespace().equals("gttruesteam") &&
-                (id.getPath().startsWith("lightly_") || id.getPath().startsWith("severely_"))), "prototype cracked fluids absent");
-        check(recipes.size() == 32, "32 emitted cracking recipes");
+                (id.getPath().contains("supercriticalsteam") || id.getPath().contains("most_hellishsteam"))), "malformed prototype cracked fluids absent");
+        check(recipes.size() == 48, "48 emitted cracking/distillation recipes");
         var loadedAddon = level.getRecipeManager().getRecipes().stream().filter(r -> r instanceof GTRecipe g &&
                 g.recipeType == CRACKING_RECIPES && g.id.getNamespace().equals("gttruesteam")).toList();
         check(loadedAddon.size() == 32, "32 loaded addon cracker recipes");
+        check(level.getRecipeManager().getRecipes().stream().filter(r -> r instanceof GTRecipe g &&
+                g.recipeType == DISTILLATION_RECIPES && g.id.getNamespace().equals("gttruesteam") &&
+                g.id.getPath().contains("steam_cracked")).count() == 16, "16 custom Tower recipes");
+        check(level.getRecipeManager().getRecipes().stream().noneMatch(r -> r instanceof GTRecipe g &&
+                g.recipeType == DISTILLERY_RECIPES && fluids(g.inputs).stream().anyMatch(in ->
+                variants.stream().flatMap(s -> s.getCrackedFluids().values().stream()).anyMatch(m -> in.test(m.getFluid(2000))))),
+                "no custom Distillery fraction routes");
         check(level.getRecipeManager().getRecipes().stream().filter(r -> r.getId().getNamespace().equals("gttruesteam") &&
                 r.getId().getPath().contains("crack_")).count() == 32, "no excluded cracking recipe family or variant");
         PetrochemRecipes.init(finished -> {
@@ -184,15 +196,39 @@ public final class CrackingRuntimeChecks {
                         actual.getInputEUt().equals(baseline.getInputEUt()), "type/circuit/duration/EUt " + id);
                 var in = fluids(actual.inputs);
                 var out = fluids(actual.outputs);
-                require(in.size() == 2 && out.size() == (recovery ? 1 : 2), "exact fluid IO counts " + id);
+                require(in.size() == 2 && out.size() == 1, "exact fluid IO counts " + id);
                 fluid(in.get(0), raw.get(i).getFluid(1000));
                 fluid(in.get(1), (recovery ? steam.getCrackingResidue() : steam.getCriticalSteam()).getFluid(1000));
-                int amount = recovery ? (steam == TrueSteamSteams.SUPERHOT ? 11500 : 13700) : 500;
-                fluid(out.get(0), (isSevere ? severe : light).get(i).getFluid(amount));
-                if (!recovery) fluid(out.get(1), steam.getCrackingResidue().getFluid(100));
+                int amount = recovery ? (steam == TrueSteamSteams.SUPERHOT ? 11500 : 13700) : 1000;
+                var regular = (isSevere ? severe : light).get(i);
+                fluid(out.get(0), (recovery ? regular : steam.getCrackedFluids().get(regular)).getFluid(amount));
                 check(true, "matrix verified " + id);
                 dump.add(id.toString(), json(actual));
             }
+            var regular = (isSevere ? severe : light).get(i);
+            var custom = steam.getCrackedFluids().get(regular);
+            var standard = loaded(new ResourceLocation("gtceu", "distillation_tower/distill_" + regular.getName()));
+            var distill = loaded(GTTrueSteam.id("distillation_tower/distill_" + custom.getName()));
+            require(json(distill).equals(json(recipes.get(distill.id))), "loaded custom distillation matches emitted");
+            fluid(fluids(distill.inputs).get(0), custom.getFluid(2000));
+            var products = fluids(standard.outputs);
+            var actual = fluids(distill.outputs);
+            require(actual.size() == products.size() + 1 && actual.size() <= 12, "Tower output count includes residue");
+            for (int j = 0; j < products.size(); j++) fluid(actual.get(j), products.get(j).getStacks()[0]);
+            fluid(actual.get(actual.size() - 1), steam.getCrackingResidue().getFluid(200));
+            var solid = distill.outputs.get(ItemRecipeCapability.CAP).get(0);
+            var expectedSolid = standard.outputs.get(ItemRecipeCapability.CAP).get(0);
+            require(solid.chance == expectedSolid.chance && solid.maxChance == expectedSolid.maxChance && solid.tierChanceBoost == expectedSolid.tierChanceBoost &&
+                    solid.tierChanceBoost == 0 && json(distill).getAsJsonObject().get("outputs").getAsJsonObject()
+                    .get("item").equals(json(standard).getAsJsonObject().get("outputs").getAsJsonObject().get("item")),
+                    "same exact rational Carbon output as one regular batch");
+            require(distill.duration == 2 * standard.duration && distill.getInputEUt().equals(standard.getInputEUt()) &&
+                    distill.data.getBoolean("disable_distillery"), "distillation timing/EUt/no fraction generation");
+            require(custom.getFluid().getFluidType().getTemperature() == regular.getFluid().getFluidType().getTemperature() &&
+                    custom.getFluid().getFluidType().isLighterThanAir() == regular.getFluid().getFluidType().isLighterThanAir(),
+                    "custom fluid temperature/state inherit regular");
+            check(true, "custom distillation matrix and carbon verified " + distill.id);
+            dump.add(distill.id.toString(), json(distill));
         }
         Files.writeString(Path.of("cracking-recipes.json"), new GsonBuilder().setPrettyPrinting().create().toJson(dump));
     }
@@ -277,91 +313,174 @@ public final class CrackingRuntimeChecks {
     }
 
     private static void queueProcessing() {
-        for (var steam : List.of(TrueSteamSteams.SUPERHOT, TrueSteamSteams.HELLISH)) for (boolean severe : List.of(false, true)) {
-            final String prefix = (severe ? "severely" : "lightly") + "_" + steam.getCriticalSteam().getName();
-            steps.add(() -> {
-                clear();
-                var first = loaded(GTTrueSteam.id("cracker/" + prefix + "_crack_light_fuel"));
-                var recovery = loaded(GTTrueSteam.id("cracker/" + prefix + "_residue_crack_light_fuel"));
-                var output = severe ? SeverelySteamCrackedLightFuel : LightlySteamCrackedLightFuel;
-                for (int i = 0; i < 10; i++) process(first);
-                check(amount(output) == 5000 && amount(steam.getCrackingResidue()) == 1000, "ten initial crafts accumulate outputs " + prefix);
-                for (int i = 0; i < 2; i++) {
-                    var storage = cracker.output(i).tank.getStorages()[0];
-                    if (storage.getFluid().getFluid() == steam.getCrackingResidue().getFluid()) storage.setFluid(FluidStack.EMPTY);
-                }
-                process(recovery);
-                check(amount(output) == (steam == TrueSteamSteams.SUPERHOT ? 16500 : 18700) && amount(steam.getCrackingResidue()) == 0,
-                        "eleven-craft cycle " + prefix);
-                clear();
-                prepare(recovery, 999);
-                cracker.machine().getRecipeLogic().findAndHandleRecipe();
-                check(!cracker.machine().getRecipeLogic().isWorking() && cracker.input(0).tank.getFluidInTank(0).getAmount() == 1000 &&
-                        cracker.input(1).tank.getFluidInTank(0).getAmount() == 999, "insufficient residue preserves inputs " + prefix);
-                for (var blocked : List.of(first, recovery)) {
-                    clear();
-                    prepare(blocked, 1000);
-                    for (int i = 0; i < 2; i++) {
-                        var storage = cracker.output(i).tank.getStorages()[0];
-                        storage.setFluid(Water.getFluid(storage.getCapacity()));
-                    }
-                    cracker.machine().getRecipeLogic().findAndHandleRecipe();
-                    check(!cracker.machine().getRecipeLogic().isWorking() && cracker.input(0).tank.getFluidInTank(0).getAmount() == 1000,
-                            "blocked output preserves feedstock " + blocked.id);
-                }
-            });
-        }
-        for (var steam : List.of(TrueSteamSteams.SUPERHOT, TrueSteamSteams.HELLISH)) {
-            for (var first : recipes.values().stream().filter(r -> !r.id.getPath().contains("residue_crack") &&
-                    r.id.getPath().contains(steam.getCriticalSteam().getName())).toList()) {
-                steps.add(() -> {
-                    clear();
-                    process(first);
-                    var produced = fluids(first.outputs).get(0).getStacks()[0];
-                    var route = upstream.values().stream().filter(r -> r.recipeType == DISTILLERY_RECIPES &&
-                            fluids(r.inputs).size() == 1 && fluids(r.inputs).get(0).test(produced)).findFirst().orElseThrow();
-                    int needed = fluids(route.inputs).get(0).getAmount();
-                    int accumulated = produced.getAmount();
-                    while (accumulated < needed) {
-                        process(first);
-                        accumulated += produced.getAmount();
-                    }
-                    distillProducedFluid(route, produced);
-                    check(true, "actual cracking output distills through existing route " + first.id + " -> " + route.id);
-                });
+        for (var steam : List.of(TrueSteamSteams.SUPERHOT, TrueSteamSteams.HELLISH))
+            for (var feed : CrackingFeedstock.all()) for (boolean severe : List.of(false, true)) {
+                steps.add(() -> runCycles(steam, feed, severe));
             }
-        }
         steps.add(() -> { clear(); check(true, "processing checks finished"); });
     }
 
-    private static void distillProducedFluid(GTRecipe route, FluidStack produced) {
-        var machine = (SimpleTieredMachine) MetaMachine.getMachine(level, DISTILLERY);
-        var logic = machine.getRecipeLogic();
-        logic.resetRecipeLogic();
-        for (var tank : machine.importFluids.getStorages()) tank.setFluid(FluidStack.EMPTY);
-        for (var tank : machine.exportFluids.getStorages()) tank.setFluid(FluidStack.EMPTY);
-        for (int i = 0; i < machine.exportItems.getSlots(); i++) machine.exportItems.setStackInSlot(i, net.minecraft.world.item.ItemStack.EMPTY);
-        int needed = fluids(route.inputs).get(0).getAmount();
-        FluidStack transferred = FluidStack.EMPTY;
+    private static FluidStack takeCrackerOutput(int requested, FluidStack identity) {
         for (int i = 0; i < 2; i++) {
             var storage = cracker.output(i).tank.getStorages()[0];
-            if (storage.getFluid().isFluidEqual(produced)) transferred = storage.drain(needed, FluidAction.EXECUTE);
+            if (storage.getFluid().isFluidEqual(identity)) return storage.drain(requested, FluidAction.EXECUTE);
         }
-        require(transferred.getAmount() == needed && transferred.isFluidEqual(produced), "transfer actual cracker output to distillery");
-        machine.importFluids.getStorages()[0].setFluid(transferred);
-        machine.getCircuitInventory().setStackInSlot(0, IntCircuitBehaviour.stack(circuit(route)));
-        machine.energyContainer.setEnergyStored(machine.energyContainer.getEnergyCapacity());
+        throw new AssertionError("No actual cracker output " + identity);
+    }
+
+    private static DistillationTowerMachine tower() { return (DistillationTowerMachine) MetaMachine.getMachine(level, TOWER); }
+    private static FluidHatchPartMachine towerInput() { return (FluidHatchPartMachine) MetaMachine.getMachine(level, TOWER_INPUT); }
+    private static EnergyHatchPartMachine towerPower() { return (EnergyHatchPartMachine) MetaMachine.getMachine(level, TOWER_ENERGY); }
+    private static FluidHatchPartMachine towerOutput(int index) {
+        return (FluidHatchPartMachine) MetaMachine.getMachine(level, new BlockPos(1041, 101 + index, 1026));
+    }
+
+    private static void buildTower() {
+        for (int y = 100; y <= 112; y++) for (int x = 1040; x <= 1042; x++) for (int z = 1024; z <= 1026; z++) {
+            var pos = new BlockPos(x,y,z);
+            boolean air = y > 100 && y < 112 && x == 1041 && z == 1025;
+            level.setBlockAndUpdate(pos, air ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState() :
+                    GTBlocks.CASING_STAINLESS_CLEAN.getDefaultState());
+        }
+        level.setBlockAndUpdate(TOWER, GTMultiMachines.DISTILLATION_TOWER.defaultBlockState());
+        level.setBlockAndUpdate(TOWER_INPUT, GTMachines.FLUID_IMPORT_HATCH[HV].defaultBlockState());
+        level.setBlockAndUpdate(TOWER_ENERGY, GTMachines.ENERGY_INPUT_HATCH[HV].defaultBlockState());
+        level.setBlockAndUpdate(TOWER_ITEMS, GTMachines.ITEM_EXPORT_BUS[HV].defaultBlockState());
+        var maintenance = new BlockPos(1040,100,1026);
+        level.setBlockAndUpdate(maintenance, GTMachines.MAINTENANCE_HATCH.defaultBlockState());
+        ((MaintenanceHatchPartMachine) MetaMachine.getMachine(level, maintenance)).fixAllMaintenanceProblems();
+        for (int i = 0; i < 12; i++) {
+            var pos = new BlockPos(1041,101+i,1026);
+            level.setBlockAndUpdate(pos, GTMachines.FLUID_EXPORT_HATCH[HV].defaultBlockState());
+            MetaMachine.getMachine(level,pos).setFrontFacing(Direction.SOUTH);
+        }
+        for (var pos : List.of(TOWER,TOWER_INPUT,TOWER_ITEMS)) MetaMachine.getMachine(level,pos).setFrontFacing(Direction.NORTH);
+        MetaMachine.getMachine(level,TOWER_ENERGY).setFrontFacing(Direction.SOUTH);
+    }
+
+    private static void formTower() {
+        tower().onStructureInvalid();
+        require(tower().checkPatternWithLock(), "Tower pattern matches");
+        tower().onStructureFormed();
+        MultiblockWorldSavedData.getOrCreate(level).addMapping(tower().getMultiblockState());
+        check(tower().isFormed() && tower().getFluidOutputs().size() == 12 && tower().hasCapabilityProxies(),
+                "formed ordinary Tower with twelve real output hatches");
+    }
+
+    private static void clearTower() {
+        tower().getRecipeLogic().resetRecipeLogic();
+        towerInput().tank.getStorages()[0].setFluid(FluidStack.EMPTY);
+        for (int i = 0; i < 12; i++) towerOutput(i).tank.getStorages()[0].setFluid(FluidStack.EMPTY);
+        var bus = ((ItemBusPartMachine) MetaMachine.getMachine(level, TOWER_ITEMS)).getInventory();
+        for (int i = 0; i < bus.getSlots(); i++) bus.setStackInSlot(i, net.minecraft.world.item.ItemStack.EMPTY);
+    }
+
+    private static List<FluidStack> distill(GTRecipe route, FluidStack transferred) {
+        clearTower();
+        require(fluids(route.inputs).get(0).test(transferred) && transferred.getAmount() == fluids(route.inputs).get(0).getAmount(),
+                "Tower receives actual complete input batch");
+        towerInput().tank.getStorages()[0].setFluid(transferred);
+        towerPower().energyContainer.setEnergyStored(towerPower().energyContainer.getEnergyCapacity());
+        var logic = tower().getRecipeLogic();
         logic.findAndHandleRecipe();
-        require(logic.isWorking() && logic.getLastRecipe().id.equals(route.id), "existing distillation recipe starts " + route.id);
-        var expected = fluids(logic.getLastRecipe().outputs).get(0).getStacks()[0].copy();
+        require(logic.isWorking() && logic.getLastRecipe().id.equals(route.id), "Tower starts " + route.id + "; " + logic.getFailureReasons());
+        require(fluids(logic.getLastRecipe().outputs).size() == fluids(route.outputs).size(), "no Tower fraction omitted");
         int limit = logic.getDuration() + 20;
         for (int i = 0; i < limit && logic.isWorking(); i++) {
-            machine.energyContainer.setEnergyStored(machine.energyContainer.getEnergyCapacity());
+            towerPower().energyContainer.setEnergyStored(towerPower().energyContainer.getEnergyCapacity());
             logic.serverTick();
         }
-        var actual = machine.exportFluids.getFluidInTank(0);
-        require(!logic.isWorking() && actual.isFluidEqual(expected) && actual.getAmount() == expected.getAmount(),
-                "existing distillation produces expected output " + route.id);
+        require(!logic.isWorking() && towerInput().tank.getFluidInTank(0).isEmpty(), "Tower consumes complete batch");
+        var actual = new ArrayList<FluidStack>();
+        var expected = fluids(route.outputs);
+        for (int i = 0; i < expected.size(); i++) {
+            var drained = towerOutput(i).tank.getStorages()[0].drain(Integer.MAX_VALUE, FluidAction.EXECUTE);
+            fluid(expected.get(i), drained);
+            actual.add(drained);
+        }
+        return actual;
+    }
+
+    private static void runCycles(SteamRecord steam, CrackingFeedstock feed, boolean severe) {
+        String prefix = (severe ? "severely" : "lightly") + "_" + steam.getCriticalSteam().getName();
+        var initial = loaded(GTTrueSteam.id("cracker/" + prefix + "_crack_" + feed.raw().getName()));
+        var recovery = loaded(GTTrueSteam.id("cracker/" + prefix + "_residue_crack_" + feed.raw().getName()));
+        var regular = feed.regular(severe);
+        var custom = steam.getCrackedFluids().get(regular);
+        var customRoute = loaded(GTTrueSteam.id("distillation_tower/distill_" + custom.getName()));
+        var ordinaryRoute = loaded(new ResourceLocation("gtceu", "distillation_tower/distill_" + regular.getName()));
+        var totals = new HashMap<net.minecraft.world.level.material.Fluid, Integer>();
+        var residue = FluidStack.EMPTY;
+        var retained = FluidStack.EMPTY;
+        clear();
+        for (int cycle = 0; cycle < 10; cycle++) {
+            for (int batch = 0; batch < 5; batch++) {
+                process(initial); process(initial);
+                require(amount(steam.getCrackingResidue()) == 0 && amount(custom) == 2000, "initial output is custom only");
+                var actual = distill(customRoute, takeCrackerOutput(2000,custom.getFluid(2000)));
+                for (var product : actual) {
+                    if (product.getFluid() == steam.getCrackingResidue().getFluid()) {
+                        if (residue.isEmpty()) residue = product.copy(); else residue.grow(product.getAmount());
+                    } else totals.merge(product.getFluid(),product.getAmount(),Integer::sum);
+                }
+            }
+            require(residue.getAmount() == 1000, "five custom distillations produce 1000 mB actual residue");
+            // Transfer the produced residue, rather than manufacturing the recovery agent.
+            prepare(recovery,1000);
+            cracker.input(1).tank.getStorages()[0].setFluid(residue);
+            residue = FluidStack.EMPTY;
+            var logic = cracker.machine().getRecipeLogic();
+            logic.resetRecipeLogic(); logic.findAndHandleRecipe();
+            require(logic.isWorking() && logic.getLastRecipe().id.equals(recovery.id), "actual residue starts recovery");
+            int limit = logic.getDuration()+20;
+            for (int i=0; i<limit && logic.isWorking(); i++) {
+                cracker.power().energyContainer.setEnergyStored(cracker.power().energyContainer.getEnergyCapacity());
+                logic.serverTick();
+            }
+            require(!logic.isWorking() && cracker.input(1).tank.getFluidInTank(0).isEmpty(), "recovery consumes actual residue");
+            var produced = takeCrackerOutput(Integer.MAX_VALUE,regular.getFluid(1000));
+            require(produced.getAmount() == fluids(recovery.outputs).get(0).getAmount(), "recovery output quantity");
+            if (retained.isEmpty()) retained = produced; else retained.grow(produced.getAmount());
+            while (retained.getAmount() >= 1000) {
+                var batch = retained.copy(); batch.setAmount(1000); retained.shrink(1000);
+                for (var product : distill(ordinaryRoute,batch)) totals.merge(product.getFluid(),product.getAmount(),Integer::sum);
+            }
+            require(retained.getAmount() == ((cycle+1)*fluids(recovery.outputs).get(0).getAmount())%1000,
+                    "partial ordinary batch retained");
+        }
+        require(retained.isEmpty() && residue.isEmpty(), "ten cycles have no remainder");
+        int equivalent = steam == TrueSteamSteams.SUPERHOT ? 165 : 187;
+        for (var product : fluids(ordinaryRoute.outputs)) {
+            var identity = product.getStacks()[0];
+            require(totals.get(identity.getFluid()) == equivalent * identity.getAmount(), "exact final product " + identity);
+        }
+        check(true,"ten actual three-stage cycles; all final fluid products balanced " + initial.id);
+        clear(); prepare(recovery,999); cracker.machine().getRecipeLogic().findAndHandleRecipe();
+        check(!cracker.machine().getRecipeLogic().isWorking() && cracker.input(1).tank.getFluidInTank(0).getAmount()==999,
+                "insufficient residue preserves input " + recovery.id);
+        for (var blocked : List.of(initial,recovery)) {
+            clear(); prepare(blocked,1000);
+            for (int i=0;i<2;i++) {
+                var storage=cracker.output(i).tank.getStorages()[0]; storage.setFluid(Water.getFluid(storage.getCapacity()));
+            }
+            cracker.machine().getRecipeLogic().findAndHandleRecipe();
+            check(!cracker.machine().getRecipeLogic().isWorking() && cracker.input(0).tank.getFluidInTank(0).getAmount()==1000,
+                    "blocked cracker output preserves input " + blocked.id);
+        }
+        for (int output : new int[] {0,fluids(customRoute.outputs).size()-1}) {
+            clearTower();
+            towerInput().tank.getStorages()[0].setFluid(custom.getFluid(2000));
+            var storage=towerOutput(output).tank.getStorages()[0]; storage.setFluid(Water.getFluid(storage.getCapacity()));
+            towerPower().energyContainer.setEnergyStored(towerPower().energyContainer.getEnergyCapacity());
+            tower().getRecipeLogic().findAndHandleRecipe();
+            check(!tower().getRecipeLogic().isWorking() && towerInput().tank.getFluidInTank(0).getAmount()==2000,
+                    "blocked Tower product/residue preserves input " + customRoute.id + " fraction " + output);
+        }
+        clearTower(); towerInput().tank.getStorages()[0].setFluid(custom.getFluid(1999));
+        tower().getRecipeLogic().findAndHandleRecipe();
+        check(!tower().getRecipeLogic().isWorking() && towerInput().tank.getFluidInTank(0).getAmount()==1999,
+                "insufficient custom distillation input preserved " + customRoute.id);
+        clear(); clearTower();
     }
 
     private static void require(boolean condition, String message) {

@@ -2,32 +2,33 @@
 
 ## Why
 
-Critical custom steam currently has no oil-cracking recipes: the WIP registers separate cracked materials without a usable recipe chain. Add a faster, residue-producing route that trades immediate yield for a larger total yield while retaining GTCEu's existing cracked fluids and downstream distillation.
+The first implementation misread the intended chain: it produced ordinary cracked fluid and residue directly in the Cracking Unit. Correct it so critical steam produces a distinct cracked fluid, whose distillation sacrifices immediate product yield and releases residue for boosted recovery.
 
 ## What Changes
 
-- Add Cracking Unit recipes for non-dense Supercritical Steam (SUPERHOT) and Most Hellish Steam (HELLISH), covering Light Fuel, Heavy Fuel, Naphtha, and Refinery Gas with light and severe cracking.
-- Preserve the corresponding regular steam-cracking feedstock and cracking-agent amounts, circuits, and EU/t; halve duration and output 50% of the regular cracked-fluid amount plus 100 mB of the variant's residue.
-- Add residue recipes consuming another regular feedstock batch plus 1,000 mB residue, with regular duration, circuits, and EU/t, producing the corresponding existing steam-cracked fluid and no further residue.
-- Dynamically calculate residue output so ten critical-steam crafts plus one residue craft yield exactly 1.5 times (SUPERHOT) or 1.7 times (HELLISH) the output of eleven equivalent regular steam-cracking crafts.
-- Register two shared liquid residues with explicit names, approved purple colors, and regular steam temperature (373 K in GTCEu 7.5.1).
-- Remove/rework unused WIP custom cracked-material registrations and regenerate their language output. **BREAKING (WIP only):** removal of those prototype registry IDs makes any prototype fluids already saved under them unavailable; released steam IDs remain unchanged.
-- Leave ordinary steam, hydrogen cracking, dense variants, Chemical Reactor recipes, moderate gas cracking, and existing distillation unchanged.
+- Support the same four feedstocks (Light Fuel, Heavy Fuel, Naphtha, Refinery Gas), two severities, and two non-dense critical steam variants.
+- Initial cracking preserves regular feedstock/agent amounts, circuits, EU/t and 1,000 mB output, halves cracking duration, and outputs only the matching custom critical-steam-cracked fluid.
+- Register 16 custom cracked fluids with readable variant/severity/feedstock names, corresponding regular cracked-fluid state/temperature, and colors blended with critical steam.
+- Add 16 Distillation Tower recipes consuming 2,000 mB custom cracked fluid. Each produces one regular 1,000 mB distillation batch's fluid products and expected solid byproduct, plus 200 mB shared variant residue: exactly 50% yield and 100 mB residue per 1,000 mB equivalent, without rounding odd fluid amounts.
+- Keep residue recovery in the Cracking Unit: 1,000 mB residue plus 1,000 mB fresh feedstock produces 11,500 mB ordinary steam-cracked fluid for SUPERHOT or 13,700 mB for HELLISH.
+- Measure the 1.5/1.7 coefficients on final distillation products, with solids measured in expected yield. Compare ten initial cracking batches, five custom distillations, and one recovery batch with eleven ordinary batches.
+- Retain approved residue IDs/names/colors, liquid state, and builder temperature of 373 K. Residues pool across feedstocks/severities within their variant.
+- Preserve all upstream steam/hydrogen cracking and distillation definitions; exclude dense variants, Chemical Reactor cracking, and moderate cracking. Custom distillation is Tower-only so residue cannot be duplicated through independent single-fraction routes.
+- **BREAKING (WIP only):** corrected custom fluid IDs do not revive malformed prototype IDs or migrate stored prototype fluids. Back up development saves; released steam IDs remain unchanged.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `critical-steam-cracking`: Critical-steam and residue Cracking Unit processing, residue identity/properties, and balanced eleven-craft yield for the four supported oil products.
+- `critical-steam-cracking`: Custom critical-steam cracking, reduced-yield residue-producing distillation, boosted residue recovery, material properties, and final-product cycle balance.
 
 ### Modified Capabilities
 
-None. The current OpenSpec capability inventory is empty.
+None. This revises the existing unarchived change, not an established main capability.
 
 ## Impact
 
-- `common/SteamRecord.java`: replace unused cracked-pair registration with retained residue registration and integrate cracking recipes into the existing steam recipe lifecycle.
-- `common/SteamConfiguration.java` and `TrueSteamSteams.java`: attach the yield coefficient to the steam variant and supply variant-specific residue metadata through the existing builder pattern.
-- A small focused cracking recipe helper, if needed, owns feedstock/output pairing and shared yield arithmetic; no new recipe type or machine is required.
-- Generated material language/assets and recipes under `src/generated/resources`, plus focused JUnit/data/runtime checks.
-- Use the pinned GTCEu 7.5.1 `CRACKING_RECIPES` and existing light/severe steam-cracked materials; no dependency upgrades, upstream recipe overrides, mixins, or new distillation recipes.
+- `SteamRecord`, configuration and steam definitions retain residues and custom cracked-material mappings in the existing lifecycle.
+- `CriticalSteamCrackingRecipes` and focused distillation registration implement 32 Cracking Unit recipes plus 16 Tower recipes using pinned GTCEu 7.5.1 APIs.
+- Revise yield tests, opt-in loader/machine fixtures, localization, and feature documentation. Previous passing evidence covers the incorrect chain, not this revised contract.
+- PR #15 must be corrected with follow-up commits and fresh verification. No dependency upgrades, new machines, mixins, or upstream overrides are required.
