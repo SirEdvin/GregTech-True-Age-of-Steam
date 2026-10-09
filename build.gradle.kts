@@ -34,6 +34,7 @@ val emiVersion: String by extra
 val kubejsVersion: String by extra
 val rhinoVersion: String by extra
 val architecturyVersion: String by extra
+val gtcalcboardVersion: String by extra
 
 subprojectShaking {
     withKotlin.set(false)
@@ -187,6 +188,7 @@ dependencies {
     implementation(fg.deobf("dev.architectury:architectury-forge:$architecturyVersion"))
 
     runtimeOnly(fg.deobf("maven.modrinth:ae2:15.2.13"))
+    runtimeOnly(fg.deobf("maven.modrinth:gtcalcboard:$gtcalcboardVersion"))
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
