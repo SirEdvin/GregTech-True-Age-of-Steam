@@ -14,6 +14,7 @@ The first implementation misread the intended chain: it produced ordinary cracke
 - Measure the 1.5/1.7 coefficients on final distillation products, with solids measured in expected yield. Compare ten initial cracking batches, five custom distillations, and one recovery batch with eleven ordinary batches.
 - Retain approved residue IDs/names/colors, liquid state, and builder temperature of 373 K. Residues pool across feedstocks/severities within their variant.
 - Preserve all upstream steam/hydrogen cracking and distillation definitions; exclude dense variants, Chemical Reactor cracking, and moderate cracking. Custom distillation is Tower-only so residue cannot be duplicated through independent single-fraction routes.
+- Discover supported GTCEu-generated recipes through native recipe-build callbacks instead of copying upstream quantities, circuits, energy, timing, or Carbon metadata into addon code. Retain only the explicit supported-material mapping; adaptation to later datapack/KubeJS overrides remains out of scope.
 - **BREAKING (WIP only):** corrected custom fluid IDs do not revive malformed prototype IDs or migrate stored prototype fluids. Back up development saves; released steam IDs remain unchanged.
 
 ## Capabilities

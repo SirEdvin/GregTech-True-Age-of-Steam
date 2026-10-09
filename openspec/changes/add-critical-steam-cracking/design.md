@@ -2,7 +2,7 @@
 
 ## Context
 
-See proposal.md and the delta spec for the corrected contract. PR #15 currently implements the incorrect two-stage chain: initial recipes output 500 mB ordinary cracked fluid plus residue, and no custom cracked fluids exist. Its passing tests do not verify the revised behavior.
+See proposal.md and the delta spec for the corrected contract. The corrected three-stage implementation is now verified on PR #15. This follow-up replaces its copied upstream recipe data with discovery of GTCEu-generated recipes, without changing material identities or the agreed balance.
 
 The project pins GTCEu 7.5.1, Java 17, ForgeGradle conventions, and JUnit 5.10.2. Reuse `SteamRecord.registerRecipes`, the addon provider, existing `CrackingYield`, and opt-in `crackingTest` fixtures.
 
@@ -12,7 +12,7 @@ Pinned `PetrochemRecipes.java:235-400` defines eight relevant steam-cracked Towe
 
 Goals: implement the intended material chain; preserve exact proportional fluid yield; retain normal machine modifiers and ordinary routes; test actual distillation/residue recovery rather than merely recipe definitions.
 
-Non-goals: new machines, mixins, dependencies, runtime adaptation to arbitrary pack overrides, migration of malformed prototype IDs, or unrelated PR/history changes.
+Non-goals: new machines, mixins, dependency upgrades, runtime adaptation to arbitrary pack overrides, migration of malformed prototype IDs, or unrelated PR/history changes.
 
 ## Decisions
 
@@ -31,6 +31,14 @@ Initial recipes retain the current 16 IDs where practical but output 1,000 mB cu
 Custom Tower input is 2,000 mB, fluid outputs equal one regular 1,000 mB recipe's outputs, and residue output is 200 mB. Use pinned regular distillation EU/t and proportionally scaled duration (240 ticks for double input), preserving ordinary modifiers. Do not synthesize independent Distillery fraction routes for custom fluids: giving residue on each fraction would duplicate it. Explicitly inspect GTCEu's automatic Distillery generation controls during apply and disable that generation for these recipes using supported API.
 
 Rejected: 1,000 mB distillation with rounded halves, which breaks per-product balance; residue in the cracker, which contradicts the intended chain.
+
+### Discover generated upstream definitions
+
+Install idempotent `GTRecipeType.onRecipeBuild` callbacks during addon initialization, before GTCEu generates recipes. Chain the previous callback, especially the Tower's native Distillery generator. Match GTCEu-owned Cracking Unit recipes by ordinary Steam, supported raw material, and matching regular cracked output; match Tower recipes by their regular cracked input. Do not scan or mutate the final RecipeManager.
+
+Copy the matched builder, clear its callback on the derived copy to avoid recursion, and replace only the stage-specific fluid identities/amounts and duration. Preserve upstream circuits, EU/t, remaining content, chance metadata, data, and conditions. Append deterministic residue to doubled custom distillation and retain `disableDistilleryRecipes(true)`. Keep stable addon IDs and only the explicit four-feedstock/light-severe material mapping; remove product arrays and Carbon/timing/energy tables from production code.
+
+Generate directly through the callback's consumer without retaining recipe snapshots across reloads. Repeat generation must emit the same 48 unique recipes. Real-loader probes vary generated circuits, Steam quantities, durations, EU/t, products, and Carbon chance to prove derivation rather than agreement with another copied table. Preserve upstream definitions and native Distillery routes; exclude addon-owned, hydrogen, and unsupported-feed recipes. Later KubeJS/datapack edits are not promised to propagate.
 
 ### Scale carbon by equivalent input, not twice
 

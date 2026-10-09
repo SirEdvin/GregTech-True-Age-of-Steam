@@ -25,3 +25,11 @@
 - [x] 4.2 Extend client checks for all custom and residue fluid identities, readable localized names, colors/state/temperature. Run isolated client/server fixtures and verify fresh machine-readable passing reports; previous two-stage reports are not completion evidence.
 - [x] 4.3 Run `./gradlew spotlessApply --no-daemon`, datagen, fresh JUnit tests and `./gradlew build spotlessCheck compileCrackingTestJava --no-daemon`; verify generated translations, production jar exclusion of fixtures and scoped diff. Record corrected evidence, reporting provider completion separately if datagen shutdown lingers, and run strict OpenSpec validation.
 - [x] 4.4 Commit/push scoped correction on feature/critical-steam-cracking and update existing PR #15 against main with corrected chain, test evidence and compatibility notes. Verify exact remote head/PR readback and CI status, leaving unrelated files/history untouched and not merging automatically.
+
+## 5. GTCEu-generated recipe discovery
+
+- [x] 5.1 Add idempotent native build callbacks that preserve existing callbacks, derive all three stages from supported GTCEu-owned source builders, clear callbacks on copies, preserve source definitions/metadata, and remove production recipe tables while retaining supported-fluid mappings and stable IDs.
+- [x] 5.2 Extend real-loader checks with changed-source builder probes, excluded-source checks, preservation of native Distillery callbacks, and repeated-generation equality; retain full matrix and actual-machine final-product checks.
+- [x] 5.3 Run fresh JUnit/build/formatting and opt-in server/client checks; verify 48 unique recipes, unchanged upstream definitions, all 16 full-cycle combinations, fixture exclusion, scoped diff, and strict OpenSpec validation. Do not recreate the documentation file the user removed.
+
+Discovery verification: the changed-source probe failed against table-based registration, then passed with build-hook derivation. Fresh runs passed 55 JUnit tests, 180 dedicated-server checks and 18 client checks, with 48 unique recipes and unchanged upstream definitions. The headless client required Xvfb after a direct run failed GLFW initialization; the successful replacement produced a fresh passing report. Build/Spotless/fixture compilation and production-JAR fixture exclusion passed. The removed documentation file remains absent.

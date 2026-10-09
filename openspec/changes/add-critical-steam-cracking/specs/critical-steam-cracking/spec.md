@@ -102,3 +102,16 @@ The addon SHALL leave existing GTCEu steam/hydrogen cracking and distillation ID
 - **WHEN** corrected custom materials are registered
 - **THEN** malformed unused WIP prototype IDs are not silently treated as migrated fluids
 - **AND** documentation warns to back up prototype-containing worlds and distinguishes these IDs from preserved released steam IDs
+
+### Requirement: Discover GTCEu-generated recipe definitions
+The addon SHALL derive supported cracking and distillation recipes from GTCEu's native recipe-build callbacks rather than duplicate upstream quantities, circuits, duration, EU/t, fluid-product tables, or solid chance metadata in production code. It SHALL retain explicit supported-material mappings, stable addon recipe IDs, existing native callbacks, and reload-safe generation without mutating source definitions. Adaptation to subsequent datapack/KubeJS overrides SHALL remain outside this requirement.
+
+#### Scenario: Changed generated source definition
+- **WHEN** a supported GTCEu-owned recipe builder changes its circuit, Steam amount, duration, EU/t, distillation products, or Carbon chance
+- **THEN** derived recipes inherit those source properties except for the explicitly required stage transformations
+- **AND** source definitions and ordinary Distillery generation remain unchanged
+
+#### Scenario: Repeated generation and excluded sources
+- **WHEN** GTCEu recipe generation repeats or unsupported, hydrogen, or addon-owned recipes are built
+- **THEN** the normal source set regenerates the same 48 unique addon recipes without recursive or accumulated additions
+- **AND** excluded sources do not generate additional critical-steam recipes

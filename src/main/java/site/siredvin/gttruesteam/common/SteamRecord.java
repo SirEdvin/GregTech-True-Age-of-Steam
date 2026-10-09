@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Blocks;
 
 import lombok.Getter;
 import site.siredvin.gttruesteam.*;
-import site.siredvin.gttruesteam.recipe.CriticalSteamCrackingRecipes;
 import site.siredvin.gttruesteam.recipe.CrackingFeedstock;
 import site.siredvin.gttruesteam.recipe.condition.BeatingHuskCondition;
 
@@ -131,7 +130,6 @@ public class SteamRecord {
                 .addData(TrueSteamRecipeTypes.OVERHEATED_KEY, true).save(provider);
         registerPressurizeRecipe(provider, denseSteam, basicSteam);
         registerPressurizeRecipe(provider, denseCriticalSteam, criticalSteam);
-        CriticalSteamCrackingRecipes.register(provider, this);
     }
 
     public static int calculateTemperature(double density) {

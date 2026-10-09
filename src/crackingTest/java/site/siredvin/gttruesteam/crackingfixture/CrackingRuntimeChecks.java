@@ -20,6 +20,8 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachin
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.data.recipe.serialized.chemistry.PetrochemRecipes;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -134,6 +136,7 @@ public final class CrackingRuntimeChecks {
     }
 
     private static void validateRecipes() throws Exception {
+        validateDiscovery();
         var variants = List.of(TrueSteamSteams.SUPERHOT, TrueSteamSteams.HELLISH);
         int[] colors = { 0x9666CC, 0x663399 };
         double[] coefficients = { 1.5, 1.7 };
@@ -145,13 +148,31 @@ public final class CrackingRuntimeChecks {
             check(steam.getCrackingResidue().getResourceLocation().equals(GTTrueSteam.id(names[i] + "_steam_cracking_residue")) &&
                     steam.getCrackingResidue().getMaterialRGB() == colors[i] &&
                     steam.getCrackingResidue().getFluid(LIQUID) == steam.getCrackingResidue().getFluid(), "residue identity/color/liquid " + names[i]);
-            CriticalSteamCrackingRecipes.register(finished -> {
-                var data = new JsonObject();
-                finished.serializeRecipeData(data);
-                var recipe = GTRecipeSerializer.SERIALIZER.fromJson(finished.getId(), data);
-                require(recipes.put(recipe.id, recipe) == null, "unique emitted ID " + recipe.id);
-            }, steam);
         }
+        PetrochemRecipes.init(finished -> {
+            if (finished.getType() != GTRecipeSerializer.SERIALIZER) return;
+            var data = new JsonObject();
+            finished.serializeRecipeData(data);
+            var expected = GTRecipeSerializer.SERIALIZER.fromJson(finished.getId(), data);
+            if (expected.id.getNamespace().equals(GTTrueSteam.MOD_ID)) {
+                require(recipes.put(expected.id, expected) == null, "unique discovered ID " + expected.id);
+            } else if (expected.id.getNamespace().equals("gtceu")) {
+                var actual = loaded(expected.id);
+                require(json(actual).equals(json(expected)), "upstream definition unchanged " + expected.id);
+                upstream.put(expected.id, actual);
+            }
+        });
+        var repeated = new LinkedHashMap<ResourceLocation, GTRecipe>();
+        PetrochemRecipes.init(finished -> {
+            if (finished.getType() != GTRecipeSerializer.SERIALIZER || !finished.getId().getNamespace().equals(GTTrueSteam.MOD_ID)) return;
+            var data = new JsonObject();
+            finished.serializeRecipeData(data);
+            var recipe = GTRecipeSerializer.SERIALIZER.fromJson(finished.getId(), data);
+            require(repeated.put(recipe.id, recipe) == null, "unique repeated discovery ID " + recipe.id);
+        });
+        require(repeated.keySet().equals(recipes.keySet()), "same IDs on repeated generation");
+        for (var entry : repeated.entrySet()) require(json(entry.getValue()).equals(json(recipes.get(entry.getKey()))), "same repeated definition " + entry.getKey());
+        check(true, "repeated GTCEu generation emits the same unique recipe definitions");
         check(ForgeRegistries.FLUIDS.getKeys().stream().noneMatch(id -> id.getNamespace().equals("gttruesteam") &&
                 (id.getPath().contains("supercriticalsteam") || id.getPath().contains("most_hellishsteam"))), "malformed prototype cracked fluids absent");
         check(recipes.size() == 48, "48 emitted cracking/distillation recipes");
@@ -167,16 +188,6 @@ public final class CrackingRuntimeChecks {
                 "no custom Distillery fraction routes");
         check(level.getRecipeManager().getRecipes().stream().filter(r -> r.getId().getNamespace().equals("gttruesteam") &&
                 r.getId().getPath().contains("crack_")).count() == 32, "no excluded cracking recipe family or variant");
-        PetrochemRecipes.init(finished -> {
-            var data = new JsonObject();
-            finished.serializeRecipeData(data);
-            if (finished.getType() == GTRecipeSerializer.SERIALIZER) {
-                var expected = GTRecipeSerializer.SERIALIZER.fromJson(finished.getId(), data);
-                var actual = loaded(expected.id);
-                require(json(actual).equals(json(expected)), "upstream definition unchanged " + expected.id);
-                upstream.put(expected.id, actual);
-            }
-        });
         check(!upstream.isEmpty(), "pinned petrochemical cracking/distillation definitions unchanged: " + upstream.size());
         var raw = List.of(LightFuel, HeavyFuel, Naphtha, RefineryGas);
         var light = List.of(LightlySteamCrackedLightFuel, LightlySteamCrackedHeavyFuel, LightlySteamCrackedNaphtha, LightlySteamCrackedGas);
@@ -231,6 +242,93 @@ public final class CrackingRuntimeChecks {
             dump.add(distill.id.toString(), json(distill));
         }
         Files.writeString(Path.of("cracking-recipes.json"), new GsonBuilder().setPrettyPrinting().create().toJson(dump));
+    }
+
+    private static Map<ResourceLocation, GTRecipe> emit(GTRecipeBuilder source) {
+        var before = json(source.buildRawRecipe());
+        var emitted = new LinkedHashMap<ResourceLocation, GTRecipe>();
+        source.save(finished -> {
+            var data = new JsonObject();
+            finished.serializeRecipeData(data);
+            var recipe = GTRecipeSerializer.SERIALIZER.fromJson(finished.getId(), data);
+            require(emitted.put(recipe.id, recipe) == null, "no duplicate hook emission " + recipe.id);
+        });
+        require(before.equals(json(source.buildRawRecipe())), "discovery does not mutate source " + source.id);
+        return emitted;
+    }
+
+    private static void validateDiscovery() {
+        CriticalSteamCrackingRecipes.init();
+        CriticalSteamCrackingRecipes.init();
+        var source = CRACKING_RECIPES.recipeBuilder(new ResourceLocation("gtceu", "discovery_probe_cracking"))
+                .circuitMeta(7).inputFluids(LightFuel.getFluid(1000)).inputFluids(Steam.getFluid(333))
+                .outputFluids(LightlySteamCrackedLightFuel.getFluid(1000)).duration(222).EUt(144)
+                .addData("discovery_probe", 19);
+        var emitted = emit(source);
+        require(emitted.values().stream().filter(r -> r.id.getNamespace().equals("gttruesteam")).count() == 4,
+                "source cracking builder automatically produces four derived recipes");
+        for (var steam : List.of(TrueSteamSteams.SUPERHOT, TrueSteamSteams.HELLISH)) {
+            String prefix = "lightly_" + steam.getCriticalSteam().getName();
+            var initial = emitted.get(GTTrueSteam.id("cracker/" + prefix + "_crack_light_fuel"));
+            var recovery = emitted.get(GTTrueSteam.id("cracker/" + prefix + "_residue_crack_light_fuel"));
+            require(initial != null && recovery != null, "discovered recipes keep stable IDs");
+            require(circuit(initial) == 7 && circuit(recovery) == 7 && initial.duration == 111 && recovery.duration == 222 &&
+                    initial.getInputEUt().equals(source.buildRawRecipe().getInputEUt()) &&
+                    recovery.getInputEUt().equals(source.buildRawRecipe().getInputEUt()), "inherit generated circuit/timing/EUt");
+            fluid(fluids(initial.inputs).get(1), steam.getCriticalSteam().getFluid(333));
+            fluid(fluids(recovery.inputs).get(1), steam.getCrackingResidue().getFluid(1000));
+            require(initial.data.getInt("discovery_probe") == 19 && recovery.data.getInt("discovery_probe") == 19,
+                    "inherit generated recipe data");
+        }
+        check(true, "changed source cracking circuit/Steam amount/timing/EUt/data inherited");
+
+        var distillation = DISTILLATION_RECIPES.recipeBuilder(new ResourceLocation("gtceu", "discovery_probe_distillation"))
+                .inputFluids(LightlySteamCrackedLightFuel.getFluid(1000))
+                .outputFluids(Propane.getFluid(17)).outputFluids(Methane.getFluid(11))
+                .chancedOutput(com.gregtechceu.gtceu.api.data.tag.TagPrefix.dust, Carbon, "2/7", 0)
+                .duration(318).EUt(90).addData("discovery_probe", 19);
+        var distillations = emit(distillation);
+        require(distillations.values().stream().filter(r -> r.recipeType == DISTILLERY_RECIPES).count() == 2,
+                "native Distillery callback still generates ordinary fractions");
+        require(distillations.values().stream().filter(r -> r.id.getNamespace().equals("gttruesteam")).count() == 2,
+                "source Tower builder produces only two custom Tower recipes");
+        for (var steam : List.of(TrueSteamSteams.SUPERHOT, TrueSteamSteams.HELLISH)) {
+            var custom = steam.getCrackedFluids().get(LightlySteamCrackedLightFuel);
+            var derived = distillations.get(GTTrueSteam.id("distillation_tower/distill_" + custom.getName()));
+            require(derived != null && derived.duration == 636 &&
+                    derived.getInputEUt().equals(distillation.buildRawRecipe().getInputEUt()) &&
+                    derived.data.getInt("discovery_probe") == 19 && derived.data.getBoolean("disable_distillery"),
+                    "custom Tower inherits generated timing/EUt/data");
+            fluid(fluids(derived.inputs).get(0), custom.getFluid(2000));
+            var outputs = fluids(derived.outputs);
+            require(outputs.size() == 3, "custom Tower keeps changed source product count plus residue");
+            fluid(outputs.get(0), Propane.getFluid(17));
+            fluid(outputs.get(1), Methane.getFluid(11));
+            fluid(outputs.get(2), steam.getCrackingResidue().getFluid(200));
+            require(json(derived).getAsJsonObject().getAsJsonObject("outputs").get("item")
+                    .equals(json(distillation.buildRawRecipe()).getAsJsonObject().getAsJsonObject("outputs").get("item")),
+                    "exact changed Carbon stack/probability/boost inherited");
+        }
+        check(true, "changed Tower products/Carbon/timing/EUt/data inherited and native fractions preserved");
+
+        record Excluded(String namespace, Material raw, Material agent, Material output) {}
+        var excluded = List.of(
+                new Excluded("gttruesteam", LightFuel, Steam, LightlySteamCrackedLightFuel),
+                new Excluded("gtceu", LightFuel, Hydrogen, LightlySteamCrackedLightFuel),
+                new Excluded("gtceu", Naphtha, Steam, LightlySteamCrackedLightFuel),
+                new Excluded("gtceu", LightFuel, Steam, LightlyHydroCrackedLightFuel));
+        for (int i = 0; i < excluded.size(); i++) {
+            var probe = excluded.get(i);
+            var ignored = emit(CRACKING_RECIPES.recipeBuilder(new ResourceLocation(probe.namespace(), "excluded_discovery_" + i))
+                    .inputFluids(probe.raw().getFluid(1000)).inputFluids(probe.agent().getFluid(1000))
+                    .outputFluids(probe.output().getFluid(1000)).circuitMeta(1).duration(80).EUt(240));
+            require(ignored.size() == 1, "excluded source emits no derived recipes " + i);
+        }
+        var chemical = emit(CHEMICAL_RECIPES.recipeBuilder(new ResourceLocation("gtceu", "excluded_chemical_discovery"))
+                .inputFluids(LightFuel.getFluid(1000)).inputFluids(Steam.getFluid(1000))
+                .outputFluids(LightlySteamCrackedLightFuel.getFluid(1000)).circuitMeta(1).duration(80).EUt(240));
+        require(chemical.values().stream().noneMatch(r -> r.id.getNamespace().equals("gttruesteam")), "Chemical Reactor source excluded");
+        check(true, "addon/hydrogen/unsupported-material/Chemical Reactor sources excluded; initialization idempotent");
     }
 
     private static Fixture buildCracker(BlockPos origin) {

@@ -6,6 +6,8 @@ import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 
+import site.siredvin.gttruesteam.recipe.CriticalSteamCrackingRecipes;
+
 import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
@@ -19,6 +21,7 @@ public class GTTrueSteamGTAddon implements IGTAddon {
 
     @Override
     public void initializeAddon() {
+        CriticalSteamCrackingRecipes.init();
         TrueSteamCriteria.init();
         TrueSteamAdvancements.init();
         TrueSteamStats.init();
