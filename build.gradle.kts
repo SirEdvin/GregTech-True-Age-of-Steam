@@ -34,6 +34,7 @@ val emiVersion: String by extra
 val kubejsVersion: String by extra
 val rhinoVersion: String by extra
 val architecturyVersion: String by extra
+val gtcalcboardVersion: String by extra
 
 subprojectShaking {
     withKotlin.set(false)
@@ -55,6 +56,12 @@ val redstoneTest by sourceSets.creating {
     runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
 }
 configurations[redstoneTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
+
+val crackingTest by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+    runtimeClasspath += output + compileClasspath + sourceSets.main.get().runtimeClasspath
+}
+configurations[crackingTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
 
 forgeShaking {
     commonProjectName.set("")
@@ -181,6 +188,7 @@ dependencies {
     implementation(fg.deobf("dev.architectury:architectury-forge:$architecturyVersion"))
 
     runtimeOnly(fg.deobf("maven.modrinth:ae2:15.2.13"))
+    runtimeOnly(fg.deobf("maven.modrinth:gtcalcboard:$gtcalcboardVersion"))
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
@@ -194,6 +202,18 @@ mixin {
 
 extensions.configure<UserDevExtension>("minecraft") {
     runs {
+        if (providers.gradleProperty("crackingTest").isPresent) {
+            listOf("client", "server").forEach { runName ->
+                named(runName) {
+                    workingDirectory(file("build/cracking-test"))
+                    property("gttruesteam.crackingTest", "true")
+                    mods.create(modBaseName) {
+                        source(sourceSets.main.get())
+                        source(crackingTest)
+                    }
+                }
+            }
+        }
         if (providers.gradleProperty("redstoneTest").isPresent) {
             listOf("client", "server").forEach { runName ->
                 named(runName) {

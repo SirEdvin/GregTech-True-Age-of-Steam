@@ -13,11 +13,13 @@ public class TrueSteamSteams {
 
     public static SteamRecord SUPERHOT = register(new SteamRecord.Builder()
             .baseName("superhot").criticalName("supercritical").water(GTMaterials.DistilledWater)
-            .density(2.1).compression(130, 100).build());
+            .density(2.1).compression(130, 100)
+            .cracking(1.5, 0x9666CC, "Supercritical Steam Cracking Residue").build());
 
     public static SteamRecord HELLISH = register(new SteamRecord.Builder()
             .baseName("hellish").criticalName("most_hellish").water(TrueSteamMaterials.HellishWater)
-            .density(2.5).compression(130, 100).build());
+            .density(2.5).compression(130, 100)
+            .cracking(1.7, 0x663399, "Most Hellish Steam Cracking Residue").build());
 
     public static SteamRecord register(SteamRecord record) {
         STEAMS.add(record);
